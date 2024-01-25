@@ -105,7 +105,7 @@ export default function LoginPage() {
                 <Typography level="h3">Login</Typography>
                 <Typography level="body-sm">
                   Primeira vez?{' '}
-                  <Link href="#replace-with-a-link" level="title-sm">
+                  <Link href="sign-up" level="title-sm">
                     Cadastre aqui!
                   </Link>
                 </Typography>
