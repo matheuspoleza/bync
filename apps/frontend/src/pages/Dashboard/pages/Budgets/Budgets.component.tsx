@@ -1,8 +1,8 @@
 import { Box, EmptyPage } from '@bync/ui';
-import { useYNAB } from '../../../../hooks/ynab';
+import { useYNABConnect } from '../../../../hooks/ynab';
 
 export const BudgetsPage = () => {
-  const { connectBudgets } = useYNAB();
+  const { connectBudgets } = useYNABConnect();
 
   return (
     <Box direction="column" align="center" justify="center" height="100%">

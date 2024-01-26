@@ -10,6 +10,7 @@ import { BudgetsPage } from './pages/Dashboard/pages/Budgets/Budgets.component';
 import { SourcesPage } from './pages/Dashboard/pages/Sources/Sources.component';
 import { ConnectionsPage } from './pages/Dashboard/pages/Connections/Connections.component';
 import { TransactionsPage } from './pages/Dashboard/pages/Transactions/Transactions.component';
+import { useYNABAuth } from './hooks/ynab';
 
 const router = createBrowserRouter([
   {
@@ -44,11 +45,17 @@ const router = createBrowserRouter([
   },
 ]);
 
+const YNABProvider = () => {
+  useYNABAuth();
+  return null;
+};
+
 const App = () => {
   return (
     <>
       <div id="belvo" />
       <RouterProvider router={router} />
+      <YNABProvider />
     </>
   );
 };

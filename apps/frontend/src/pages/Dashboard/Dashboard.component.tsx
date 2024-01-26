@@ -15,14 +15,12 @@ import {
 import { useTabChange } from './hooks/useTabChange';
 import { DashboardTabs } from './Dashboard.constants';
 import { Outlet, useNavigate } from 'react-router-dom';
-import { useYNAB } from '../../hooks/ynab';
 
 const SECONDARY_WIDTH = Tokens.layout.secondaryMenu.width;
 
 export const DashboardPage: React.FC<IBox> = () => {
   const [secondSearch, setSecondSearch] = useState('');
   const navigate = useNavigate();
-  useYNAB(true);
 
   const { activeTab: activeSecondaryTab, switchTab: setActiveSecondaryTab } =
     useTabChange<DashboardTabs>(DashboardTabs.HOME);
