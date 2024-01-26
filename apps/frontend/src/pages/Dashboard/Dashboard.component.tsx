@@ -10,32 +10,35 @@ import {
   Tokens,
   Text,
   Avatar,
-  Divider,
 } from '@bync/ui';
 
 import { useTabChange } from './hooks/useTabChange';
-import { DashboardTabs, DashboardTabsMapper } from './Dashboard.constants';
+import { DashboardTabs } from './Dashboard.constants';
+import { Outlet, useNavigate } from 'react-router-dom';
+import { useYNAB } from '../../hooks/ynab';
 
 const SECONDARY_WIDTH = Tokens.layout.secondaryMenu.width;
 
 export const DashboardPage: React.FC<IBox> = () => {
   const [secondSearch, setSecondSearch] = useState('');
+  const navigate = useNavigate();
+  useYNAB(true);
 
-  const { activeTab: activePrimaryTab, switchTab: setActivePrimaryTab } =
-    useTabChange('Generate');
   const { activeTab: activeSecondaryTab, switchTab: setActiveSecondaryTab } =
     useTabChange<DashboardTabs>(DashboardTabs.HOME);
-
-  const primaryTabProps = (icon: IconName) => ({
-    icon,
-    isActive: activePrimaryTab === icon,
-    onClick: () => setActivePrimaryTab(icon),
-  });
 
   const secondaryTabProps = (tab: DashboardTabs, icon: IconName) => ({
     icon,
     isActive: activeSecondaryTab === tab,
-    onClick: () => setActiveSecondaryTab(tab),
+    onClick: () => {
+      setActiveSecondaryTab(tab);
+      if (tab === DashboardTabs.HOME) {
+        navigate('/');
+        return;
+      }
+
+      navigate(`/${tab}`);
+    },
   });
 
   return (
@@ -138,26 +141,24 @@ export const DashboardPage: React.FC<IBox> = () => {
         style={{ position: 'relative' }}
         width={`calc(100vw - ${SECONDARY_WIDTH}px - 28px)`}
       >
-        {DashboardTabsMapper[activeSecondaryTab].header && (
-          <Header variant="search">
-            <Header.Section.Left>
-              <SearchInput
-                variant="dark"
-                placeholder={`Procurar ${DashboardTabsMapper[activeSecondaryTab].label} ...`}
-                withIconAnimation={false}
-                value={secondSearch}
-                onValueChange={setSecondSearch}
-              />
-            </Header.Section.Left>
+        <Header variant="search">
+          <Header.Section.Left>
+            <SearchInput
+              variant="dark"
+              placeholder={`Procurar ...`}
+              withIconAnimation={false}
+              value={secondSearch}
+              onValueChange={setSecondSearch}
+            />
+          </Header.Section.Left>
 
-            <Header.Section.Right>
-              <Header.Section.RightActions>
-                <Header.Button.IconSecondary iconName="Settings" />
-                <Header.Button.Primary label="Conectar budgets" />
-              </Header.Section.RightActions>
-            </Header.Section.Right>
-          </Header>
-        )}
+          <Header.Section.Right>
+            <Header.Section.RightActions>
+              <Header.Button.IconSecondary iconName="Settings" />
+              <Header.Button.Primary label="Conectar budgets" />
+            </Header.Section.RightActions>
+          </Header.Section.Right>
+        </Header>
 
         <Box
           id="children"
@@ -166,7 +167,7 @@ export const DashboardPage: React.FC<IBox> = () => {
           height="100%"
           style={{ position: 'absolute', top: '56px' }}
         >
-          {DashboardTabsMapper[activeSecondaryTab].render()}
+          <Outlet />
         </Box>
       </Box>
     </Box>

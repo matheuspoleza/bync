@@ -17,7 +17,9 @@ export const Homepage = () => {
                   borderRight: `1px solid ${Tokens.colors.neutralLight.neutralsLight100}`,
                 }}
               >
-                <Text>Transferido</Text>
+                <Text style={{ fontSize: 18, fontWeight: 200 }}>
+                  Transferido
+                </Text>
               </Box>
               <Box
                 width="100%"

@@ -1,6 +1,9 @@
 import { Box, EmptyPage } from '@bync/ui';
+import { useYNAB } from '../../../../hooks/ynab';
 
 export const BudgetsPage = () => {
+  const { connectBudgets } = useYNAB();
+
   return (
     <Box direction="column" align="center" justify="center" height="100%">
       <EmptyPage
@@ -9,6 +12,7 @@ export const BudgetsPage = () => {
         illustration="NoData"
         button={{
           label: 'Conectar ao YNAB',
+          onClick: connectBudgets,
         }}
       />
     </Box>
