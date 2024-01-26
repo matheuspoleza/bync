@@ -24,7 +24,7 @@ export const useYNABAuth = () => {
   const getAccesstTokens = async (authCode: string) => {
     try {
       await window.fetch(
-        `http://localhost:3000/213132/ynab/authorization/${authCode}`,
+        `http://localhost:3000/b66f3403-befb-46ab-9dc1-08c1105dac06/ynab/authorization/${authCode}`,
         {
           method: 'POST',
         }
