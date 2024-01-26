@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "@bync-meta/typescript-config/base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "jsx": "react-jsx"
+  },
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  },
+  "exclude": ["node_modules", "build"]
+}

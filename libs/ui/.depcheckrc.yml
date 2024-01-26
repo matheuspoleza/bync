@@ -1,0 +1,13 @@
+ignores:
+  - '@storybook/*'
+  - '@testing-library/*'
+  - '@vanilla-extract/*'
+  - '@vitejs/*'
+  - '@bync-meta/*'
+  - 'eslint-import-resolver-typescript'
+  - 'vite-tsconfig-paths'
+  - 'rollup'
+  - 'rollup-plugin-esbuild'
+  - 'rollup-plugin-peer-deps-external'
+  - 'rollup-plugin-tsconfig-paths'
+  - 'vitest'

@@ -1,0 +1,60 @@
+{
+  "name": "@bync/style",
+  "version": "1.6.1",
+  "exports": {
+    ".": {
+      "types": "./build/cjs/main.d.ts",
+      "import": "./build/esm/main.js",
+      "default": "./build/cjs/main.js"
+    }
+  },
+  "main": "build/cjs/main.js",
+  "types": "build/cjs/main.d.ts",
+  "scripts": {
+    "build": "yarn g:run-p build:cjs build:esm",
+    "prebuild:cjs": "yarn g:rimraf build/cjs",
+    "build:cjs": "yarn prebuild:cjs && yarn g:tsc -p tsconfig.build.cjs.json && yarn g:tsc-alias -p tsconfig.build.cjs.json && yarn postbuild:cjs",
+    "postbuild:cjs": "touch build/cjs/package.json && echo '{ \"type\": \"commonjs\" }' > build/cjs/package.json",
+    "prebuild:esm": "yarn g:rimraf build/esm",
+    "build:esm": "yarn prebuild:esm && yarn g:tsc -p tsconfig.build.esm.json && yarn g:tsc-alias -p tsconfig.build.esm.json && yarn postbuild:esm",
+    "postbuild:esm": "touch build/esm/package.json && echo '{ \"type\": \"module\" }' > build/esm/package.json",
+    "lint": "yarn g:run-p lint:eslint \"lint:prettier --check\"",
+    "lint:eslint": "yarn g:eslint \"src/**/*.{js,ts}\"",
+    "lint:fix": "yarn g:run-p \"lint:eslint --fix\" \"lint:prettier --write\"",
+    "lint:prettier": "yarn g:prettier . \"!**/*.{js,ts}\"",
+    "lint:report": "yarn g:eslint-output --quiet './src/**/*.{js,ts}'",
+    "test": "yarn g:vitest",
+    "test:check": "yarn g:tsc --noEmit",
+    "test:dependencies": "yarn g:depcheck",
+    "test:unit": "yarn g:vitest run"
+  },
+  "prettier": "@bync-meta/prettier-config",
+  "eslintConfig": {
+    "extends": "@bync-meta/eslint-config"
+  },
+  "dependencies": {
+    "@vanilla-extract/css": "1.13.0",
+    "@vanilla-extract/dynamic": "2.0.3",
+    "@vanilla-extract/recipes": "0.4.0",
+    "clsx": "1.2.1",
+    "type-fest": "3.13.1"
+  },
+  "devDependencies": {
+    "@bync-meta/eslint-config": "workspace:*",
+    "@bync-meta/prettier-config": "workspace:*",
+    "@bync-meta/typescript-config": "workspace:*",
+    "@testing-library/jest-dom": "5.16.5",
+    "@testing-library/react": "14.0.0",
+    "@types/react": "18.0.35",
+    "@vanilla-extract/vite-plugin": "3.9.0",
+    "jsdom": "21.1.1",
+    "react": "18.2.0",
+    "vite-tsconfig-paths": "4.2.0"
+  },
+  "peerDependencies": {
+    "react": "^18"
+  },
+  "volta": {
+    "extends": "../../package.json"
+  }
+}
