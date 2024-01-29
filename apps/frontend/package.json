@@ -27,6 +27,7 @@
     "@mui/material": "^5.15.6",
     "@mui/styled-engine-sc": "^6.0.0-alpha.13",
     "@vitejs/plugin-react": "^4.1.1",
+    "axios": "^1.6.7",
     "belvo": "^0.28.0",
     "jotai": "^2.6.3",
     "react": "^18.2.0",

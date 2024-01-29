@@ -1,8 +1,7 @@
+import { TableItem } from '@bync/ui';
 import { faker } from '@faker-js/faker';
 import dayjs from 'dayjs';
 import { type Atom, atom } from 'jotai';
-
-import type { TableItem } from '../Table.interface';
 
 export interface TableItemExample extends TableItem {
   name: string;

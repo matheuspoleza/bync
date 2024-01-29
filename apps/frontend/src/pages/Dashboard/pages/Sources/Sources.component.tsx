@@ -4,12 +4,11 @@ export const SourcesPage = () => {
   return (
     <Box direction="column" align="center" justify="center" height="100%">
       <EmptyPage
-        title="No events exist"
-        description="Events are external actions such as a button click, email sent, order placed etc."
-        illustration="NoContent"
-        learnMoreLink="https://learn.voiceflow.com/en/articles/5443226-events"
+        title="Nenhuma conta bancária conectada"
+        description="Você ainda não conectou nenhuma conta bancária. Conecte suas contas para buscarmos informações e deixarmos seus budgets atualizados."
+        illustration="NoData"
         button={{
-          label: 'Create Event',
+          label: 'Conectar',
         }}
       />
     </Box>

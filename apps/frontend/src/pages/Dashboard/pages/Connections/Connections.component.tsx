@@ -4,12 +4,11 @@ export const ConnectionsPage = () => {
   return (
     <Box direction="column" align="center" justify="center" height="100%">
       <EmptyPage
-        title="No events exist"
-        description="Events are external actions such as a button click, email sent, order placed etc."
-        illustration="NoContent"
-        learnMoreLink="https://learn.voiceflow.com/en/articles/5443226-events"
+        title="Sem conexões"
+        description="Parece que você não tem nenhuma conta bancária conectada ainda. Você precisa conectar seus budgets no YNAB e suas contas primeiramente. Assim podemos fazer as conexões entre eles."
+        illustration="NoData"
         button={{
-          label: 'Create Event',
+          label: 'Conectar contas bancárias',
         }}
       />
     </Box>

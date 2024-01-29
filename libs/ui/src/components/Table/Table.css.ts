@@ -5,6 +5,7 @@ export const tableStyles = style({
   display: 'flex',
   overflowX: 'hidden',
   flexDirection: 'column',
+  width: '100%',
 });
 
 export const tableScrollStyles = style({

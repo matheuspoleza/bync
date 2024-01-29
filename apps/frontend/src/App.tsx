@@ -11,12 +11,17 @@ import { SourcesPage } from './pages/Dashboard/pages/Sources/Sources.component';
 import { ConnectionsPage } from './pages/Dashboard/pages/Connections/Connections.component';
 import { TransactionsPage } from './pages/Dashboard/pages/Transactions/Transactions.component';
 import { useYNABAuth } from './hooks/ynab';
+import { Homepage } from './pages/Dashboard/pages/Home/Home.component';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <DashboardPage />,
     children: [
+      {
+        path: '',
+        element: <Homepage />,
+      },
       {
         path: 'budgets',
         element: <BudgetsPage />,
