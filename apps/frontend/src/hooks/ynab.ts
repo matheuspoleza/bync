@@ -1,10 +1,8 @@
 import { useEffect, useRef } from 'react';
-import { useAtomValue } from 'jotai';
-import * as SessionAtoms from '../atoms/session';
 import { authenticateBudget } from '../clients/api';
 
 export const YNAB_CLIENT_ID = 'WGEAcIpzW8Npx-kFtgYSA-JBDUPodjRKQVqoCD0cRZA';
-export const YNAB_REDIRECT_URL = 'http://localhost:5173/budgets';
+export const YNAB_REDIRECT_URL = 'http://localhost:5173/onboarding/connection';
 
 const removeQueryParam = (paramToRemove: string) => {
   const currentUrl = window.location.href;
@@ -23,11 +21,10 @@ export const useYNABConnect = () => {
 
 export const useYNABAuth = () => {
   const hasRun = useRef(false);
-  const activeCustomerID = useAtomValue(SessionAtoms.activeCustomerID);
 
   const getAccesstTokens = async (authCode: string) => {
     try {
-      await authenticateBudget(activeCustomerID, authCode, YNAB_REDIRECT_URL);
+      await authenticateBudget(authCode, YNAB_REDIRECT_URL);
     } catch (e) {
       console.log(e);
     }

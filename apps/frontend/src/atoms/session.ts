@@ -1,3 +1,9 @@
-import { atom } from 'jotai';
+import { atomWithStorage } from 'jotai/utils';
+import { STORAGE_KEYS } from './utils';
 
-export const activeCustomerID = atom('b66f3403-befb-46ab-9dc1-08c1105dac06');
+const CUSTOMER_ID = 'b66f3403-befb-46ab-9dc1-08c1105dac06';
+
+export const activeCustomerID = atomWithStorage(
+  STORAGE_KEYS.CUSTOMER_ID,
+  CUSTOMER_ID
+);

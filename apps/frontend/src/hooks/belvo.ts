@@ -1,3 +1,4 @@
+import { createBankLinkSession } from '../clients/api';
 import { useScript } from './scripts';
 
 declare global {
@@ -6,25 +7,17 @@ declare global {
   }
 }
 
-export const createBankingSession = () => {
-  return fetch('http://localhost:3000/banking/session', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-    },
-  })
-    .then((response) => response.json())
-    .then((data) => data)
-    .catch((error) => console.error('Error:', error));
-};
-
-export const useBelvo = () => {
+export const useBelvo = ({
+  onSuccess,
+}: {
+  onSuccess: (data: { link: string; institution: string }) => void;
+}) => {
   const widgetCallback = async () => {
-    const callback = () => {};
-    const successCallbackFunction = (link: any, institution: any) => {
-      // Do something with the link and institution,
-      // such as associate it with your registered user in your database.
-      console.log({ link, institution });
+    const successCallbackFunction = async (
+      link: string,
+      institution: string
+    ) => {
+      onSuccess({ link, institution });
     };
     const onExitCallbackFunction = (data: any) => {
       // Do something with the exit data.
@@ -35,15 +28,15 @@ export const useBelvo = () => {
       console.log({ data });
     };
     const config = {
-      // Add your startup configuration here.
-
       callback: (link: any, institution: any) =>
         successCallbackFunction(link, institution),
       onExit: (data: any) => onExitCallbackFunction(data),
       onEvent: (data: any) => onEventCallbackFunction(data),
+      locale: 'pt',
+      country_codes: ['BR'],
     };
 
-    const { access } = await createBankingSession();
+    const { access } = await createBankLinkSession();
 
     window.belvoSDK.createWidget(access, config).build();
   };

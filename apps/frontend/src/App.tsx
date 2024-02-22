@@ -12,10 +12,11 @@ import { ConnectionsPage } from './pages/Dashboard/pages/Connections/Connections
 import { TransactionsPage } from './pages/Dashboard/pages/Transactions/Transactions.component';
 import { useYNABAuth } from './hooks/ynab';
 import { Homepage } from './pages/Dashboard/pages/Home/Home.component';
+import { OnboardingPage } from './pages/Onboarding/Onboarding.component';
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: '/dashboard',
     element: <DashboardPage />,
     children: [
       {
@@ -41,7 +42,15 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: '/login',
+    path: '/onboarding/:step',
+    element: <OnboardingPage />,
+  },
+  {
+    path: '/onboarding',
+    element: <OnboardingPage />,
+  },
+  {
+    path: '/',
     element: <LoginPage />,
   },
   {

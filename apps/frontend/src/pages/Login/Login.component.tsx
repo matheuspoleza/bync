@@ -5,23 +5,29 @@ import CssBaseline from '@mui/joy/CssBaseline';
 import Box from '@mui/joy/Box';
 import Button from '@mui/joy/Button';
 import Checkbox from '@mui/joy/Checkbox';
-import Divider from '@mui/joy/Divider';
 import FormControl from '@mui/joy/FormControl';
 import FormLabel, { formLabelClasses } from '@mui/joy/FormLabel';
 import IconButton from '@mui/joy/IconButton';
-import Link from '@mui/joy/Link';
 import Input from '@mui/joy/Input';
 import Typography from '@mui/joy/Typography';
 import Stack from '@mui/joy/Stack';
 import BadgeRoundedIcon from '@mui/icons-material/BadgeRounded';
 
-import { GoogleIcon } from './components';
 import { ColorSchemeToggle } from '../../components/ColorSchemaToggle.component';
 import { SignInFormElement } from './Login.types';
-// import { useBelvo } from '../../hooks/belvo';
+import { useNavigate } from 'react-router-dom';
+import * as atoms from '../../atoms';
 
 export default function LoginPage() {
-  // const { createWidget } = useBelvo();
+  const navigate = useNavigate();
+
+  const login = () => {
+    localStorage.setItem(
+      atoms.utils.STORAGE_KEYS.CUSTOMER_ID,
+      'b66f3403-befb-46ab-9dc1-08c1105dac06'
+    );
+    navigate('/onboarding');
+  };
 
   return (
     <CssVarsProvider defaultMode="dark" disableTransitionOnChange>
@@ -103,52 +109,11 @@ export default function LoginPage() {
               },
             }}
           >
-            <Stack gap={4} sx={{ mb: 2 }}>
-              <Stack gap={1}>
-                <Typography level="h3">Login</Typography>
-                <Typography level="body-sm">
-                  Primeira vez?{' '}
-                  <Link href="sign-up" level="title-sm">
-                    Cadastre aqui!
-                  </Link>
-                </Typography>
-              </Stack>
-              <Button
-                variant="soft"
-                color="neutral"
-                fullWidth
-                startDecorator={<GoogleIcon />}
-              >
-                Continue com Google
-              </Button>
-            </Stack>
-            <Divider
-              sx={(theme) => ({
-                [theme.getColorSchemeSelector('light')]: {
-                  color: { xs: '#FFF', md: 'text.tertiary' },
-                  '--Divider-lineColor': {
-                    xs: '#FFF',
-                    md: 'var(--joy-palette-divider)',
-                  },
-                },
-              })}
-            >
-              ou
-            </Divider>
             <Stack gap={4} sx={{ mt: 2 }}>
               <form
                 onSubmit={(event: React.FormEvent<SignInFormElement>) => {
                   event.preventDefault();
-                  const formElements = event.currentTarget.elements;
-                  const data = {
-                    email: formElements.email.value,
-                    password: formElements.password.value,
-                    persistent: formElements.persistent.checked,
-                  };
-
-                  console.log({ data });
-
-                  // createWidget();
+                  login();
                 }}
               >
                 <FormControl required>
@@ -172,9 +137,6 @@ export default function LoginPage() {
                       label="Lembre de mim"
                       name="persistent"
                     />
-                    <Link level="title-sm" href="#replace-with-a-link">
-                      Esqueceu a senha?
-                    </Link>
                   </Box>
                   <Button type="submit" fullWidth>
                     Fazer login
