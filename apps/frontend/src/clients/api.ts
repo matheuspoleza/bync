@@ -6,6 +6,7 @@ import {
 } from '../models/BudgetAccounts';
 import { BankLink, BankLinkSession } from '../models/BankLink';
 import * as atoms from '../atoms';
+import { BankAccount } from '../models/BankAccount';
 
 // TODO: move to env var
 export const YNAB_CLIENT_ID = 'WGEAcIpzW8Npx-kFtgYSA-JBDUPodjRKQVqoCD0cRZA';
@@ -68,5 +69,17 @@ export const createBankLink = async (bankLink: BankLink): Promise<void> => {
     throw new Error('customer not found');
   }
 
-  await axios.post(`/banking/${customerID}/link`, bankLink);
+  await api.post(`/banking/${customerID}/link`, bankLink);
+};
+
+export const getAllBankAccounts = async (): Promise<BankAccount[]> => {
+  const customerID = getCustomerID();
+
+  if (!customerID) {
+    throw new Error('customer not found');
+  }
+
+  return api
+    .get<BankAccount[]>(`/banking/${customerID}/accounts`)
+    .then((response) => response.data);
 };

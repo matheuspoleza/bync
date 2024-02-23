@@ -11,18 +11,12 @@ import { CollectorSessionRepository } from 'src/infrastructure/repositories/coll
 @Injectable()
 export class CollectService {
   constructor(
-    @Inject(CollectorRepository)
     private readonly collectorRepository: CollectorRepository,
     private readonly collectorSessionRepository: CollectorSessionRepository,
     private readonly sessionRepository: SessionRepository,
     private readonly bankAccountRepository: BankAccountRepository,
     private readonly customerRepository: CustomerRepository,
   ) {}
-
-  private getFirstDayOfCurrentMonth(): Date {
-    const firstDayOfCurrentMonth = LocalDate.now().withDayOfMonth(1);
-    return convert(firstDayOfCurrentMonth).toDate();
-  }
 
   private createDateFromString(dateStr: string): Date {
     const parts = dateStr.split('-');
@@ -39,8 +33,9 @@ export class CollectService {
       (c) => c.id,
     );
 
-    const bankAccounts =
-      await this.bankAccountRepository.getAllForCustomers(customerIDs);
+    const bankAccounts = await this.bankAccountRepository.getAllForCustomers(
+      customerIDs,
+    );
 
     const session = new CollectorSession<Transaction>(
       start,

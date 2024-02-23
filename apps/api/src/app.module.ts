@@ -17,6 +17,8 @@ import { BelvoService } from './infrastructure/belvo/belvo.service';
 import { SyncController } from './presentation/sync.controller';
 import { BankingController } from './presentation/banking.controller';
 import { BudgetsController } from './presentation/budgets.controller';
+import { BankingService } from './application/banking.service';
+import { BankAccountLinkRepository } from './infrastructure/repositories/bank-account-link.repository';
 
 @Module({
   imports: [
@@ -42,6 +44,8 @@ import { BudgetsController } from './presentation/budgets.controller';
     SessionRepository,
     PublishService,
     BelvoService,
+    BankingService,
+    BankAccountLinkRepository,
   ],
   controllers: [SyncController, BankingController, BudgetsController],
 })

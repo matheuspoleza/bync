@@ -6,6 +6,7 @@ import { useYNABConnect } from '../../hooks/ynab';
 import { useParams } from 'react-router-dom';
 import { useBudgetAccounts } from '../../hooks/budgets';
 import PendingIcon from '@mui/icons-material/PendingOutlined';
+import * as api from '../../clients/api';
 
 export const OnboardingPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -14,7 +15,8 @@ export const OnboardingPage = () => {
   const [activeStep, setActiveStep] = useState<string>(step ?? 'banking');
 
   const { createWidget } = useBelvo({
-    onSuccess: () => {
+    onSuccess: async ({ link, institution }) => {
+      await api.createBankLink({ linkID: link, institution });
       setActiveStep('ynab');
       setIsLoading(false);
     },
