@@ -14,9 +14,6 @@
     "lint:report": "yarn g:eslint-output --quiet './src/**/*.{js,ts,tsx,mdx}'"
   },
   "dependencies": {
-    "@bync/icons": "workspace:*",
-    "@bync/style": "workspace:*",
-    "@bync/ui": "workspace:*",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@fontsource/inter": "^5.0.16",

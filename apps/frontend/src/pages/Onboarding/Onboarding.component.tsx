@@ -1,5 +1,4 @@
 import { Grid, Typography, Box, Button, Select, MenuItem } from '@mui/material';
-import { ByncLogo } from '../Dashboard/components/ByncLogo.component';
 import { useState } from 'react';
 import { useBelvo } from '../../hooks/belvo';
 import { useYNABConnect } from '../../hooks/ynab';
@@ -43,9 +42,7 @@ export const OnboardingPage = () => {
     >
       {activeStep === 'banking' && (
         <Grid item>
-          <Box>
-            <ByncLogo fill="black" />
-          </Box>
+          <Box>{/* // add logo here */}</Box>
           <Typography>Step 1/3</Typography>
           <Typography variant="h5">Conectar contas bancárias</Typography>
           <Button
@@ -62,9 +59,7 @@ export const OnboardingPage = () => {
 
       {activeStep === 'ynab' && (
         <Grid item>
-          <Box>
-            <ByncLogo fill="black" />
-          </Box>
+          <Box>{/* // add logo here */}</Box>
           <Typography>Step 2/3</Typography>
           <Typography variant="h5">Conectar budgets ynab</Typography>
           <Button
@@ -80,9 +75,7 @@ export const OnboardingPage = () => {
 
       {activeStep === 'connection' && (
         <Grid item>
-          <Box>
-            <ByncLogo fill="black" />
-          </Box>
+          <Box>{/* // add logo here */}</Box>
           <Typography>Step 3/3</Typography>
 
           <Box>
