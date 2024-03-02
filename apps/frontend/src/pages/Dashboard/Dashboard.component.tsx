@@ -1,11 +1,11 @@
 import { Box, Grid, MenuItem, Select } from '@mui/material';
 import { useBankingAccounts } from '../../hooks/banking';
 import { useBudgetAccounts } from '../../hooks/budgets';
-import { useConnectionsForm } from './Connections.hook';
+import { useConnectionsForm } from './Dashboard.hook';
 import PendingIcon from '@mui/icons-material/PendingOutlined';
 import AutorenewOutlinedIcon from '@mui/icons-material/AutorenewOutlined';
 
-export const ConnectionsPage = () => {
+export const DashboardPage = () => {
   const budgetAccounts = useBudgetAccounts();
   const bankingAccounts = useBankingAccounts();
   const {

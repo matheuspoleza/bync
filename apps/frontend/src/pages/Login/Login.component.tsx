@@ -1,5 +1,3 @@
-// import { useNavigate } from 'react-router-dom';
-// import * as atoms from '../../atoms';
 import React from 'react';
 
 import {
@@ -13,49 +11,37 @@ import {
   Button,
   Input,
 } from '../../components/ui';
+import { useAuth } from '../../context/auth';
 
 export const LoginPage: React.FC = () => {
-  // const navigate = useNavigate();
-
-  // const login = () => {
-  //   localStorage.setItem(
-  //     atoms.utils.STORAGE_KEYS.CUSTOMER_ID,
-  //     'b66f3403-befb-46ab-9dc1-08c1105dac06'
-  //   );
-  //   navigate('/onboarding');
-  // };
+  const { login } = useAuth();
 
   return (
-    <div>
+    <div className="min-h-screen flex items-center justify-center">
       <Card>
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl">Create an account</CardTitle>
+          <CardTitle className="text-2xl">Login</CardTitle>
           <CardDescription>
-            Enter your email below to create your account
+            Coloque suas credenciais para ter acesso a plataforma
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">
-                Or continue with
-              </span>
-            </div>
-          </div>
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" placeholder="m@example.com" />
+            <Input id="email" type="email" placeholder="m@exemplo.com" />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">Senha</Label>
             <Input id="password" type="password" />
           </div>
         </CardContent>
         <CardFooter>
-          <Button className="w-full">Create account</Button>
+          <Button
+            className="w-full"
+            onClick={() => login('b66f3403-befb-46ab-9dc1-08c1105dac06')}
+          >
+            Entrar
+          </Button>
         </CardFooter>
       </Card>
     </div>
