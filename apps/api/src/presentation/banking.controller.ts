@@ -10,6 +10,11 @@ export class BankingController {
     private readonly bankingService: BankingService,
   ) {}
 
+  @Get(':customerID/accounts')
+  async getAllBankAccounts(@Param('customerID') customerID: string) {
+    return this.bankingService.getAllAccountsForCustomer(customerID);
+  }
+
   @Post('belvo/session')
   async createSession() {
     return this.belvoService.createAccessToken();
@@ -23,8 +28,17 @@ export class BankingController {
     return this.bankingService.createLink(customerID, data);
   }
 
-  @Get(':customerID/link')
-  async getAllLinks(@Param('customerID') customerID: string) {
-    return this.bankingService.getAllLinks(customerID);
+  @Post('belvo/webhook')
+  async receiveBelvoWebhook(@Body() data: any) {
+    if (
+      data.webhook_type === 'ACCOUNTS' &&
+      data.webhook_code === 'historical_update'
+    ) {
+      const linkID = data.link_id;
+
+      if (!linkID) return;
+
+      this.bankingService.handleLinkDataAvailable(linkID);
+    }
   }
 }

@@ -1,10 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '../database/database.service';
-import {
-  BankAccount,
-  BankAccountType,
-  IBankAccountRepository,
-} from 'src/domain/bank-account';
+import { BankAccount, IBankAccountRepository } from 'src/domain/bank-account';
 import { Tables } from '../database/database.types';
 
 @Injectable()
@@ -26,13 +22,14 @@ export class BankAccountRepository implements IBankAccountRepository {
     return bankAccountsData.map(
       (bankAccount) =>
         new BankAccount(
-          bankAccount.id,
-          bankAccount.ynab_account_name,
-          bankAccount.ynab_account_id,
-          bankAccount.mobilis_account_name,
-          bankAccount.mobilis_account_id,
-          bankAccount.type as BankAccountType,
           bankAccount.customer_id,
+          bankAccount.link_id,
+          bankAccount.type,
+          bankAccount.name,
+          bankAccount.number,
+          bankAccount.institution,
+          bankAccount.balance,
+          bankAccount.id,
         ),
     );
   }
@@ -54,13 +51,14 @@ export class BankAccountRepository implements IBankAccountRepository {
     return bankAccountsData.map(
       (bankAccount) =>
         new BankAccount(
-          bankAccount.id,
-          bankAccount.ynab_account_name,
-          bankAccount.ynab_account_id,
-          bankAccount.mobilis_account_name,
-          bankAccount.mobilis_account_id,
-          bankAccount.type as BankAccountType,
           bankAccount.customer_id,
+          bankAccount.link_id,
+          bankAccount.type,
+          bankAccount.name,
+          bankAccount.number,
+          bankAccount.institution,
+          bankAccount.balance,
+          bankAccount.id,
         ),
     );
   }
@@ -82,14 +80,38 @@ export class BankAccountRepository implements IBankAccountRepository {
     return bankAccountsData.map(
       (bankAccount) =>
         new BankAccount(
-          bankAccount.id,
-          bankAccount.ynab_account_name,
-          bankAccount.ynab_account_id,
-          bankAccount.mobilis_account_name,
-          bankAccount.mobilis_account_id,
-          bankAccount.type as BankAccountType,
           bankAccount.customer_id,
+          bankAccount.link_id,
+          bankAccount.type,
+          bankAccount.name,
+          bankAccount.number,
+          bankAccount.institution,
+          bankAccount.balance,
+          bankAccount.id,
         ),
     );
+  }
+
+  async createMany(bankAccounts: BankAccount[]): Promise<void> {
+    const client = this.databaseService.getClient();
+
+    const data = bankAccounts.map<
+      Omit<Tables<'bank_accounts'>, 'id' | 'created_at'>
+    >((b) => ({
+      type: b.type,
+      balance: b.balance,
+      customer_id: b.customerID,
+      institution: b.institution,
+      link_id: b.linkID,
+      name: b.name,
+      number: b.number,
+    }));
+
+    const result = await client
+      .from(BankAccountRepository.TABLE_NAME)
+      .insert(data)
+      .throwOnError();
+
+    console.log('DB RESULT', { result });
   }
 }

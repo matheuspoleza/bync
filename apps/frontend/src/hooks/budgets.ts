@@ -19,7 +19,6 @@ export const useBudgetAccounts = () => {
 
   return {
     accounts,
-    accountAtoms: atoms.budgets.accountsTableData,
     isFetching,
   };
 };

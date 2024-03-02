@@ -34,8 +34,8 @@ export class PublishService {
 
       return new PublishAccountData(
         data.customerID,
-        bankAccount.ynabName,
-        bankAccount.ynabAccountID,
+        bankAccount.name,
+        bankAccount.id,
         data.transactions.map((t) =>
           this.platformsService.fromMobilisToYnab(t),
         ),

@@ -57,6 +57,16 @@ export const getAllBudgetAccounts = async (): Promise<BudgetAccount[]> => {
     );
 };
 
+export const getAllBankingAccounts = async (): Promise<BankAccount[]> => {
+  const customerID = getCustomerID();
+
+  if (!customerID) {
+    throw new Error('customer not found');
+  }
+
+  return (await api.get<BankAccount[]>(`/banking/${customerID}/accounts`)).data;
+};
+
 export const createBankLinkSession = async () => {
   const session = await api.post<BankLinkSession>(`/banking/belvo/session`);
   return session.data;

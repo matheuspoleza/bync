@@ -31,6 +31,7 @@ export class BankAccountLinkRepository implements IBankAccountLinkRepository {
           link.link_id,
           link.institution,
           link.status as BankAccountLinkStatus,
+          link.customer_id,
         ),
     );
   }
@@ -59,6 +60,40 @@ export class BankAccountLinkRepository implements IBankAccountLinkRepository {
       created.link_id,
       created.institution,
       created.status as BankAccountLinkStatus,
+      created.customer_id,
     );
+  }
+
+  async getOne(linkID: string): Promise<BankAccountLink | null> {
+    const client = this.databaseService.getClient();
+
+    const { error, data } = await client
+      .schema('public')
+      .from(BankAccountLinkRepository.TABLE_NAME)
+      .select('*')
+      .eq('link_id', linkID);
+
+    if (error || !data || data?.length === 0) return null;
+
+    const link = data[0] as Tables<'bank_account_link'>;
+
+    return new BankAccountLink(
+      link.id,
+      link.link_id,
+      link.institution,
+      link.status as BankAccountLinkStatus,
+      link.customer_id,
+    );
+  }
+
+  async updateOne(link: BankAccountLink): Promise<void> {
+    const client = this.databaseService.getClient();
+
+    await client
+      .schema('public')
+      .from(BankAccountLinkRepository.TABLE_NAME)
+      .update({ status: link.status })
+      .eq('id', link.id)
+      .throwOnError();
   }
 }

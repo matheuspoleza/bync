@@ -1,10 +1,9 @@
-import LoginPage from './pages/Login/Login.component';
-
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import SignupPage from './pages/Signup/Signup.component';
-import './assets/fonts.css';
 import { useYNABAuth } from './hooks/ynab';
 import { OnboardingPage } from './pages/Onboarding/Onboarding.component';
+import { ConnectionsPage } from './pages/Connections/Connections.component';
+import { ThemeProvider } from './components/lib/ThemeProvider.component';
+import { LoginPage } from './pages/Login';
 
 const router = createBrowserRouter([
   {
@@ -16,12 +15,12 @@ const router = createBrowserRouter([
     element: <OnboardingPage />,
   },
   {
-    path: '/',
-    element: <LoginPage />,
+    path: '/connections',
+    element: <ConnectionsPage />,
   },
   {
-    path: '/sign-up',
-    element: <SignupPage />,
+    path: '/',
+    element: <LoginPage />,
   },
 ]);
 
@@ -30,13 +29,33 @@ const YNABProvider = () => {
   return null;
 };
 
+// const AppContent = () => {
+//   const { isComplete } = useOnboarding();
+//   const navigate = useNavigate();
+
+//   useEffect(() => {
+//     if (isComplete) {
+//       navigate('/connections');
+//     } else {
+//       navigate('/onboarding');
+//     }
+//   }, [isComplete]);
+
+//   return (
+//     <>
+//       <div id="belvo" />
+//       <YNABProvider />
+//     </>
+//   );
+// };
+
 const App = () => {
   return (
-    <>
-      <div id="belvo" />
+    <ThemeProvider defaultTheme="light" storageKey="@bync/ui-theme">
       <RouterProvider router={router} />
+      <div id="belvo" />
       <YNABProvider />
-    </>
+    </ThemeProvider>
   );
 };
 

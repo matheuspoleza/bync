@@ -19,3 +19,13 @@ INSERT INTO storage.buckets (
     NULL,
     NULL
 );
+
+INSERT into public.customers (
+    id,
+    full_name,
+    created_at
+) VALUES (
+    'b66f3403-befb-46ab-9dc1-08c1105dac06',
+    'Matheus Alexandre Poleza',
+    '2024-01-24 01:08:46+00'
+)

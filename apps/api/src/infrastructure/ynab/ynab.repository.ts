@@ -15,9 +15,6 @@ export class YNABRepository {
   private isTokenExpired({ created_at, expires_in }: YNABCustomerAuthDTO) {
     const expirationTime = new Date(created_at * 1000 + expires_in * 1000);
     const currentTime = new Date();
-
-    console.log({ expirationTime, currentTime });
-
     return currentTime > expirationTime;
   }
 
@@ -31,8 +28,6 @@ export class YNABRepository {
     let authData = customerAuth;
 
     const expired = this.isTokenExpired(authData);
-
-    console.log({ expired });
 
     if (expired) {
       const response = await axios.post<YNABCustomerAuthDTO>(
@@ -82,15 +77,27 @@ export class YNABRepository {
 
   public async getBudgets(customerID: string) {
     const client = await this.getCustomerClient(customerID);
-    return client.budgets.getBudgets();
+    const { data } = await client.budgets.getBudgets();
+    return data.default_budget
+      ? [data.default_budget]
+      : [
+          data.budgets.reduce((prev, current) => {
+            if (current.name.includes('Archived')) return prev;
+
+            return new Date(prev.last_modified_on) >
+              new Date(current.last_modified_on)
+              ? prev
+              : current;
+          }),
+        ];
   }
 
   public async getAllBudgetsAccounts(customerID: string) {
     const client = await this.getCustomerClient(customerID);
-    const { data } = await client.budgets.getBudgets();
+    const budgets = await this.getBudgets(customerID);
 
     const accountsResponse = await Promise.all(
-      data.budgets.flatMap((budget) => client.accounts.getAccounts(budget.id)),
+      budgets.flatMap((budget) => client.accounts.getAccounts(budget.id)),
     );
 
     return accountsResponse.flatMap(
@@ -105,9 +112,9 @@ export class YNABRepository {
   ): Promise<Transaction[]> {
     const client = await this.getCustomerClient(customerID);
 
-    const budgets = await client.budgets.getBudgets(true);
+    const budgets = await this.getBudgets(customerID);
 
-    const budget = budgets.data.budgets?.find(
+    const budget = budgets?.find(
       (b) => !!b.accounts?.find((a) => a.id === accountID),
     );
 

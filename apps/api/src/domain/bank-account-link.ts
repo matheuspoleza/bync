@@ -6,6 +6,8 @@ export interface LinkDTO {
 export interface IBankAccountLinkRepository {
   getCustomerLinks(customerID: string): Promise<BankAccountLink[]>;
   createLink(customerID: string, linkDTO: LinkDTO): Promise<BankAccountLink>;
+  getOne(linkID: string): Promise<BankAccountLink | null>;
+  updateOne(link: BankAccountLink): Promise<void>;
 }
 
 export enum BankAccountLinkStatus {
@@ -20,10 +22,6 @@ export class BankAccountLink {
     public linkID: string,
     public institution: string,
     public status: BankAccountLinkStatus,
-  ) {
-    this.id = id;
-    this.linkID = linkID;
-    this.institution = institution;
-    this.status = status;
-  }
+    public customerID: string,
+  ) {}
 }

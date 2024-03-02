@@ -18,6 +18,10 @@ export class BelvoService implements OnModuleInit {
     });
   }
 
+  async getAccounts(linkID: string) {
+    return this.client.accounts.retrieve(linkID);
+  }
+
   async onModuleInit() {
     this.client = new Belvo(
       this.configService.get<string>('BELVO_SECRET_ID'),

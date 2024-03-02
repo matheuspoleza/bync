@@ -28,7 +28,7 @@ export class CollectorRepository {
 
     return bankAccounts.reduce((acc, account) => {
       const transactions = allTransactions.filter((transaction) =>
-        transaction.isFromAccount(account.mobilisAccountID),
+        transaction.isFromAccount(Number(account.id ?? '1')),
       );
 
       return [
