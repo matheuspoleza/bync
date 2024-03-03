@@ -7,3 +7,5 @@ export const accounts = atomWithStorage<any[]>(
   []
 );
 export const isFetchingAccounts = atom(false);
+
+export const isAuthorizing = atom(false);

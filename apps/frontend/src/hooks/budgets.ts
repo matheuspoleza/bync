@@ -1,24 +1,34 @@
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import * as atoms from '../atoms';
-import { useEffect } from 'react';
 import { getAllBudgetAccounts } from '../clients/api';
+import { useEffect } from 'react';
 
 export const useBudgetAccounts = () => {
   const [accounts, setAccounts] = useAtom(atoms.budgets.accounts);
   const [isFetching, setIsFetching] = useAtom(atoms.budgets.isFetchingAccounts);
+  const isAuthorizing = useAtomValue(atoms.budgets.isAuthorizing);
 
-  useEffect(() => {
-    if (accounts.length) return;
-
+  const fetchBudgetAccounts = () => {
     setIsFetching(true);
+
+    if (isAuthorizing) return;
 
     getAllBudgetAccounts()
       .then((accounts) => setAccounts(accounts))
       .finally(() => setIsFetching(false));
-  }, []);
+  };
+
+  useEffect(() => {
+    if (isFetching && !isAuthorizing) {
+      getAllBudgetAccounts()
+        .then((accounts) => setAccounts(accounts))
+        .finally(() => setIsFetching(false));
+    }
+  }, [isAuthorizing]);
 
   return {
     accounts,
+    fetchBudgetAccounts,
     isFetching,
   };
 };

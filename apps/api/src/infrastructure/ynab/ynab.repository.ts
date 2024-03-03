@@ -27,7 +27,7 @@ export class YNABRepository {
     );
     let authData = customerAuth;
 
-    const expired = this.isTokenExpired(authData);
+    const expired = authData ? this.isTokenExpired(authData) : true;
 
     if (expired) {
       const response = await axios.post<YNABCustomerAuthDTO>(

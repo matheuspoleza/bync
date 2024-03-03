@@ -46,8 +46,6 @@ export const budgetAccountAdapter = {
     last_reconciled_at,
     uncleared_balance,
   }: BudgetAccountResponse): BudgetAccount => {
-    console.log({ type });
-
     return {
       id,
       balance,

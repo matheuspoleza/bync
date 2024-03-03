@@ -111,7 +111,5 @@ export class BankAccountRepository implements IBankAccountRepository {
       .from(BankAccountRepository.TABLE_NAME)
       .insert(data)
       .throwOnError();
-
-    console.log('DB RESULT', { result });
   }
 }

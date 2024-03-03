@@ -9,8 +9,6 @@ export const useLocalStorageState = <T extends unknown>(
     return storedValue ? JSON.parse(storedValue) : initialValue;
   });
 
-  console.log('state', { state });
-
   useEffect(() => {
     let value = state;
 
@@ -25,10 +23,7 @@ export const useLocalStorageState = <T extends unknown>(
 
   useEffect(() => {
     const handleStorageChange = (e: any) => {
-      console.log('EVENT', { e });
-
       if (e.key === key) {
-        console.log('event', { e });
         setState(e.newValue ? JSON.parse(e.newValue) : initialValue);
       }
     };

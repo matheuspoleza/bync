@@ -1,7 +1,21 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, useNavigate } from 'react-router-dom';
 import { DashboardPage } from './pages/Dashboard/Dashboard.component';
 import { LoginPage } from './pages/Login/Login.component';
 import { Layout } from './Layout';
+import { useEffect } from 'react';
+import { useYNABAuth } from './hooks/ynab';
+
+const YnabConnectedRoute: React.FC = () => {
+  const navigate = useNavigate();
+  useYNABAuth();
+
+  useEffect(() => {
+    navigate('/');
+    navigate('?modal=OnboardingModal&step=connection');
+  }, []);
+
+  return null;
+};
 
 export const router = createBrowserRouter([
   {
@@ -17,5 +31,9 @@ export const router = createBrowserRouter([
         element: <LoginPage />,
       },
     ],
+  },
+  {
+    path: '/ynab/connected',
+    element: <YnabConnectedRoute />,
   },
 ]);

@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useYNABAuth } from './hooks/ynab';
 import { useAuth } from './context/auth';
+import { ModalProvider } from './context/modal';
 
 const YNABProvider = () => {
   useYNABAuth();
@@ -21,10 +22,10 @@ export const Layout: React.FC = () => {
   }, [isLoggedIn]);
 
   return (
-    <>
+    <ModalProvider>
       <div id="belvo" />
       <YNABProvider />
       <Outlet />
-    </>
+    </ModalProvider>
   );
 };

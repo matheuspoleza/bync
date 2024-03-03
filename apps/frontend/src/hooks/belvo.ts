@@ -9,8 +9,12 @@ declare global {
 
 export const useBelvo = ({
   onSuccess,
+  onExit,
+  onPageLoad,
 }: {
   onSuccess: (data: { link: string; institution: string }) => void;
+  onExit?: () => void;
+  onPageLoad?: () => void;
 }) => {
   const widgetCallback = async () => {
     const successCallbackFunction = async (
@@ -19,19 +23,15 @@ export const useBelvo = ({
     ) => {
       onSuccess({ link, institution });
     };
-    const onExitCallbackFunction = (data: any) => {
-      // Do something with the exit data.
-      console.log({ data });
-    };
-    const onEventCallbackFunction = (data: any) => {
-      // Do something with the exit data.
-      console.log({ data });
-    };
     const config = {
       callback: (link: any, institution: any) =>
         successCallbackFunction(link, institution),
-      onExit: (data: any) => onExitCallbackFunction(data),
-      onEvent: (data: any) => onEventCallbackFunction(data),
+      onExit,
+      onEvent: ({ eventName }: any) => {
+        if (eventName === 'PAGE_LOAD') {
+          onPageLoad?.();
+        }
+      },
       locale: 'pt',
       country_codes: ['BR'],
     };

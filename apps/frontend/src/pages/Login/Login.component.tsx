@@ -1,16 +1,6 @@
 import React from 'react';
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-  Label,
-  Button,
-  Input,
-} from '../../components/ui';
+import { Card, Label, Button, Input } from '../../components/ui';
 import { useAuth } from '../../context/auth';
 
 export const LoginPage: React.FC = () => {
@@ -18,14 +8,14 @@ export const LoginPage: React.FC = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center">
-      <Card>
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl">Login</CardTitle>
-          <CardDescription>
+      <Card.Container>
+        <Card.Header className="space-y-1">
+          <Card.Title className="text-2xl">Login</Card.Title>
+          <Card.Description>
             Coloque suas credenciais para ter acesso a plataforma
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="grid gap-4">
+          </Card.Description>
+        </Card.Header>
+        <Card.Content className="grid gap-4">
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
             <Input id="email" type="email" placeholder="m@exemplo.com" />
@@ -34,16 +24,16 @@ export const LoginPage: React.FC = () => {
             <Label htmlFor="password">Senha</Label>
             <Input id="password" type="password" />
           </div>
-        </CardContent>
-        <CardFooter>
+        </Card.Content>
+        <Card.Footer>
           <Button
             className="w-full"
             onClick={() => login('b66f3403-befb-46ab-9dc1-08c1105dac06')}
           >
             Entrar
           </Button>
-        </CardFooter>
-      </Card>
+        </Card.Footer>
+      </Card.Container>
     </div>
   );
 };
