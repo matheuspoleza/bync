@@ -4,6 +4,7 @@ import { LoginPage } from './pages/Login/Login.component';
 import { Layout } from './Layout';
 import { useEffect } from 'react';
 import { useYNABAuth } from './hooks/ynab';
+import { SignupPage } from './pages/Signup';
 
 const YnabConnectedRoute: React.FC = () => {
   const navigate = useNavigate();
@@ -31,6 +32,10 @@ export const router = createBrowserRouter([
         element: <LoginPage />,
       },
     ],
+  },
+  {
+    path: '/sign-up',
+    element: <SignupPage />,
   },
   {
     path: '/ynab/connected',
