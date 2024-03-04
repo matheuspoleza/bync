@@ -7,3 +7,8 @@ export * as Typography from './Typography.component';
 export * from './Progress.component';
 export * as Command from './Command.component';
 export * as Popover from './Popover.component';
+export * as Tabs from './Tabs.component';
+export * as DropdownMenu from './DropdownMenu.component';
+export * as Avatar from './Avatar.component';
+export * as Table from './Table.component';
+export * from './Checkbox.component';
