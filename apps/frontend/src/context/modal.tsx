@@ -28,6 +28,15 @@ interface ModalContextType {
 
 const ModalContext = createContext<ModalContextType | undefined>(undefined);
 
+export const useModals = () => {
+  const context = useContext(ModalContext);
+  if (!context) {
+    throw new Error('useModal must be used within a ModalProvider');
+  }
+
+  return { closeModals: context.closeModal };
+};
+
 export const useModal = <Props,>(
   modalInstance: ModalInstance<Props>
 ): { openModal: (props?: Props) => void; closeModal: () => void } => {
@@ -98,6 +107,7 @@ export const ModalProvider: React.FC<React.PropsWithChildren> = ({
 
     if (modalName) {
       const modalInstance = modalsManager.get(modalName);
+
       if (modalInstance) {
         openModal(modalInstance, props);
       }

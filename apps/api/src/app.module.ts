@@ -19,6 +19,8 @@ import { BankingController } from './presentation/banking.controller';
 import { BudgetsController } from './presentation/budgets.controller';
 import { BankingService } from './application/banking.service';
 import { BankAccountLinkRepository } from './infrastructure/repositories/bank-account-link.repository';
+import { CustomerController } from './presentation/customer.controller';
+import { CustomerService } from './application/customer.service';
 
 @Module({
   imports: [
@@ -46,7 +48,14 @@ import { BankAccountLinkRepository } from './infrastructure/repositories/bank-ac
     BelvoService,
     BankingService,
     BankAccountLinkRepository,
+    CustomerRepository,
+    CustomerService,
   ],
-  controllers: [SyncController, BankingController, BudgetsController],
+  controllers: [
+    SyncController,
+    BankingController,
+    BudgetsController,
+    CustomerController,
+  ],
 })
 export class AppModule {}

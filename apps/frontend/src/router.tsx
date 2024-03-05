@@ -7,12 +7,12 @@ import { useYNABAuth } from './hooks/ynab';
 import { SignupPage } from './pages/Signup';
 
 const YnabConnectedRoute: React.FC = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   useYNABAuth();
 
   useEffect(() => {
-    navigate('/');
-    navigate('?modal=OnboardingModal&step=connection');
+    // navigate('/');
+    // navigate('?modal=OnboardingModal&step=connection');
   }, []);
 
   return null;

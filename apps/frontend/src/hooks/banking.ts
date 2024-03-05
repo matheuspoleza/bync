@@ -1,22 +1,18 @@
-import { useAtom } from 'jotai';
-import * as atoms from '../atoms';
+import { useQuery } from '@tanstack/react-query';
 import { getAllBankingAccounts } from '../clients/api';
 
-export const useBankingAccounts = () => {
-  const [accounts, setAccounts] = useAtom(atoms.banking.accounts);
-  const [isFetching, setIsFetching] = useAtom(atoms.banking.isFetchingAccounts);
-
-  const fetchBankAccounts = () => {
-    setIsFetching(true);
-
-    getAllBankingAccounts()
-      .then((accounts) => setAccounts(accounts))
-      .finally(() => setIsFetching(false));
-  };
+export const useBankingAccounts = (options?: { enabled?: boolean }) => {
+  const query = useQuery({
+    queryKey: ['bank-accounts'],
+    queryFn: getAllBankingAccounts,
+    enabled: options?.enabled ?? true,
+    throwOnError: false,
+    retry: false,
+  });
 
   return {
-    accounts,
-    isFetching,
-    fetchBankAccounts,
+    accounts: query.data,
+    isFetching: query.isLoading,
+    fetchBankAccounts: query.refetch,
   };
 };

@@ -1,30 +1,45 @@
 import { useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
-import { useYNABAuth } from './hooks/ynab';
-import { useAuth } from './context/auth';
+import { useAuth, useAuthSubscription } from './context/auth';
+import { useBankingAccounts } from './hooks/banking';
+import { useBudgetAccounts } from './hooks/budgets';
 import { ModalProvider } from './context/modal';
-
-const YNABProvider = () => {
-  useYNABAuth();
-  return null;
-};
 
 export const Layout: React.FC = () => {
   const navigate = useNavigate();
+  useAuthSubscription();
   const { isLoggedIn } = useAuth();
+  const { fetchBankAccounts } = useBankingAccounts({ enabled: false });
+  const { fetchBudgetAccounts } = useBudgetAccounts({ enabled: false });
 
-  useEffect(() => {
+  const handleRedirect = async () => {
     if (!isLoggedIn) {
       navigate('/login');
-    } else {
-      navigate('/dashboard');
+      return;
     }
+
+    const bankAccounts = await fetchBankAccounts();
+    const budgetAccounts = await fetchBudgetAccounts();
+
+    if (!bankAccounts.data?.length) {
+      navigate('/dashboard?modal=OnboardingModal&step=bank-accounts');
+      return;
+    }
+
+    if (!budgetAccounts.data?.length) {
+      navigate('/dashboard?modal=OnboardingModal&step=budgets');
+      return;
+    }
+
+    navigate('/dashboard');
+  };
+
+  useEffect(() => {
+    handleRedirect();
   }, [isLoggedIn]);
 
   return (
     <ModalProvider>
-      <div id="belvo" />
-      <YNABProvider />
       <Outlet />
     </ModalProvider>
   );

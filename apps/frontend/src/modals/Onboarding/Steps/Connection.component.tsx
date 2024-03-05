@@ -38,7 +38,7 @@ export const OnboardingConnectionStep: React.FC<
         </Dialog.Header>
 
         <div className="flex flex-col gap-3">
-          {budgetAccounts.map((budgetAccount) => (
+          {budgetAccounts?.map((budgetAccount) => (
             <div
               className="flex justify-between w-full"
               style={{ alignItems: 'center' }}

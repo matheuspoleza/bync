@@ -1,36 +1,46 @@
-import React, { createContext, useContext } from 'react';
-import { useLocalStorageState } from '../hooks/storage';
+import { useEffect } from 'react';
 import * as atoms from '../atoms';
-
-const AuthContext = createContext({
-  customerID: '',
-  setCustomerID: (_: string) => null,
-});
-
-export const AuthProvider: React.FC<React.PropsWithChildren> = ({
-  children,
-}) => {
-  const [customerID, setCustomerID] = useLocalStorageState<string>(
-    atoms.utils.STORAGE_KEYS.CUSTOMER_ID,
-    ''
-  );
-
-  return (
-    <AuthContext.Provider value={{ customerID, setCustomerID }}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
+import * as api from '../clients/api';
+import { useAtomValue, useSetAtom } from 'jotai';
 
 export const useAuth = () => {
-  const context = useContext(AuthContext);
+  const session = useAtomValue(atoms.session.session);
 
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
+  const handleLogin = async (email: string, password: string) => {
+    await api.login({ email, password });
+  };
 
   return {
-    isLoggedIn: !!context.customerID,
-    login: (customerID: string) => context.setCustomerID(customerID),
+    isLoggedIn: !!session?.access_token,
+    login: handleLogin,
   };
+};
+
+export const useAuthSubscription = () => {
+  const setSession = useSetAtom(atoms.session.session);
+
+  useEffect(() => {
+    api.authClient.getSession().then((response) => {
+      const session = response.data.session;
+      setSession(session);
+    });
+
+    const { data } = api.authClient.onAuthStateChange((event, session) => {
+      if (event === 'INITIAL_SESSION') {
+        setSession(session);
+      } else if (event === 'SIGNED_IN') {
+        setSession(session);
+      } else if (event === 'SIGNED_OUT') {
+        setSession(null);
+      } else if (event === 'PASSWORD_RECOVERY') {
+        setSession(null);
+      } else if (event === 'TOKEN_REFRESHED') {
+        setSession(session);
+      } else if (event === 'USER_UPDATED') {
+        setSession(session);
+      }
+    });
+
+    return () => data.subscription.unsubscribe();
+  }, []);
 };

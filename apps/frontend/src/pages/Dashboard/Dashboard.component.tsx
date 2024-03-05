@@ -1,7 +1,4 @@
 import { useEffect, useMemo } from 'react';
-import { useModal } from '../../context/modal';
-import { Modals } from '../../modals';
-import { useOnboarding } from '../../hooks/onboarding';
 import { UserNav } from './components/UserNav.component';
 import { DataTable } from './components/DataTable.component';
 import { columns } from './components/Columns.component';
@@ -10,18 +7,24 @@ import { BudgetAccount } from './data/schema';
 import { useAtomValue } from 'jotai';
 import * as atoms from '../../atoms';
 import { useBankingAccounts } from '../../hooks/banking';
+import { useLocation } from 'react-router-dom';
+import { useModal } from '../../context/modal';
+import { Modals } from '../../modals';
 
 export const DashboardPage = () => {
-  const { openModal } = useModal(Modals.Onboarding);
-  const { step, isComplete, isLoading } = useOnboarding();
-  const { accounts: budgetAccounts } = useBudgetAccounts();
+  const { accounts: budgetAccounts, isFetching: isBudgetAccountsLoading } =
+    useBudgetAccounts();
   const connections = useAtomValue(atoms.connections.connections);
-  const { accounts: bankAccounts } = useBankingAccounts();
+  const { accounts: bankAccounts, isFetching: isBankAccountsLoading } =
+    useBankingAccounts();
+  const isLoading = isBankAccountsLoading || isBudgetAccountsLoading;
+  const location = useLocation();
+  const { openModal } = useModal(Modals.Onboarding);
 
   const budgetAccountsItems = useMemo(() => {
-    return budgetAccounts.map<BudgetAccount>((account) => {
+    return budgetAccounts?.map<BudgetAccount>((account) => {
       const connectedBankAccountID = connections[account.id];
-      const connectedBankAccount = bankAccounts.find(
+      const connectedBankAccount = bankAccounts?.find(
         (bankAccount) => bankAccount.id === connectedBankAccountID
       );
 
@@ -40,10 +43,16 @@ export const DashboardPage = () => {
   }, [budgetAccounts, bankAccounts, connections]);
 
   useEffect(() => {
-    if (!isComplete && !isLoading) {
-      openModal({ step });
+    const params = new URLSearchParams(location.search);
+    const modalName = params.get('modal');
+
+    if (modalName === Modals.Onboarding.name) {
+      const step = params.get('step');
+      if (step) {
+        openModal({ step });
+      }
     }
-  }, [step, isComplete, isLoading]);
+  }, [location]);
 
   if (isLoading) return <div>is loading</div>;
 
@@ -63,7 +72,7 @@ export const DashboardPage = () => {
           <UserNav />
         </div>
       </div>
-      <DataTable data={budgetAccountsItems} columns={columns} />
+      <DataTable data={budgetAccountsItems ?? []} columns={columns} />
     </div>
   );
 };

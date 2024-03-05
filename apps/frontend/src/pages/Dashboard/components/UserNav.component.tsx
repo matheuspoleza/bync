@@ -1,6 +1,15 @@
+import { useAtomValue } from 'jotai';
 import { Avatar, Button, DropdownMenu } from '../../../components/ui';
+import * as atoms from '../../../atoms';
+import { api } from '../../../clients';
 
 export const UserNav: React.FC = () => {
+  const userEmail = useAtomValue(atoms.session.userEmail);
+
+  const handleLogout = async () => {
+    await api.authClient.signOut();
+  };
+
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
@@ -14,9 +23,9 @@ export const UserNav: React.FC = () => {
       <DropdownMenu.Content className="w-56" align="end" forceMount>
         <DropdownMenu.Label className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">matheus poleza</p>
+            <p className="text-sm font-medium leading-none">{userEmail}</p>
             <p className="text-xs leading-none text-muted-foreground">
-              matheus.poleza@gmail.com
+              {userEmail}
             </p>
           </div>
         </DropdownMenu.Label>
@@ -36,7 +45,7 @@ export const UserNav: React.FC = () => {
           </DropdownMenu.Item>
         </DropdownMenu.Group>
         <DropdownMenu.Separator />
-        <DropdownMenu.Item>
+        <DropdownMenu.Item onClick={handleLogout}>
           Sair
           <DropdownMenu.Shortcut>⇧⌘Q</DropdownMenu.Shortcut>
         </DropdownMenu.Item>

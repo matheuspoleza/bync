@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { modalsManager } from '../../context/modal';
 import { OnboardingBankAccountsStep } from './Steps/BankAccounts.component';
 import { OnboardingConnectionStep } from './Steps/Connection.component';
@@ -11,9 +11,9 @@ interface ModalProps {
 export const OnboardingModal = modalsManager.register<ModalProps>(
   'OnboardingModal',
   ({ step, closeModal }) => {
-    const [activeStep, setStep] = useState<string>('bank-accounts');
-
-    useEffect(() => setStep(step), [step]);
+    const [activeStep, setActiveStep] = useState<string>(
+      step ?? 'bank-accounts'
+    );
 
     return (
       <>
@@ -21,7 +21,7 @@ export const OnboardingModal = modalsManager.register<ModalProps>(
           <OnboardingConnectionStep onClose={closeModal} />
         )}
         {activeStep === 'bank-accounts' && (
-          <OnboardingBankAccountsStep onNext={() => setStep('budgets')} />
+          <OnboardingBankAccountsStep onNext={() => setActiveStep('budgets')} />
         )}
         {activeStep === 'budgets' && <OnboardingYNABAccountsStep />}
       </>

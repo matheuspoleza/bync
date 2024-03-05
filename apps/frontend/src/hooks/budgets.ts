@@ -1,34 +1,22 @@
-import { useAtom, useAtomValue } from 'jotai';
-import * as atoms from '../atoms';
+import { useQuery } from '@tanstack/react-query';
+// import { useAtomValue } from 'jotai';
+// import * as atoms from '../atoms';
 import { getAllBudgetAccounts } from '../clients/api';
-import { useEffect } from 'react';
 
-export const useBudgetAccounts = () => {
-  const [accounts, setAccounts] = useAtom(atoms.budgets.accounts);
-  const [isFetching, setIsFetching] = useAtom(atoms.budgets.isFetchingAccounts);
-  const isAuthorizing = useAtomValue(atoms.budgets.isAuthorizing);
+export const useBudgetAccounts = (options?: { enabled?: boolean }) => {
+  // const isAuthorizing = useAtomValue(atoms.budgets.isAuthorizing);
 
-  const fetchBudgetAccounts = () => {
-    setIsFetching(true);
-
-    if (isAuthorizing) return;
-
-    getAllBudgetAccounts()
-      .then((accounts) => setAccounts(accounts))
-      .finally(() => setIsFetching(false));
-  };
-
-  useEffect(() => {
-    if (isFetching && !isAuthorizing) {
-      getAllBudgetAccounts()
-        .then((accounts) => setAccounts(accounts))
-        .finally(() => setIsFetching(false));
-    }
-  }, [isAuthorizing]);
+  const query = useQuery({
+    queryKey: ['budget-accounts'],
+    queryFn: getAllBudgetAccounts,
+    enabled: options?.enabled,
+    throwOnError: false,
+    retry: false,
+  });
 
   return {
-    accounts,
-    fetchBudgetAccounts,
-    isFetching,
+    accounts: query.data,
+    isFetching: query.isLoading,
+    fetchBudgetAccounts: query.refetch,
   };
 };

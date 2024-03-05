@@ -1,10 +1,30 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { Card, Label, Button, Input } from '../../components/ui';
+import { Card, Label, Button, Input, useToast } from '../../components/ui';
 import { useAuth } from '../../context/auth';
+import { useNavigate } from 'react-router-dom';
 
 export const LoginPage: React.FC = () => {
   const { login } = useAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const { toast } = useToast();
+  const { isLoggedIn } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogin = async () => {
+    try {
+      await login(email, password);
+    } catch (e) {
+      toast({ title: 'Email or password is wrong', variant: 'destructive' });
+    }
+  };
+
+  useEffect(() => {
+    navigate('/dashboard');
+  }, [isLoggedIn]);
+
+  if (isLoggedIn) return null;
 
   return (
     <div className="min-h-screen flex items-center justify-center">
@@ -18,18 +38,26 @@ export const LoginPage: React.FC = () => {
         <Card.Content className="grid gap-4">
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" placeholder="m@exemplo.com" />
+            <Input
+              id="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              type="email"
+              placeholder="m@exemplo.com"
+            />
           </div>
           <div className="grid gap-2">
             <Label htmlFor="password">Senha</Label>
-            <Input id="password" type="password" />
+            <Input
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              id="password"
+              type="password"
+            />
           </div>
         </Card.Content>
         <Card.Footer>
-          <Button
-            className="w-full"
-            onClick={() => login('b66f3403-befb-46ab-9dc1-08c1105dac06')}
-          >
+          <Button className="w-full" onClick={handleLogin}>
             Entrar
           </Button>
         </Card.Footer>
