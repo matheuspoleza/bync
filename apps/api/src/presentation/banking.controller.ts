@@ -1,11 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Post,
-  Req,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { BelvoService } from '../infrastructure/belvo/belvo.service';
 import { BankingService } from 'src/application/banking.service';
 import { LinkDTO } from 'src/domain/bank-account-link';
