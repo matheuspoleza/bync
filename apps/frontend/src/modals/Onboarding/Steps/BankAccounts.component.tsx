@@ -1,17 +1,11 @@
 import { useState } from 'react';
 import { useBelvo } from '../../../hooks/belvo';
 import { StepProgress } from '../components/StepProgress.component';
-import { Dialog, Typography, Button } from '../../../components/ui';
+import { Dialog, Typography, Button, toast } from '../../../components/ui';
 import { LockClosedIcon } from '@radix-ui/react-icons';
 import { createBankLink } from '../../../clients/api';
 
-interface OnboardingBankAccountsStepProps {
-  onNext: () => void;
-}
-
-export const OnboardingBankAccountsStep: React.FC<
-  OnboardingBankAccountsStepProps
-> = ({ onNext }) => {
+export const OnboardingBankAccountsStep: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isConnectingBankAccounts, setIsConnectingBankAccounts] =
     useState(false);
@@ -22,7 +16,6 @@ export const OnboardingBankAccountsStep: React.FC<
 
       try {
         await createBankLink({ linkID: link, institution });
-        onNext();
       } finally {
         setIsLoading(false);
       }
@@ -34,9 +27,19 @@ export const OnboardingBankAccountsStep: React.FC<
     },
   });
 
-  const handleConnectBankAccounts = () => {
+  const handleConnectBankAccounts = async () => {
     setIsLoading(true);
-    createWidget();
+
+    try {
+      await createWidget();
+    } catch (e) {
+      toast({
+        variant: 'destructive',
+        title: 'Não foi possível conectar ao provedor',
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

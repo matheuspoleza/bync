@@ -2,16 +2,19 @@ import React, { useState } from 'react';
 
 import { Card, Label, Button, Input, useToast } from '../../components/ui';
 import { useLogin } from '../../context/auth';
+import { useNavigate } from 'react-router-dom';
 
 export const LoginPage: React.FC = () => {
   const { login } = useLogin();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
       await login(email, password);
+      navigate('/dashboard');
     } catch (e) {
       toast({ title: 'Email or password is wrong', variant: 'destructive' });
     }

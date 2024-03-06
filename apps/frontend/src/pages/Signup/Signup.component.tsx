@@ -2,18 +2,15 @@ import React, { useState } from 'react';
 
 import { Card, Label, Button, Input } from '../../components/ui';
 import { useSignup } from '../../hooks/auth';
-import { useNavigate } from 'react-router-dom';
 
 export const SignupPage: React.FC = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { isLoading, onSignup } = useSignup();
-  const navigate = useNavigate();
 
   const handleSignup = async () => {
     await onSignup({ name, email, password });
-    navigate('/dashboard');
   };
 
   return (

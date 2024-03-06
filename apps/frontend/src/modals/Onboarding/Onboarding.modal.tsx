@@ -11,18 +11,14 @@ interface ModalProps {
 export const OnboardingModal = modalsManager.register<ModalProps>(
   'OnboardingModal',
   ({ step, closeModal }) => {
-    const [activeStep, setActiveStep] = useState<string>(
-      step ?? 'bank-accounts'
-    );
+    const [activeStep] = useState<string>(step ?? 'bank-accounts');
 
     return (
       <>
         {activeStep === 'connection' && (
           <OnboardingConnectionStep onClose={closeModal} />
         )}
-        {activeStep === 'bank-accounts' && (
-          <OnboardingBankAccountsStep onNext={() => setActiveStep('budgets')} />
-        )}
+        {activeStep === 'bank-accounts' && <OnboardingBankAccountsStep />}
         {activeStep === 'budgets' && <OnboardingYNABAccountsStep />}
       </>
     );

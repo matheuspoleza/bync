@@ -28,6 +28,8 @@ export class BankingController {
 
   @Post('belvo/webhook')
   async receiveBelvoWebhook(@Body() data: any) {
+    console.log('Webhook:', { data });
+
     if (
       data.webhook_type === 'ACCOUNTS' &&
       data.webhook_code === 'historical_update'

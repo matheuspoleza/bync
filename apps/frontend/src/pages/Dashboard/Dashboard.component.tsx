@@ -9,6 +9,7 @@ import * as atoms from '../../atoms';
 import { useBankingAccounts } from '../../hooks/banking';
 import { useModal } from '../../context/modal';
 import { Modals } from '../../modals';
+import { useYNABAuth } from '../../hooks/ynab';
 
 export const DashboardPage = () => {
   const { accounts: budgetAccounts, isFetching: isBudgetAccountsLoading } =
@@ -16,8 +17,12 @@ export const DashboardPage = () => {
   const connections = useAtomValue(atoms.connections.connections);
   const { accounts: bankAccounts, isFetching: isBankAccountsLoading } =
     useBankingAccounts();
-  const isLoading = isBankAccountsLoading || isBudgetAccountsLoading;
+  const isLoading = useMemo(
+    () => isBankAccountsLoading || isBudgetAccountsLoading,
+    [isBankAccountsLoading, isBudgetAccountsLoading]
+  );
   const { openModal } = useModal(Modals.Onboarding);
+  useYNABAuth();
 
   const budgetAccountsItems = useMemo(() => {
     return budgetAccounts?.map<BudgetAccount>((account) => {
@@ -41,6 +46,8 @@ export const DashboardPage = () => {
   }, [budgetAccounts, bankAccounts, connections]);
 
   useEffect(() => {
+    if (isLoading) return;
+
     if (!bankAccounts?.length) {
       openModal({ step: 'bank-accounts' });
       return;
@@ -52,9 +59,9 @@ export const DashboardPage = () => {
     }
 
     if (!Object.keys(connections).length) {
-      openModal({ step: 'connections' });
+      openModal({ step: 'connection' });
     }
-  }, [bankAccounts, budgetAccounts]);
+  }, [bankAccounts, budgetAccounts, connections, isLoading]);
 
   if (isLoading) return <div>is loading</div>;
 

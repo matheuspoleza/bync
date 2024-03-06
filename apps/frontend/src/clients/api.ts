@@ -47,6 +47,20 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+api.interceptors.response.use(null, async (error) => {
+  if (error.config && error.response && error.response.status === 401) {
+    const cachedSession = JSON.parse(
+      localStorage.getItem(STORAGE_KEYS.SESSION) ?? ''
+    );
+
+    if (cachedSession?.access_token) {
+      supabase.auth.signOut();
+    }
+  }
+
+  return Promise.reject(error);
+});
+
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 export const signup = async ({
@@ -58,7 +72,7 @@ export const signup = async ({
   name: string;
   password: string;
 }) => {
-  const auth = await supabase.auth.signUp({
+  await supabase.auth.signUp({
     email,
     password,
     options: {
@@ -67,10 +81,6 @@ export const signup = async ({
       },
     },
   });
-
-  if (!auth.data.session) return;
-
-  await supabase.auth.setSession(auth.data.session);
 };
 
 export const login = async ({
@@ -88,8 +98,6 @@ export const login = async ({
   if (!authResponse.data.session) {
     throw new Error('could not login');
   }
-
-  await supabase.auth.setSession(authResponse.data.session);
 };
 
 export const authClient = supabase.auth;

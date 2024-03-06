@@ -4,7 +4,7 @@ import { useSetAtom } from 'jotai';
 import * as atoms from '../atoms';
 
 export const YNAB_CLIENT_ID = 'WGEAcIpzW8Npx-kFtgYSA-JBDUPodjRKQVqoCD0cRZA';
-export const YNAB_REDIRECT_URL = 'http://localhost:5173/ynab/connected';
+export const YNAB_REDIRECT_URL = 'http://localhost:5173';
 
 const removeQueryParam = (paramToRemove: string) => {
   const currentUrl = window.location.href;

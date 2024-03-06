@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import * as api from '../clients/api';
+import { toast } from '../components/ui';
 
 export const useSignup = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -14,6 +15,12 @@ export const useSignup = () => {
     try {
       const authenticatedData = await api.signup(data);
       return authenticatedData;
+    } catch (e) {
+      toast({
+        variant: 'destructive',
+        title: 'Não foi possível criar uma nova conta',
+      });
+      throw new Error('Não foi possível criar uma nova conta');
     } finally {
       setIsLoading(false);
     }

@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
-import * as atoms from '../atoms';
+import { useEffect, useMemo, useState } from 'react';
 import * as api from '../clients/api';
-import { useAtom } from 'jotai';
+import { useLocalStorageState } from '../hooks/storage';
+import { STORAGE_KEYS } from '../atoms/utils';
 
 export const useLogin = () => {
   const handleLogin = async (email: string, password: string) => {
@@ -14,13 +14,22 @@ export const useLogin = () => {
 };
 
 export const useAuth = () => {
-  const [session, setSession] = useAtom(atoms.session.session);
+  const [isFetching, setIsFetching] = useState(true);
+  const [session, setSession] = useLocalStorageState(
+    STORAGE_KEYS.SESSION,
+    null
+  );
+
+  const isLoggedIn = useMemo(() => {
+    console.log({ accessToken: session });
+    return session?.access_token?.length ? true : false;
+  }, [session?.accessToken]);
 
   useEffect(() => {
-    api.authClient.getSession().then((response) => {
-      const session = response.data.session;
-      setSession(session);
-    });
+    api.authClient
+      .getSession()
+      .then((response) => setSession(response.data.session))
+      .finally(() => setIsFetching(false));
 
     const { data } = api.authClient.onAuthStateChange((event, session) => {
       if (event === 'INITIAL_SESSION') {
@@ -28,6 +37,7 @@ export const useAuth = () => {
       } else if (event === 'SIGNED_IN') {
         setSession(session);
       } else if (event === 'SIGNED_OUT') {
+        console.log({ event });
         setSession(null);
       } else if (event === 'PASSWORD_RECOVERY') {
         setSession(null);
@@ -41,5 +51,5 @@ export const useAuth = () => {
     return () => data.subscription.unsubscribe();
   }, []);
 
-  return { isLoggedIn: !!session?.access_token };
+  return { isLoggedIn, isFetching };
 };

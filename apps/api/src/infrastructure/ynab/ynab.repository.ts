@@ -4,6 +4,7 @@ import { API as YNABApi } from 'ynab';
 import { RedisService } from '../database';
 import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
+import { FormData } from 'formdata-node';
 
 @Injectable()
 export class YNABRepository {

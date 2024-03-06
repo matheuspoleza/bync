@@ -9,6 +9,8 @@ import { Request, Response, NextFunction } from 'express';
 import { Tables } from 'src/infrastructure/database';
 import { CustomerRepository } from 'src/infrastructure/repositories/customer.repository';
 
+const API_KEY = '7df56b81-34e0-492d-a1c0-4a86fcf8fee9';
+
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
   private redis: Redis;
@@ -26,7 +28,16 @@ export class AuthMiddleware implements NestMiddleware {
   }
 
   async use(req: Request, res: Response, next: NextFunction) {
+    const tokenType = req.headers.authorization?.split(' ')[0];
     const token = req.headers.authorization?.split(' ')[1];
+
+    if (tokenType === 'API') {
+      if (token === API_KEY) {
+        return next();
+      } else {
+        throw new UnauthorizedException('Invalid token');
+      }
+    }
 
     if (!token) {
       throw new UnauthorizedException('Token not provided');
@@ -49,7 +60,7 @@ export class AuthMiddleware implements NestMiddleware {
       if (!cachedCustomerID) {
         const { data } = await this.supabase
           .schema('public')
-          .from(CustomerRepository.TABLE_NAME)
+          .from('customers')
           .select('*')
           .eq('user_id', userID)
           .single();

@@ -16,7 +16,7 @@ export const useBelvo = ({
   onExit?: () => void;
   onPageLoad?: () => void;
 }) => {
-  const widgetCallback = async () => {
+  const widgetCallback = (access: string) => async () => {
     const successCallbackFunction = async (
       link: string,
       institution: string
@@ -36,8 +36,6 @@ export const useBelvo = ({
       country_codes: ['BR'],
     };
 
-    const { access } = await createBankLinkSession();
-
     window.belvoSDK.createWidget(access, config).build();
   };
 
@@ -45,8 +43,9 @@ export const useBelvo = ({
     'https://cdn.belvo.io/belvo-widget-1-stable.js'
   );
 
-  const createWidget = () => {
-    loadScript(widgetCallback);
+  const createWidget = async () => {
+    const { access } = await createBankLinkSession();
+    loadScript(widgetCallback(access));
   };
 
   return { createWidget };
