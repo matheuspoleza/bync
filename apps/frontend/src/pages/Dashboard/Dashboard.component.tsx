@@ -10,6 +10,7 @@ import { useBankingAccounts } from '../../hooks/banking';
 import { useModal } from '../../context/modal';
 import { Modals } from '../../modals';
 import { useYNABAuth } from '../../hooks/ynab';
+import { LoadingPage } from '../../components/LoadingPage.component';
 
 export const DashboardPage = () => {
   const { accounts: budgetAccounts, isFetching: isBudgetAccountsLoading } =
@@ -63,7 +64,7 @@ export const DashboardPage = () => {
     }
   }, [bankAccounts, budgetAccounts, connections, isLoading]);
 
-  if (isLoading) return <div>is loading</div>;
+  if (isLoading) return <LoadingPage />;
 
   return (
     <div className="hidden h-full flex-1 flex-col space-y-8 p-8 md:flex">

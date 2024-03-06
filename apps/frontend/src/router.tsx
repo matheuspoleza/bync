@@ -5,6 +5,7 @@ import { SignupPage } from './pages/Signup';
 import { ModalProvider } from './context/modal';
 import { useAuth } from './context/auth';
 import { useEffect } from 'react';
+import { LoadingPage } from './components/LoadingPage.component';
 
 export const unAuthenticatedRoutes = ['login', 'sign-up'];
 
@@ -15,8 +16,6 @@ const RoutePage = () => {
   useEffect(() => {
     if (isFetching) return;
 
-    console.log({ isFetching, isLoggedIn });
-
     if (!isLoggedIn) {
       navigate('/login');
     } else {
@@ -24,7 +23,7 @@ const RoutePage = () => {
     }
   }, [isLoggedIn, isFetching]);
 
-  if (isFetching) return <div>is loading</div>;
+  if (isFetching) return <LoadingPage />;
 
   return (
     <ModalProvider>

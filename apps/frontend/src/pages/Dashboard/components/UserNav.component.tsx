@@ -8,6 +8,7 @@ export const UserNav: React.FC = () => {
 
   const handleLogout = async () => {
     await api.authClient.signOut();
+    window.location.href = '/login';
   };
 
   return (
