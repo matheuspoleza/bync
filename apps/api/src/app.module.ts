@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { CollectService } from './application/collect.service';
 import { CollectorRepository } from './infrastructure/repositories/collector.repository';
 import { MobilisAPIV1, MobilisAPIV2 } from './infrastructure/mobilis';
@@ -21,6 +21,7 @@ import { BankingService } from './application/banking.service';
 import { BankAccountLinkRepository } from './infrastructure/repositories/bank-account-link.repository';
 import { CustomerController } from './presentation/customer.controller';
 import { CustomerService } from './application/customer.service';
+import { AuthMiddleware } from './presentation/common/auth.middeware';
 
 @Module({
   imports: [
@@ -58,4 +59,8 @@ import { CustomerService } from './application/customer.service';
     CustomerController,
   ],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AuthMiddleware).forRoutes('*');
+  }
+}

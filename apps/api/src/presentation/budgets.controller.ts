@@ -1,23 +1,28 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  UseInterceptors,
+} from '@nestjs/common';
 
 import { RedisService } from '../infrastructure/database';
 import { YNABRepository } from '../infrastructure/ynab/ynab.repository';
+import { CustomerID } from './common';
 
 @Controller('budgets')
 export class BudgetsController {
-  constructor(
-    private readonly redisService: RedisService,
-    private readonly ynabRepository: YNABRepository,
-  ) {}
+  constructor(private readonly ynabRepository: YNABRepository) {}
 
-  @Get('/ynab/:customerID/accounts')
-  async getBudgetAccounts(@Param('customerID') customerID: string) {
+  @Get('ynab/accounts')
+  async getBudgetAccounts(@CustomerID() customerID: string) {
     return this.ynabRepository.getAllBudgetsAccounts(customerID);
   }
 
-  @Post('/ynab/:customerID/auth')
+  @Post('ynab/auth')
   async authorizeYNAB(
-    @Param('customerID') customerID: string,
+    @CustomerID() customerID: string,
     @Body()
     { redirectURL, authCode }: { redirectURL: string; authCode: string },
   ) {

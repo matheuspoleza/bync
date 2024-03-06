@@ -1,23 +1,20 @@
 import { useEffect } from 'react';
 import * as atoms from '../atoms';
 import * as api from '../clients/api';
-import { useAtomValue, useSetAtom } from 'jotai';
+import { useAtom } from 'jotai';
 
-export const useAuth = () => {
-  const session = useAtomValue(atoms.session.session);
-
+export const useLogin = () => {
   const handleLogin = async (email: string, password: string) => {
     await api.login({ email, password });
   };
 
   return {
-    isLoggedIn: !!session?.access_token,
     login: handleLogin,
   };
 };
 
-export const useAuthSubscription = () => {
-  const setSession = useSetAtom(atoms.session.session);
+export const useAuth = () => {
+  const [session, setSession] = useAtom(atoms.session.session);
 
   useEffect(() => {
     api.authClient.getSession().then((response) => {
@@ -43,4 +40,6 @@ export const useAuthSubscription = () => {
 
     return () => data.subscription.unsubscribe();
   }, []);
+
+  return { isLoggedIn: !!session?.access_token };
 };

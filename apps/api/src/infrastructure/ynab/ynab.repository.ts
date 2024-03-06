@@ -18,7 +18,7 @@ export class YNABRepository {
     return currentTime > expirationTime;
   }
 
-  private async getCustomerClient(customerID: string) {
+  private async getCustomerClient(customerID: string): Promise<YNABApi | null> {
     const clientSecret = this.configService.get<string>('YNAB_CLIENT_SECRET');
     const clientID = this.configService.get<string>('YNAB_CLIENT_ID');
 
@@ -27,7 +27,9 @@ export class YNABRepository {
     );
     let authData = customerAuth;
 
-    const expired = authData ? this.isTokenExpired(authData) : true;
+    if (!authData) return null;
+
+    const expired = this.isTokenExpired(authData);
 
     if (expired) {
       const response = await axios.post<YNABCustomerAuthDTO>(
@@ -77,6 +79,9 @@ export class YNABRepository {
 
   public async getBudgets(customerID: string) {
     const client = await this.getCustomerClient(customerID);
+
+    if (!client) return [];
+
     const { data } = await client.budgets.getBudgets();
     return data.default_budget
       ? [data.default_budget]
@@ -94,6 +99,9 @@ export class YNABRepository {
 
   public async getAllBudgetsAccounts(customerID: string) {
     const client = await this.getCustomerClient(customerID);
+
+    if (!client) return [];
+
     const budgets = await this.getBudgets(customerID);
 
     const accountsResponse = await Promise.all(
@@ -111,6 +119,10 @@ export class YNABRepository {
     transactions: Transaction[],
   ): Promise<Transaction[]> {
     const client = await this.getCustomerClient(customerID);
+
+    if (!client) {
+      throw new Error('Not authenticated');
+    }
 
     const budgets = await this.getBudgets(customerID);
 

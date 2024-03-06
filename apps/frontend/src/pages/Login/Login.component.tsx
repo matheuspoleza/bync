@@ -1,16 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { Card, Label, Button, Input, useToast } from '../../components/ui';
-import { useAuth } from '../../context/auth';
-import { useNavigate } from 'react-router-dom';
+import { useLogin } from '../../context/auth';
 
 export const LoginPage: React.FC = () => {
-  const { login } = useAuth();
+  const { login } = useLogin();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { toast } = useToast();
-  const { isLoggedIn } = useAuth();
-  const navigate = useNavigate();
 
   const handleLogin = async () => {
     try {
@@ -19,12 +16,6 @@ export const LoginPage: React.FC = () => {
       toast({ title: 'Email or password is wrong', variant: 'destructive' });
     }
   };
-
-  useEffect(() => {
-    navigate('/dashboard');
-  }, [isLoggedIn]);
-
-  if (isLoggedIn) return null;
 
   return (
     <div className="min-h-screen flex items-center justify-center">

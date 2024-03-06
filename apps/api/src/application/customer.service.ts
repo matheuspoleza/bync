@@ -9,4 +9,8 @@ export class CustomerService {
   async getCustomer(customerID: string) {
     return this.customerRepository.getOne(customerID);
   }
+
+  async createCustomer(userID: string, fullName: string) {
+    return this.customerRepository.createOne(userID, fullName);
+  }
 }

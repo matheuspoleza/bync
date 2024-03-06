@@ -1,41 +1,43 @@
-import { createBrowserRouter, useNavigate } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 import { DashboardPage } from './pages/Dashboard/Dashboard.component';
 import { LoginPage } from './pages/Login/Login.component';
-import { Layout } from './Layout';
-import { useEffect } from 'react';
 import { useYNABAuth } from './hooks/ynab';
 import { SignupPage } from './pages/Signup';
+import { ModalProvider } from './context/modal';
 
 const YnabConnectedRoute: React.FC = () => {
-  // const navigate = useNavigate();
   useYNABAuth();
-
-  useEffect(() => {
-    // navigate('/');
-    // navigate('?modal=OnboardingModal&step=connection');
-  }, []);
-
   return null;
 };
 
-export const router = createBrowserRouter([
+export const unthenticatedRouter = createBrowserRouter([
   {
     path: '/',
-    element: <Layout />,
-    children: [
-      {
-        path: '/dashboard',
-        element: <DashboardPage />,
-      },
-      {
-        path: '/login',
-        element: <LoginPage />,
-      },
-    ],
+    element: <LoginPage />,
   },
   {
     path: '/sign-up',
     element: <SignupPage />,
+  },
+]);
+
+export const authenticatedRouter = createBrowserRouter([
+  {
+    path: '/',
+    // TODO: remove it from here and add a provider component
+    element: (
+      <ModalProvider>
+        <DashboardPage />
+      </ModalProvider>
+    ),
+  },
+  {
+    path: '/dashboard',
+    element: (
+      <ModalProvider>
+        <DashboardPage />
+      </ModalProvider>
+    ),
   },
   {
     path: '/ynab/connected',

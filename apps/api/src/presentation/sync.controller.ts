@@ -15,7 +15,7 @@ export class SyncController {
     private readonly publishService: PublishService,
   ) {}
 
-  @Post('/collect')
+  @Post('collect')
   async syncCollect(@Body() collectRequestDTO: SyncCollectRequestDTO) {
     return this.collectorService.collectTransactions(
       collectRequestDTO.startDate,
@@ -23,7 +23,7 @@ export class SyncController {
     );
   }
 
-  @Post('/publish/:sessionID')
+  @Post('publish/:sessionID')
   async syncPublish(@Param('sessionID') sessionID: string) {
     return this.publishService.publishSession(sessionID);
   }

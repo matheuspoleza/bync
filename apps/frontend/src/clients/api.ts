@@ -6,7 +6,8 @@ import {
 } from '../models/BudgetAccounts';
 import { BankLink, BankLinkSession } from '../models/BankLink';
 import { BankAccount } from '../models/BankAccount';
-import { createClient } from '@supabase/supabase-js';
+import { Session, createClient } from '@supabase/supabase-js';
+import { STORAGE_KEYS } from '../atoms/utils';
 
 // TODO: move to env var
 // remote
@@ -22,19 +23,28 @@ const SUPABASE_KEY =
 // TODO: move to env var
 export const YNAB_CLIENT_ID = 'WGEAcIpzW8Npx-kFtgYSA-JBDUPodjRKQVqoCD0cRZA';
 
-const getCustomerID = async () => {
-  const session = await supabase.auth.getSession();
-
-  if (!session.data.session) {
-    window.location.href = '/login';
-    throw new Error('Session not found');
-  }
-
-  return session.data.session.user.id;
-};
-
 export const api = axios.create({
   baseURL: `http://localhost:3000`,
+});
+
+const getAccessToken = () => {
+  const cachedSession = localStorage.getItem(STORAGE_KEYS.SESSION);
+
+  if (cachedSession) {
+    const data = JSON.parse(cachedSession) as Session;
+    return data.access_token;
+  } else {
+    throw new Error('Not authenticated');
+  }
+};
+
+api.interceptors.request.use((config) => {
+  const accessToken = getAccessToken();
+
+  if (accessToken) {
+    config.headers.Authorization = `Bearer ${accessToken}`;
+  }
+  return config;
 });
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -92,49 +102,23 @@ export const authenticateBudget = async (
   authCode: string,
   redirectURL: string
 ) => {
-  const customerID = await getCustomerID();
-
-  if (!customerID) {
-    throw new Error('customer not found');
-  }
-
-  await api.post(
-    `/budgets/ynab/${customerID}/auth`,
-    {
-      authCode,
-      clientID: YNAB_CLIENT_ID,
-      redirectURL: redirectURL,
-    },
-    {
-      headers: {
-        customerID,
-      },
-    }
-  );
+  await api.post(`/budgets/ynab/auth`, {
+    authCode,
+    clientID: YNAB_CLIENT_ID,
+    redirectURL: redirectURL,
+  });
 };
 
 export const getAllBudgetAccounts = async (): Promise<BudgetAccount[]> => {
-  const customerID = await getCustomerID();
-
-  if (!customerID) {
-    throw new Error('customer not found');
-  }
-
   return api
-    .get<BudgetAccountResponse[]>(`/budgets/ynab/${customerID}/accounts`)
+    .get<BudgetAccountResponse[]>(`/budgets/ynab/accounts`)
     .then((response) =>
       response.data.map((data) => budgetAccountAdapter.fromResponse(data))
     );
 };
 
 export const getAllBankingAccounts = async (): Promise<BankAccount[]> => {
-  const customerID = await getCustomerID();
-
-  if (!customerID) {
-    throw new Error('customer not found');
-  }
-
-  return (await api.get<BankAccount[]>(`/banking/${customerID}/accounts`)).data;
+  return (await api.get<BankAccount[]>(`/banking/accounts`)).data;
 };
 
 export const createBankLinkSession = async () => {
@@ -143,23 +127,11 @@ export const createBankLinkSession = async () => {
 };
 
 export const createBankLink = async (bankLink: BankLink): Promise<void> => {
-  const customerID = await getCustomerID();
-
-  if (!customerID) {
-    throw new Error('customer not found');
-  }
-
-  await api.post(`/banking/${customerID}/link`, bankLink);
+  await api.post(`/banking/link`, bankLink);
 };
 
 export const getAllBankAccounts = async (): Promise<BankAccount[]> => {
-  const customerID = await getCustomerID();
-
-  if (!customerID) {
-    throw new Error('customer not found');
-  }
-
   return api
-    .get<BankAccount[]>(`/banking/${customerID}/accounts`)
+    .get<BankAccount[]>(`/banking/accounts`)
     .then((response) => response.data);
 };

@@ -1,7 +1,15 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Req,
+  UseInterceptors,
+} from '@nestjs/common';
 import { BelvoService } from '../infrastructure/belvo/belvo.service';
 import { BankingService } from 'src/application/banking.service';
 import { LinkDTO } from 'src/domain/bank-account-link';
+import { CustomerID } from './common';
 
 @Controller('banking')
 export class BankingController {
@@ -10,8 +18,8 @@ export class BankingController {
     private readonly bankingService: BankingService,
   ) {}
 
-  @Get(':customerID/accounts')
-  async getAllBankAccounts(@Param('customerID') customerID: string) {
+  @Get('accounts')
+  async getAllBankAccounts(@CustomerID() customerID: string) {
     return this.bankingService.getAllAccountsForCustomer(customerID);
   }
 
@@ -20,11 +28,8 @@ export class BankingController {
     return this.belvoService.createAccessToken();
   }
 
-  @Post(':customerID/link')
-  async createLink(
-    @Param('customerID') customerID: string,
-    @Body() data: LinkDTO,
-  ) {
+  @Post('link')
+  async createLink(@CustomerID() customerID: string, @Body() data: LinkDTO) {
     return this.bankingService.createLink(customerID, data);
   }
 

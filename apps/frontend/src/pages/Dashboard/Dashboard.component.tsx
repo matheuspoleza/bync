@@ -7,7 +7,6 @@ import { BudgetAccount } from './data/schema';
 import { useAtomValue } from 'jotai';
 import * as atoms from '../../atoms';
 import { useBankingAccounts } from '../../hooks/banking';
-import { useLocation } from 'react-router-dom';
 import { useModal } from '../../context/modal';
 import { Modals } from '../../modals';
 
@@ -18,7 +17,6 @@ export const DashboardPage = () => {
   const { accounts: bankAccounts, isFetching: isBankAccountsLoading } =
     useBankingAccounts();
   const isLoading = isBankAccountsLoading || isBudgetAccountsLoading;
-  const location = useLocation();
   const { openModal } = useModal(Modals.Onboarding);
 
   const budgetAccountsItems = useMemo(() => {
@@ -43,16 +41,20 @@ export const DashboardPage = () => {
   }, [budgetAccounts, bankAccounts, connections]);
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const modalName = params.get('modal');
-
-    if (modalName === Modals.Onboarding.name) {
-      const step = params.get('step');
-      if (step) {
-        openModal({ step });
-      }
+    if (!bankAccounts?.length) {
+      openModal({ step: 'bank-accounts' });
+      return;
     }
-  }, [location]);
+
+    if (!budgetAccounts?.length) {
+      openModal({ step: 'budgets' });
+      return;
+    }
+
+    if (!Object.keys(connections).length) {
+      openModal({ step: 'connections' });
+    }
+  }, [bankAccounts, budgetAccounts]);
 
   if (isLoading) return <div>is loading</div>;
 

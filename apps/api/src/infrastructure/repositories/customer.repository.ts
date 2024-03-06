@@ -38,4 +38,33 @@ export class CustomerRepository implements ICustomerRepository {
 
     return new Customer(customersData.id, customersData.full_name);
   }
+
+  async getOneByUserID(id: string): Promise<Customer> {
+    const client = this.databaseService.getClient();
+
+    const { data } = await client
+      .schema('public')
+      .from(CustomerRepository.TABLE_NAME)
+      .select('*')
+      .eq('user_id', id)
+      .single();
+
+    const customersData = data as Tables<'customers'>;
+
+    return new Customer(customersData.id, customersData.full_name);
+  }
+
+  async createOne(userID: string, fullName: string): Promise<Customer> {
+    const client = this.databaseService.getClient();
+
+    const { data } = await client
+      .schema('public')
+      .from(CustomerRepository.TABLE_NAME)
+      .insert({ full_name: fullName, user_id: userID })
+      .select();
+
+    const createdCustomer = data[0] as Tables<'customers'>;
+
+    return new Customer(createdCustomer.id, createdCustomer.full_name);
+  }
 }

@@ -13,7 +13,7 @@ export const SignupPage: React.FC = () => {
 
   const handleSignup = async () => {
     await onSignup({ name, email, password });
-    navigate('/');
+    navigate('/dashboard');
   };
 
   return (

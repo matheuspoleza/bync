@@ -107,7 +107,7 @@ export class BankAccountRepository implements IBankAccountRepository {
       number: b.number,
     }));
 
-    const result = await client
+    await client
       .from(BankAccountRepository.TABLE_NAME)
       .insert(data)
       .throwOnError();
