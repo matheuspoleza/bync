@@ -22,12 +22,22 @@ import { BankAccountLinkRepository } from './infrastructure/repositories/bank-ac
 import { CustomerController } from './presentation/customer.controller';
 import { CustomerService } from './application/customer.service';
 import { AuthMiddleware } from './presentation/common/auth.middeware';
+import { BullModule } from '@nestjs/bull';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ['.env.local', '.env'],
+    }),
+    BullModule.forRoot({
+      redis: {
+        host: process.env.UPSTASH_REDIS_HOST,
+        port: 42909,
+      },
+    }),
+    BullModule.registerQueue({
+      name: 'ynab',
     }),
   ],
   providers: [

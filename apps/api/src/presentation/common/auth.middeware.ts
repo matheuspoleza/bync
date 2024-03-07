@@ -7,7 +7,6 @@ import { SupabaseClient } from '@supabase/supabase-js';
 import { Redis } from '@upstash/redis';
 import { Request, Response, NextFunction } from 'express';
 import { Tables } from 'src/infrastructure/database';
-import { CustomerRepository } from 'src/infrastructure/repositories/customer.repository';
 
 const API_KEY = '7df56b81-34e0-492d-a1c0-4a86fcf8fee9';
 

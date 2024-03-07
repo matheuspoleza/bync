@@ -33,6 +33,7 @@ export const OnboardingBankAccountsStep: React.FC = () => {
     try {
       await createWidget();
     } catch (e) {
+      console.log('error', e);
       toast({
         variant: 'destructive',
         title: 'Não foi possível conectar ao provedor',

@@ -1,17 +1,37 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Card, Label, Button, Input } from '../../components/ui';
 import { useSignup } from '../../hooks/auth';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/auth';
 
 export const SignupPage: React.FC = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { isLoading, onSignup } = useSignup();
+  const navigate = useNavigate();
+  const { isLoggedIn, isFetching } = useAuth();
+  const [isCreatingAccount, setIsCreatingAccount] = useState(false);
 
   const handleSignup = async () => {
-    await onSignup({ name, email, password });
+    setIsCreatingAccount(true);
+
+    try {
+      await onSignup({ name, email, password });
+    } catch (e) {
+      setIsCreatingAccount(false);
+    }
   };
+
+  useEffect(() => {
+    if (isLoggedIn && !isFetching) {
+      setTimeout(() => {
+        setIsCreatingAccount(false);
+        navigate('/dashboard');
+      }, 2000);
+    }
+  }, [isLoggedIn, isFetching]);
 
   return (
     <div className="min-h-screen min-w-screen flex items-center justify-center">
@@ -58,7 +78,7 @@ export const SignupPage: React.FC = () => {
           <Button
             className="w-full"
             onClick={handleSignup}
-            disabled={isLoading}
+            disabled={isLoading || isCreatingAccount}
           >
             Cadastrar
           </Button>

@@ -8,6 +8,7 @@ import React, {
   FunctionComponent,
 } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useAuth } from './auth';
 
 type ModalComponent<Props> = FunctionComponent<
   Props & { closeModal: () => void }
@@ -73,6 +74,7 @@ export const ModalProvider: React.FC<React.PropsWithChildren> = ({
 }) => {
   const [activeModal, setActiveModal] = useState<ReactElement | null>(null);
   const location = useLocation();
+  const { isLoggedIn } = useAuth();
 
   const openModal = useCallback(
     <Props,>(
@@ -113,6 +115,12 @@ export const ModalProvider: React.FC<React.PropsWithChildren> = ({
       }
     }
   }, [location, openModal]);
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      setActiveModal(null);
+    }
+  }, [isLoggedIn]);
 
   return (
     <ModalContext.Provider value={{ openModal, closeModal }}>

@@ -1,4 +1,9 @@
-import { Outlet, createBrowserRouter, useNavigate } from 'react-router-dom';
+import {
+  Outlet,
+  createBrowserRouter,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 import { DashboardPage } from './pages/Dashboard/Dashboard.component';
 import { LoginPage } from './pages/Login/Login.component';
 import { SignupPage } from './pages/Signup';
@@ -12,9 +17,11 @@ export const unAuthenticatedRoutes = ['login', 'sign-up'];
 const RoutePage = () => {
   const { isLoggedIn, isFetching } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     if (isFetching) return;
+    if (location.pathname.includes('sign-up')) return;
 
     if (!isLoggedIn) {
       navigate('/login');

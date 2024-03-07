@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import * as api from '../clients/api';
-import { useLocalStorageState } from '../hooks/storage';
-import { STORAGE_KEYS } from '../atoms/utils';
+import { useAtom } from 'jotai';
+import * as atoms from '../atoms';
 
 export const useLogin = () => {
   const handleLogin = async (email: string, password: string) => {
@@ -14,16 +14,12 @@ export const useLogin = () => {
 };
 
 export const useAuth = () => {
-  const [isFetching, setIsFetching] = useState(true);
-  const [session, setSession] = useLocalStorageState(
-    STORAGE_KEYS.SESSION,
-    null
-  );
+  const [isFetching, setIsFetching] = useAtom(atoms.session.isFetching);
+  const [session, setSession] = useAtom(atoms.session.session);
 
   const isLoggedIn = useMemo(() => {
-    console.log({ accessToken: session });
     return session?.access_token?.length ? true : false;
-  }, [session?.accessToken]);
+  }, [session?.access_token]);
 
   useEffect(() => {
     api.authClient
@@ -37,7 +33,6 @@ export const useAuth = () => {
       } else if (event === 'SIGNED_IN') {
         setSession(session);
       } else if (event === 'SIGNED_OUT') {
-        console.log({ event });
         setSession(null);
       } else if (event === 'PASSWORD_RECOVERY') {
         setSession(null);

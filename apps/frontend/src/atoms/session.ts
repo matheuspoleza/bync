@@ -1,12 +1,9 @@
 import { Session } from '@supabase/supabase-js';
 import { atom } from 'jotai';
-import { atomWithStorage } from 'jotai/utils';
-import { STORAGE_KEYS } from './utils';
 
-export const session = atomWithStorage<Session | null>(
-  STORAGE_KEYS.SESSION,
-  null
-);
+export const session = atom<Session | null>(null);
+
+export const isFetching = atom(false);
 
 export const customerID = atom((get) => get(session)?.user.id);
 

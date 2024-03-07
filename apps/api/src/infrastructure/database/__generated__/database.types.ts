@@ -68,7 +68,7 @@ export interface Database {
       }
       bank_accounts: {
         Row: {
-          balance: number
+          balance: number | null
           created_at: string
           customer_id: string
           id: string
@@ -79,7 +79,7 @@ export interface Database {
           type: string
         }
         Insert: {
-          balance: number
+          balance?: number | null
           created_at?: string
           customer_id: string
           id?: string
@@ -90,7 +90,7 @@ export interface Database {
           type: string
         }
         Update: {
-          balance?: number
+          balance?: number | null
           created_at?: string
           customer_id?: string
           id?: string
@@ -140,7 +140,7 @@ export interface Database {
           {
             foreignKeyName: "customers_user_id_fkey"
             columns: ["user_id"]
-            isOneToOne: true
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           }
@@ -169,6 +169,72 @@ export interface Database {
           start_date?: string
         }
         Relationships: []
+      }
+      ynab_account: {
+        Row: {
+          balance: number
+          budget_id: string
+          created_at: string
+          id: string
+          name: string
+          ynab_account_id: string
+        }
+        Insert: {
+          balance?: number
+          budget_id: string
+          created_at?: string
+          id: string
+          name: string
+          ynab_account_id: string
+        }
+        Update: {
+          balance?: number
+          budget_id?: string
+          created_at?: string
+          id?: string
+          name?: string
+          ynab_account_id?: string
+        }
+        Relationships: []
+      }
+      ynab_link: {
+        Row: {
+          bank_account_link: string
+          created_at: string
+          id: string
+          last_synced_at: string | null
+          ynab_account_link: string
+        }
+        Insert: {
+          bank_account_link: string
+          created_at?: string
+          id: string
+          last_synced_at?: string | null
+          ynab_account_link: string
+        }
+        Update: {
+          bank_account_link?: string
+          created_at?: string
+          id?: string
+          last_synced_at?: string | null
+          ynab_account_link?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ynab_link_bank_account_link_fkey"
+            columns: ["bank_account_link"]
+            isOneToOne: false
+            referencedRelation: "bank_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ynab_link_ynab_account_link_fkey"
+            columns: ["ynab_account_link"]
+            isOneToOne: false
+            referencedRelation: "ynab_account"
+            referencedColumns: ["id"]
+          }
+        ]
       }
     }
     Views: {

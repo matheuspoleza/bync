@@ -5,6 +5,8 @@ import { RedisService } from '../database';
 import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
 import { FormData } from 'formdata-node';
+import { InjectQueue } from '@nestjs/bull';
+import { Queue } from 'bull';
 
 @Injectable()
 export class YNABRepository {
@@ -106,12 +108,17 @@ export class YNABRepository {
     const budgets = await this.getBudgets(customerID);
 
     const accountsResponse = await Promise.all(
-      budgets.flatMap((budget) => client.accounts.getAccounts(budget.id)),
+      budgets.flatMap((budget) =>
+        client.accounts.getAccounts(budget.id).then((accounts) =>
+          accounts.data.accounts.map((account) => ({
+            ...account,
+            budgetID: budget.id,
+          })),
+        ),
+      ),
     );
 
-    return accountsResponse.flatMap(
-      (accountResponse) => accountResponse.data.accounts,
-    );
+    return accountsResponse.flatMap((accountResponse) => accountResponse);
   }
 
   public async createTransactions(

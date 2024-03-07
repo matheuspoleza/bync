@@ -6,7 +6,7 @@ import {
 } from '../models/BudgetAccounts';
 import { BankLink, BankLinkSession } from '../models/BankLink';
 import { BankAccount } from '../models/BankAccount';
-import { Session, createClient } from '@supabase/supabase-js';
+import { createClient } from '@supabase/supabase-js';
 import { STORAGE_KEYS } from '../atoms/utils';
 
 // TODO: move to env var
@@ -27,19 +27,19 @@ export const api = axios.create({
   baseURL: `http://localhost:3000`,
 });
 
-const getAccessToken = () => {
-  const cachedSession = localStorage.getItem(STORAGE_KEYS.SESSION);
+const getAccessToken = async () => {
+  const response = await supabase.auth.getSession();
+  const session = response.data.session;
 
-  if (cachedSession) {
-    const data = JSON.parse(cachedSession) as Session;
-    return data.access_token;
+  if (session) {
+    return session.access_token;
   } else {
     throw new Error('Not authenticated');
   }
 };
 
-api.interceptors.request.use((config) => {
-  const accessToken = getAccessToken();
+api.interceptors.request.use(async (config) => {
+  const accessToken = await getAccessToken();
 
   if (accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`;
@@ -54,7 +54,15 @@ api.interceptors.response.use(null, async (error) => {
     );
 
     if (cachedSession?.access_token) {
-      supabase.auth.signOut();
+      const { data } = await supabase.auth.getSession();
+
+      if (!data.session?.access_token) {
+        return Promise.reject(error);
+      }
+
+      error.config.headers.Authorization = `Baerer ${data.session?.access_token}`;
+
+      return error.config;
     }
   }
 
@@ -80,6 +88,11 @@ export const signup = async ({
         full_name: name,
       },
     },
+  });
+
+  await supabase.auth.signInWithPassword({
+    email,
+    password,
   });
 };
 

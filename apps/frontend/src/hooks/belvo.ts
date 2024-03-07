@@ -45,6 +45,9 @@ export const useBelvo = ({
 
   const createWidget = async () => {
     const { access } = await createBankLinkSession();
+
+    console.log({ access });
+
     loadScript(widgetCallback(access));
   };
 
