@@ -9,7 +9,6 @@ import * as atoms from '../../atoms';
 import { useBankingAccounts } from '../../hooks/banking';
 import { useModal } from '../../context/modal';
 import { Modals } from '../../modals';
-import { useYNABAuth } from '../../hooks/ynab';
 import { LoadingPage } from '../../components/LoadingPage.component';
 
 export const DashboardPage = () => {
@@ -23,7 +22,6 @@ export const DashboardPage = () => {
     [isBankAccountsLoading, isBudgetAccountsLoading]
   );
   const { openModal } = useModal(Modals.Onboarding);
-  useYNABAuth();
 
   const budgetAccountsItems = useMemo(() => {
     return budgetAccounts?.map<BudgetAccount>((account) => {

@@ -6,10 +6,6 @@ certs
 *.local
 .cache
 
-.env
-.env.*
-!.env.e2e
-!.env.test
 .eslintcache
 
 .DS_Store
