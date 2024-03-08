@@ -6,5 +6,5 @@ export class IYnabIntegration {
     authData: { redirectURL: string; authCode: string },
   ) => Promise<void>;
 
-  getAllBudgetAccounts: (customerID: string) => YnabAccount;
+  getAllForCustomer: (customerID: string) => Promise<YnabAccount[]>;
 }

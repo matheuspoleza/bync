@@ -21,7 +21,11 @@ export class YnabService {
       authCode,
     });
 
-    await this.ynabIntegration.getAllBudgetsAccounts(customerID);
+    const accounts = await this.ynabIntegration.getAllForCustomer(customerID);
+
+    await Promise.all(
+      accounts.map((account) => this.ynabAccountRepository.create(account)),
+    );
   }
 
   async connectYnabAccountWithBankAccount(

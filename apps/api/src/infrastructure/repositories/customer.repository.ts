@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { DatabaseService } from '../../__v2__/database/database.service';
+import { DatabaseService } from '../../__v2__/common/database/database.service';
 import { ICustomerRepository, Customer } from 'src/domain/customer';
-import { Tables } from '../../__v2__/database/database.types';
+import { Tables } from '../../__v2__/common/database/database.types';
 
 @Injectable()
 export class CustomerRepository implements ICustomerRepository {

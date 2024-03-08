@@ -4,7 +4,7 @@ import {
   IBankAccountLinkRepository,
   LinkDTO,
 } from 'src/domain/bank-account-link';
-import { DatabaseService, Tables } from '../../__v2__/database';
+import { DatabaseService, Tables } from '../../__v2__/common/database';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()

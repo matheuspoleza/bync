@@ -5,7 +5,7 @@ import { MobilisAPIV1, MobilisAPIV2 } from './infrastructure/mobilis';
 import { MobilisWeb } from './infrastructure/mobilis/web';
 import { MobilisRepository } from './infrastructure/mobilis/mobilis.repository';
 import { BankAccountRepository } from './infrastructure/repositories/bank-account.repository';
-import { DatabaseService, RedisService } from './__v2__/database';
+import { DatabaseService, RedisService } from './__v2__/common/database';
 import { CustomerRepository } from './infrastructure/repositories/customer.repository';
 import { SessionRepository } from './infrastructure/repositories/session.repository';
 import { PublishService } from './application/publish.service';
@@ -22,7 +22,8 @@ import { BankAccountLinkRepository } from './infrastructure/repositories/bank-ac
 import { CustomerController } from './presentation/customer.controller';
 import { CustomerService } from './application/customer.service';
 import { AuthMiddleware } from './presentation/common/auth.middeware';
-import { BullModule } from '@nestjs/bull';
+import { YnabModule } from './__v2__/ynab/ynab.module';
+import { CommonModule } from './__v2__/common/common.module';
 
 @Module({
   imports: [
@@ -30,15 +31,8 @@ import { BullModule } from '@nestjs/bull';
       isGlobal: true,
       envFilePath: ['.env'],
     }),
-    BullModule.forRoot({
-      redis: {
-        host: process.env.UPSTASH_REDIS_HOST,
-        port: 42909,
-      },
-    }),
-    BullModule.registerQueue({
-      name: 'ynab',
-    }),
+    CommonModule,
+    YnabModule,
   ],
   providers: [
     CollectService,

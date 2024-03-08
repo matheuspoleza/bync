@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { Transaction, YNABCustomerAuthDTO } from './ynab.types';
 import { API as YNABApi } from 'ynab';
-import { RedisService } from '../../../database';
+import { RedisService } from '../../../common/database';
 import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
 import { FormData } from 'formdata-node';
 import { IYnabIntegration } from '../../domain/ynab.integration';
+import { YnabAccount } from '../../domain/ynab-account';
 
 @Injectable()
 export class YnabIntegration implements IYnabIntegration {
@@ -84,7 +85,7 @@ export class YnabIntegration implements IYnabIntegration {
     await this.storeAuth(customerID, data);
   }
 
-  public async getBudgets(customerID: string) {
+  private async getBudgets(customerID: string) {
     const client = await this.getCustomerClient(customerID);
 
     if (!client) return [];
@@ -104,7 +105,7 @@ export class YnabIntegration implements IYnabIntegration {
         ];
   }
 
-  public async getAllBudgetsAccounts(customerID: string) {
+  private async getAllBudgetsAccounts(customerID: string) {
     const client = await this.getCustomerClient(customerID);
 
     if (!client) return [];
@@ -123,6 +124,19 @@ export class YnabIntegration implements IYnabIntegration {
     );
 
     return accountsResponse.flatMap((accountResponse) => accountResponse);
+  }
+
+  public async getAllForCustomer(customerID: string): Promise<YnabAccount[]> {
+    const ynabBudgetAccounts = await this.getAllBudgetsAccounts(customerID);
+    return ynabBudgetAccounts.map(
+      (ynabBudgetAccount) =>
+        new YnabAccount({
+          ynabAccountID: ynabBudgetAccount.id,
+          name: ynabBudgetAccount.name,
+          balance: ynabBudgetAccount.balance,
+          type: ynabBudgetAccount.type,
+        }),
+    );
   }
 
   public async createTransactions(

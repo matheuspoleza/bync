@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
-import { DatabaseService } from '../__v2__/database';
+import { DatabaseService } from '../__v2__/common/database';
 
 @Injectable()
 export class AuthService {

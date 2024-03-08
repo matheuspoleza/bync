@@ -1,7 +1,8 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Global, Injectable, OnModuleInit } from '@nestjs/common';
 import { Redis } from '@upstash/redis';
 import { ConfigService } from '@nestjs/config';
 
+@Global()
 @Injectable()
 export class RedisService implements OnModuleInit {
   client: Redis;

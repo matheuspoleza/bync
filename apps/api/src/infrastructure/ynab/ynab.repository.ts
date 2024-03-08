@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Transaction, YNABCustomerAuthDTO } from './types';
 import { API as YNABApi } from 'ynab';
-import { RedisService } from '../../__v2__/database';
+import { RedisService } from '../../__v2__/common/database';
 import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
 import { FormData } from 'formdata-node';
