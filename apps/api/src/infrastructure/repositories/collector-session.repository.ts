@@ -2,7 +2,7 @@ import { CollectorSession } from '../../domain/collector-session';
 import { CollectorAccountData } from '../../domain/collector-account';
 import { Transaction } from 'src/infrastructure/mobilis/types/transaction';
 import { BankAccount } from 'src/domain/bank-account';
-import { DatabaseService } from 'src/infrastructure/database/database.service';
+import { DatabaseService } from 'src/__v2__/database/database.service';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()

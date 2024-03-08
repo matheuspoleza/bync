@@ -1,15 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { Transaction, YNABCustomerAuthDTO } from './types';
+import { Transaction, YNABCustomerAuthDTO } from './ynab.types';
 import { API as YNABApi } from 'ynab';
-import { RedisService } from '../../__v2__/database';
+import { RedisService } from '../../../database';
 import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
 import { FormData } from 'formdata-node';
-import { InjectQueue } from '@nestjs/bull';
-import { Queue } from 'bull';
+import { IYnabIntegration } from '../../domain/ynab.integration';
 
 @Injectable()
-export class YNABRepository {
+export class YnabIntegration implements IYnabIntegration {
   constructor(
     private readonly redisService: RedisService,
     private configService: ConfigService,
@@ -47,17 +46,20 @@ export class YNABRepository {
     return new YNABApi(authData.access_token);
   }
 
-  public async storeAuth(customerID: string, authData: YNABCustomerAuthDTO) {
+  private async storeAuth(customerID: string, authData: YNABCustomerAuthDTO) {
     return this.redisService.set(`ynab:${customerID}`, authData);
   }
 
-  public async authorize({
-    redirectURL,
-    authCode,
-  }: {
-    redirectURL: string;
-    authCode: string;
-  }) {
+  async authorize(
+    customerID: string,
+    {
+      redirectURL,
+      authCode,
+    }: {
+      redirectURL: string;
+      authCode: string;
+    },
+  ) {
     const formData = new FormData();
     const clientSecret = this.configService.get<string>('YNAB_CLIENT_SECRET');
     const clientID = this.configService.get<string>('YNAB_CLIENT_ID');
@@ -69,7 +71,7 @@ export class YNABRepository {
     formData.append('code', authCode);
     formData.append('grant_type', 'authorization_code');
 
-    return axios.post<YNABCustomerAuthDTO>(
+    const { data } = await axios.post<YNABCustomerAuthDTO>(
       `https://app.ynab.com/oauth/token?client_id=${clientID}&client_secret=${clientSecret}&redirect_uri=${redirectURL}&grant_type=authorization_code&code=${authCode}`,
       formData,
       {
@@ -78,6 +80,8 @@ export class YNABRepository {
         },
       },
     );
+
+    await this.storeAuth(customerID, data);
   }
 
   public async getBudgets(customerID: string) {

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { DatabaseService } from '../database/database.service';
-import { Tables } from '../database';
+import { DatabaseService } from '../../__v2__/database/database.service';
+import { Tables } from '../../__v2__/database';
 import { IYNABAccountRepository, YNABAccount } from 'src/domain/ynab-account';
 
 @Injectable()

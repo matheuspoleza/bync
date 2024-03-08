@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ISessionRepository, Session } from 'src/domain/session';
-import { DatabaseService } from '../database/database.service';
-import { Tables } from '../database/database.types';
+import { DatabaseService } from '../../__v2__/database/database.service';
+import { Tables } from '../../__v2__/database/database.types';
 
 @Injectable()
 export class SessionRepository implements ISessionRepository {

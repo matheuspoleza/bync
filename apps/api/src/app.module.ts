@@ -5,7 +5,7 @@ import { MobilisAPIV1, MobilisAPIV2 } from './infrastructure/mobilis';
 import { MobilisWeb } from './infrastructure/mobilis/web';
 import { MobilisRepository } from './infrastructure/mobilis/mobilis.repository';
 import { BankAccountRepository } from './infrastructure/repositories/bank-account.repository';
-import { DatabaseService, RedisService } from './infrastructure/database';
+import { DatabaseService, RedisService } from './__v2__/database';
 import { CustomerRepository } from './infrastructure/repositories/customer.repository';
 import { SessionRepository } from './infrastructure/repositories/session.repository';
 import { PublishService } from './application/publish.service';
