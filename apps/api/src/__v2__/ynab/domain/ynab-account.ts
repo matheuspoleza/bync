@@ -1,5 +1,16 @@
 import { BankAccount } from './bank-account';
 
+export interface IYnabAccountRepository {}
+
+export class IYnabIntegration {
+  authorize: (
+    customerID: string,
+    authData: { redirectURL: string; authCode: string },
+  ) => Promise<void>;
+
+  getAllForCustomer: (customerID: string) => Promise<YnabAccount[]>;
+}
+
 interface IYnabAccount {
   id?: string;
   ynabAccountID?: string;
@@ -10,23 +21,11 @@ interface IYnabAccount {
   lastSyncedAt?: Date;
 }
 
-export class YnabAccount implements IYnabAccount {
-  id?: string;
-  ynabAccountID?: string;
-  name: string;
-  type: string;
-  balance: number;
+export class YnabAccount {
   connectedBankAccount?: BankAccount;
-  lastSyncedAt?: Date;
 
   constructor(account: IYnabAccount) {
-    this.id = account.id;
     this.connectedBankAccount = account.connectedBankAccount;
-    this.name = account.name;
-    this.type = account.type;
-    this.balance = account.balance;
-    this.lastSyncedAt = account.lastSyncedAt;
-    this.ynabAccountID = account.ynabAccountID;
   }
 
   createConnectionWith(bankAccount: BankAccount) {

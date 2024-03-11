@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from '../../__v2__/common/database/database.service';
 import { BankAccount, IBankAccountRepository } from 'src/domain/bank-account';
-import { Tables } from '../../__v2__/common/database/database.types';
 
 @Injectable()
 export class BankAccountRepository implements IBankAccountRepository {
@@ -13,9 +12,7 @@ export class BankAccountRepository implements IBankAccountRepository {
       .from('bank_accounts')
       .select('*');
 
-    const bankAccountsData = data;
-
-    return bankAccountsData.map(
+    return data.map(
       (bankAccount) =>
         new BankAccount(
           bankAccount.customer_id,
@@ -40,9 +37,7 @@ export class BankAccountRepository implements IBankAccountRepository {
       throw new Error(`Failed to retrieve bank accounts: ${error.message}`);
     }
 
-    const bankAccountsData = data as Tables<'bank_accounts'>[];
-
-    return bankAccountsData.map(
+    return data.map(
       (bankAccount) =>
         new BankAccount(
           bankAccount.customer_id,
@@ -67,9 +62,7 @@ export class BankAccountRepository implements IBankAccountRepository {
       throw new Error(`Failed to retrieve bank accounts: ${error.message}`);
     }
 
-    const bankAccountsData = data as Tables<'bank_accounts'>[];
-
-    return bankAccountsData.map(
+    return data.map(
       (bankAccount) =>
         new BankAccount(
           bankAccount.customer_id,

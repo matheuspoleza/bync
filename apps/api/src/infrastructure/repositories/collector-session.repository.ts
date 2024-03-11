@@ -21,9 +21,7 @@ export class CollectorSessionRepository {
       const fileContent = JSON.stringify(transactions, null, 2);
       const fileBlob = new Blob([fileContent], { type: 'application/json' });
 
-      const client = this.databaseService.getClient();
-
-      const { error } = await client.storage
+      const { error } = await this.databaseService.client.storage
         .from(CollectorSessionRepository.BUCKET_NAME)
         .upload(fileName, fileBlob);
 
@@ -37,17 +35,16 @@ export class CollectorSessionRepository {
     sessionID: string,
     bankAccounts: BankAccount[],
   ): Promise<CollectorAccountData<T>[]> {
-    const client = this.databaseService.getClient();
-
     const accountsData: CollectorAccountData<T>[] = [];
 
     for (const bankAccount of bankAccounts) {
       const filePath = `${sessionID}/${bankAccount.customerID}/${bankAccount.id}.json`;
 
       // Download the file for the bank account
-      const { data: blobData, error } = await client.storage
-        .from(CollectorSessionRepository.BUCKET_NAME)
-        .download(filePath);
+      const { data: blobData, error } =
+        await this.databaseService.client.storage
+          .from(CollectorSessionRepository.BUCKET_NAME)
+          .download(filePath);
 
       if (error) {
         throw new Error(

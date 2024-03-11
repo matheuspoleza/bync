@@ -10,24 +10,18 @@ export class CustomerRepository implements ICustomerRepository {
   constructor(private databaseService: DatabaseService) {}
 
   async getAll(): Promise<Customer[]> {
-    const client = this.databaseService.getClient();
-
-    const { data } = await client
+    const { data } = await this.databaseService.client
       .schema('public')
       .from(CustomerRepository.TABLE_NAME)
       .select('*');
 
-    const customersData = data as Tables<'customers'>[];
-
-    return customersData.map(
+    return data.map(
       (customer) => new Customer(customer.id, customer.full_name),
     );
   }
 
   async getOne(id: string): Promise<Customer> {
-    const client = this.databaseService.getClient();
-
-    const { data } = await client
+    const { data } = await this.databaseService.client
       .schema('public')
       .from(CustomerRepository.TABLE_NAME)
       .select('*')
@@ -40,31 +34,24 @@ export class CustomerRepository implements ICustomerRepository {
   }
 
   async getOneByUserID(id: string): Promise<Customer> {
-    const client = this.databaseService.getClient();
-
-    const { data } = await client
+    const { data } = await this.databaseService.client
       .schema('public')
       .from(CustomerRepository.TABLE_NAME)
       .select('*')
       .eq('user_id', id)
       .single();
 
-    const customersData = data as Tables<'customers'>;
-
-    return new Customer(customersData.id, customersData.full_name);
+    return new Customer(data.id, data.full_name);
   }
 
   async createOne(userID: string, fullName: string): Promise<Customer> {
-    const client = this.databaseService.getClient();
-
-    const { data } = await client
+    const { data } = await this.databaseService.client
       .schema('public')
       .from(CustomerRepository.TABLE_NAME)
       .insert({ full_name: fullName, user_id: userID })
-      .select();
+      .select()
+      .single();
 
-    const createdCustomer = data[0] as Tables<'customers'>;
-
-    return new Customer(createdCustomer.id, createdCustomer.full_name);
+    return new Customer(data.id, data.full_name);
   }
 }

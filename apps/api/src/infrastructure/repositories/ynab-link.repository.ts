@@ -9,26 +9,23 @@ export class YNABLinkRepository {
   constructor(private databaseService: DatabaseService) {}
 
   async create(bankAccountLink: string, ynabAccountLink: string) {
-    const client = this.databaseService.getClient();
-
-    const { data, error } = await client
+    const { data, error } = await this.databaseService.client
       .schema('public')
       .from(YNABLinkRepository.TABLE_NAME)
       .insert({
         bank_account_link: bankAccountLink,
         ynab_account_link: ynabAccountLink,
       })
-      .select();
+      .select()
+      .single();
 
     if (!data || error) {
       console.error(error);
-      throw new Error(`aFailed to create ynab link: ${error.message}`);
+      throw new Error(`Failed to create ynab link: ${error.message}`);
     }
 
-    const created = data[0] as Tables<'ynab_link'>;
-
     return {
-      id: created.id,
+      id: data.id,
       bankAccountLink,
       ynabAccountLink,
       lastSyncedAt: new Date(),
