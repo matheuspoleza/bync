@@ -5,19 +5,15 @@ import { Tables } from '../../__v2__/common/database/database.types';
 
 @Injectable()
 export class BankAccountRepository implements IBankAccountRepository {
-  static TABLE_NAME = 'bank_accounts';
-
   constructor(private databaseService: DatabaseService) {}
 
   async getAll(): Promise<BankAccount[]> {
-    const client = this.databaseService.getClient();
-
-    const { data } = await client
+    const { data } = await this.databaseService.client
       .schema('public')
-      .from(BankAccountRepository.TABLE_NAME)
+      .from('bank_accounts')
       .select('*');
 
-    const bankAccountsData = data as Tables<'bank_accounts'>[];
+    const bankAccountsData = data;
 
     return bankAccountsData.map(
       (bankAccount) =>
@@ -35,10 +31,8 @@ export class BankAccountRepository implements IBankAccountRepository {
   }
 
   async getAllForCustomers(customerIDs: string[]): Promise<BankAccount[]> {
-    const client = this.databaseService.getClient();
-
-    const { data, error } = await client
-      .from(BankAccountRepository.TABLE_NAME)
+    const { data, error } = await this.databaseService.client
+      .from('bank_accounts')
       .select('*')
       .in('customer_id', customerIDs);
 
@@ -64,10 +58,8 @@ export class BankAccountRepository implements IBankAccountRepository {
   }
 
   async getAllByIDs(ids: string[]): Promise<BankAccount[]> {
-    const client = this.databaseService.getClient();
-
-    const { data, error } = await client
-      .from(BankAccountRepository.TABLE_NAME)
+    const { data, error } = await this.databaseService.client
+      .from('bank_accounts')
       .select('*')
       .in('id', ids);
 
@@ -93,11 +85,7 @@ export class BankAccountRepository implements IBankAccountRepository {
   }
 
   async createMany(bankAccounts: BankAccount[]): Promise<void> {
-    const client = this.databaseService.getClient();
-
-    const data = bankAccounts.map<
-      Omit<Tables<'bank_accounts'>, 'id' | 'created_at'>
-    >((b) => ({
+    const data = bankAccounts.map((b) => ({
       type: b.type,
       balance: b.balance,
       customer_id: b.customerID,
@@ -107,8 +95,8 @@ export class BankAccountRepository implements IBankAccountRepository {
       number: b.number,
     }));
 
-    await client
-      .from(BankAccountRepository.TABLE_NAME)
+    await this.databaseService.client
+      .from('bank_accounts')
       .insert(data)
       .throwOnError();
   }

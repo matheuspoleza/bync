@@ -7,17 +7,15 @@ import { ConfigService } from '@nestjs/config';
 @Global()
 @Injectable()
 export class DatabaseService implements OnModuleInit {
-  private client: SupabaseClient | null;
+  public client: SupabaseClient<Database>;
 
   constructor(private configService: ConfigService) {}
 
   async onModuleInit() {
-    const supabase = createClient<Database>(
+    this.client = createClient<Database>(
       this.configService.get<string>('SUPABASE_URL'),
       this.configService.get<string>('SUPABASE_ANON_KEY'),
     );
-
-    this.client = supabase;
   }
 
   getClient(): SupabaseClient {
