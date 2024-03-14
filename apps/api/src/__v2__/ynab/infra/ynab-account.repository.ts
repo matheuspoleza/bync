@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { IYnabAccountRepository } from '../domain/ynab-account';
 import { YnabAccount } from '../domain/ynab-account';
-import { DatabaseService, Tables } from 'src/__v2__/common';
-import { BankAccount } from '../domain/bank-account';
+import { DatabaseService } from 'src/__v2__/common';
 
 @Injectable()
 export class YnabAccountRepository implements IYnabAccountRepository {
@@ -32,8 +31,7 @@ export class YnabAccountRepository implements IYnabAccountRepository {
       balance: data.balance,
       name: data.name,
       type: '',
-      connectedBankAccount:
-        data?.bank_account_id && new BankAccount(data.bank_account_id),
+      linkedBankAccountID: data?.bank_account_id,
       lastSyncedAt: new Date(),
       ynabAccountID: data.ynab_account_id,
     });
@@ -42,6 +40,6 @@ export class YnabAccountRepository implements IYnabAccountRepository {
   async update(_: YnabAccount) {}
 
   async create(_: YnabAccount) {
-    return new YnabAccount({});
+    // return new YnabAccount({});
   }
 }

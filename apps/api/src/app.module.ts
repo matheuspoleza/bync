@@ -24,6 +24,7 @@ import { CustomerService } from './application/customer.service';
 import { AuthMiddleware } from './presentation/common/auth.middeware';
 import { YnabModule } from './__v2__/ynab/ynab.module';
 import { CommonModule } from './__v2__/common/common.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { CommonModule } from './__v2__/common/common.module';
     }),
     CommonModule,
     YnabModule,
+    EventEmitterModule.forRoot(),
   ],
   providers: [
     CollectService,

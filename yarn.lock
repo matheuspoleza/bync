@@ -4695,6 +4695,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@nestjs/event-emitter@npm:^2.0.4":
+  version: 2.0.4
+  resolution: "@nestjs/event-emitter@npm:2.0.4"
+  dependencies:
+    eventemitter2: 6.4.9
+  peerDependencies:
+    "@nestjs/common": ^8.0.0 || ^9.0.0 || ^10.0.0
+    "@nestjs/core": ^8.0.0 || ^9.0.0 || ^10.0.0
+  checksum: 36c7dbc4ed3c452d149a489d1c8bc0bd70a1c4d11fada43f9b2197dc5190ccebe0d4d29447443afbdb9d4b12b7d5df5ce6217d6e1b64b428f32a8cb9b8b23041
+  languageName: node
+  linkType: hard
+
 "@nestjs/platform-express@npm:^10.0.0":
   version: 10.3.3
   resolution: "@nestjs/platform-express@npm:10.3.3"
@@ -11046,6 +11058,7 @@ __metadata:
     "@changesets/cli": 2.26.1
     "@commitlint/cli": 17.6.0
     "@commitlint/config-conventional": 17.6.0
+    "@nestjs/event-emitter": ^2.0.4
     "@radix-ui/react-dropdown-menu": ^2.0.6
     chromatic: 6.17.4
     depcheck: 1.4.3
@@ -13934,6 +13947,13 @@ __metadata:
     stream-combiner: ~0.0.4
     through: ~2.3.1
   checksum: 80b467820b6daf824d9fb4345d2daf115a056e5c104463f2e98534e92d196a27f2df5ea2aa085624db26f4c45698905499e881d13bc7c01f7a13eac85be72a22
+  languageName: node
+  linkType: hard
+
+"eventemitter2@npm:6.4.9":
+  version: 6.4.9
+  resolution: "eventemitter2@npm:6.4.9"
+  checksum: be59577c1e1c35509c7ba0e2624335c35bbcfd9485b8a977384c6cc6759341ea1a98d3cb9dbaa5cea4fff9b687e504504e3f9c2cc1674cf3bd8a43a7c74ea3eb
   languageName: node
   linkType: hard
 

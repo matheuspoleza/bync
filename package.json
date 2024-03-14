@@ -81,6 +81,7 @@
     "yarn": "3.2.1"
   },
   "dependencies": {
+    "@nestjs/event-emitter": "^2.0.4",
     "@radix-ui/react-dropdown-menu": "^2.0.6"
   }
 }

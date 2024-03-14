@@ -1,5 +1,3 @@
-import { BankAccount } from './bank-account';
-
 export interface IYnabAccountRepository {}
 
 export class IYnabIntegration {
@@ -17,18 +15,18 @@ interface IYnabAccount {
   type: string;
   name: string;
   balance: number;
-  connectedBankAccount?: BankAccount;
+  linkedBankAccountID?: string;
   lastSyncedAt?: Date;
 }
 
 export class YnabAccount {
-  connectedBankAccount?: BankAccount;
+  linkedBankAccountID?: string;
 
   constructor(account: IYnabAccount) {
-    this.connectedBankAccount = account.connectedBankAccount;
+    this.linkedBankAccountID = account.linkedBankAccountID;
   }
 
-  createConnectionWith(bankAccount: BankAccount) {
-    this.connectedBankAccount = bankAccount;
+  link(bankAccountID: string) {
+    this.linkedBankAccountID = bankAccountID;
   }
 }
