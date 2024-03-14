@@ -9,7 +9,7 @@ export class YnabAccountRepository implements IYnabAccountRepository {
 
   constructor(private databaseService: DatabaseService) {}
 
-  async getByID(customerID: string) {
+  async getAllForCustomer(customerID: string) {
     const { data } = await this.databaseService.client
       .schema('public')
       .from(YnabAccountRepository.TABLE_NAME)
@@ -24,6 +24,34 @@ export class YnabAccountRepository implements IYnabAccountRepository {
       `,
       )
       .eq('customer_id', customerID)
+      .single();
+
+    return new YnabAccount({
+      id: data.id,
+      balance: data.balance,
+      name: data.name,
+      type: '',
+      linkedBankAccountID: data?.bank_account_id,
+      lastSyncedAt: new Date(),
+      ynabAccountID: data.ynab_account_id,
+    });
+  }
+
+  async getByID(accountID: string) {
+    const { data } = await this.databaseService.client
+      .schema('public')
+      .from(YnabAccountRepository.TABLE_NAME)
+      .select(
+        `
+        id,
+        balance,
+        name,
+        ynab_account_id,
+        customer_id,
+        bank_account_id
+      `,
+      )
+      .eq('id', accountID)
       .single();
 
     return new YnabAccount({

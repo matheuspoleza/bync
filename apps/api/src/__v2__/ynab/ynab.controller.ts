@@ -1,14 +1,38 @@
-import { Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UsePipes } from '@nestjs/common';
 import { CustomerID } from 'src/presentation/common';
+import { YnabService } from './ynab.service';
+import { ZodValidationPipe } from 'src/presentation/common/zod-validation.pipe';
+import { AuthorizeBudgetAccessRequest } from './dtos/authorize-budget-access-request.dto';
+import { LinkYnabAccount } from './dtos/link-ynab-account.dto';
 
 @Controller('ynab')
 export class YnabController {
+  constructor(private readonly ynabService: YnabService) {}
+
   @Post('auth')
-  async authorize(@CustomerID() customerID: string) {}
+  @UsePipes(new ZodValidationPipe(AuthorizeBudgetAccessRequest))
+  async authorize(
+    @CustomerID() customerID: string,
+    @Body() body: AuthorizeBudgetAccessRequest,
+  ) {
+    await this.ynabService.authorizeBudgetAccess(
+      customerID,
+      body.redirectURL,
+      body.authCode,
+    );
+  }
 
   @Post('accounts/:accountID/link')
-  async link(@Param('accountID') accountID: string) {}
+  @UsePipes(new ZodValidationPipe(LinkYnabAccount))
+  async link(
+    @Param('accountID') accountID: string,
+    @Body() body: LinkYnabAccount,
+  ) {
+    await this.ynabService.createBankAccountLink(accountID, body.bankAccountID);
+  }
 
   @Get('accounts')
-  async getAll(@CustomerID() customerID: string) {}
+  async getAll(@CustomerID() customerID: string) {
+    return this.ynabService.getAllForCustomer(customerID);
+  }
 }

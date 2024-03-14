@@ -45,4 +45,8 @@ export class YnabService {
       accounts.map((account) => this.ynabAccountRepository.create(account)),
     );
   }
+
+  async getAllForCustomer(customerID: string) {
+    return this.ynabAccountRepository.getAllForCustomer(customerID);
+  }
 }
