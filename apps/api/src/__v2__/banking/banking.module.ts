@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
-import { BankingController } from './banking.controller';
+import { BankingController as BankingControllerEvents } from './banking.controller';
+import { BankingController } from './presentation/banking.controller';
 
 @Module({
-  controllers: [BankingController],
+  imports: [],
+  controllers: [BankingController, BankingControllerEvents],
 })
 export class BankingModule {}

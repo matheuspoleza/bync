@@ -2,16 +2,10 @@ import { Body, Controller, Get, Post } from '@nestjs/common';
 
 import { YNABRepository } from '../infrastructure/ynab/ynab.repository';
 import { CustomerID } from './common';
-import { InjectQueue } from '@nestjs/bull';
-import { Queue } from 'bull';
-import { response } from 'express';
 
 @Controller('budgets')
 export class BudgetsController {
-  constructor(
-    private readonly ynabRepository: YNABRepository,
-    @InjectQueue('ynab') private ynabQueue: Queue,
-  ) {}
+  constructor(private readonly ynabRepository: YNABRepository) {}
 
   @Get('ynab/accounts')
   async getBudgetAccounts(@CustomerID() customerID: string) {
@@ -34,9 +28,5 @@ export class BudgetsController {
     }
 
     await this.ynabRepository.storeAuth(customerID, data);
-
-    await this.ynabQueue.add('import', {
-      customerID,
-    });
   }
 }

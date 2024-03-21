@@ -5,8 +5,6 @@ import { RedisService } from '../../__v2__/common/database';
 import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
 import { FormData } from 'formdata-node';
-import { InjectQueue } from '@nestjs/bull';
-import { Queue } from 'bull';
 
 @Injectable()
 export class YNABRepository {

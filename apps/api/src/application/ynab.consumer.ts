@@ -19,9 +19,8 @@ export class YnabImportConsumer {
       throw new Error('Customer not found');
     }
 
-    const budgetAccounts = await this.ynabRepository.getAllBudgetsAccounts(
-      customerID,
-    );
+    const budgetAccounts =
+      await this.ynabRepository.getAllBudgetsAccounts(customerID);
 
     const createdAccounts = await Promise.all(
       budgetAccounts.map(async (budgetAccount) => {
