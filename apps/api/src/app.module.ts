@@ -5,7 +5,6 @@ import { MobilisAPIV1, MobilisAPIV2 } from './infrastructure/mobilis';
 import { MobilisWeb } from './infrastructure/mobilis/web';
 import { MobilisRepository } from './infrastructure/mobilis/mobilis.repository';
 import { BankAccountRepository } from './infrastructure/repositories/bank-account.repository';
-import { DatabaseService, RedisService } from './__v2__/common/database';
 import { CustomerRepository } from './infrastructure/repositories/customer.repository';
 import { SessionRepository } from './infrastructure/repositories/session.repository';
 import { PublishService } from './application/publish.service';
@@ -22,8 +21,6 @@ import { BankAccountLinkRepository } from './infrastructure/repositories/bank-ac
 import { CustomerController } from './presentation/customer.controller';
 import { CustomerService } from './application/customer.service';
 import { AuthMiddleware } from './presentation/common/auth.middeware';
-import { YnabModule } from './__v2__/ynab/ynab.module';
-import { CommonModule } from './__v2__/common/common.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
@@ -32,8 +29,6 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
       isGlobal: true,
       envFilePath: ['.env'],
     }),
-    CommonModule,
-    YnabModule,
     EventEmitterModule.forRoot(),
   ],
   providers: [
@@ -47,8 +42,6 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     MobilisWeb,
     MobilisRepository,
     BankAccountRepository,
-    DatabaseService,
-    RedisService,
     CustomerRepository,
     SessionRepository,
     PublishService,
