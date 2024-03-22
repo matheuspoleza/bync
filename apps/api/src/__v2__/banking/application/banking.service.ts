@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 
 import { BankAccountLinkRepository } from '../../../infrastructure/repositories/bank-account-link.repository';
 import { BankAccountRepository } from '../../../infrastructure/repositories/bank-account.repository';
+import { BankingAccountDto } from '../dto/banking-account.dto';
+import { BankingAccount } from '../domain/banking-account';
 
 @Injectable()
 export class BankingService {
@@ -16,11 +18,10 @@ export class BankingService {
     console.log({ linkID, institution });
   }
 
-  async setupAccounts(linkID: string) {
-    const accountsDTO = providerAdapter.getAccounts();
+  async setupAccounts(accountsDto: BankingAccountDto[]) {
     const link = await this.bankAccountLinkRepository.getOne(linkID);
-    const bankAccounts = accountsDTO.map(
-      (account) => new BankAccount({ ...account, link }),
+    const bankAccounts = accountsDto.map(
+      (account) => new BankingAccount({ ...account, link }),
     );
     await this.bankAccountsRepository.createMany(bankAccounts);
 

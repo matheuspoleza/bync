@@ -1,8 +1,46 @@
-import Belvo from 'belvo';
+import Belvo, { AccountsReturn } from 'belvo';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 const COMPANY_NAME = 'Bync';
+
+export enum BelvoAccountCategory {
+  AdvanceDepositAccount = 'ADVANCE_DEPOSIT_ACCOUNT',
+  CheckingAccount = 'CHECKING_ACCOUNT',
+  CreditCard = 'CREDIT_CARD',
+  FinancingAccount = 'FINANCING_ACCOUNT',
+  InvestmentAccount = 'INVESTMENT_ACCOUNT',
+  InvoiceFinancingAccount = 'INVOICE_FINANCING_ACCOUNT',
+  LoanAccount = 'LOAN_ACCOUNT',
+  PensionFundAccount = 'PENSION_FUND_ACCOUNT',
+  SavingsAccount = 'SAVINGS_ACCOUNT',
+  Uncategorized = 'UNCATEGORIZED',
+}
+
+export enum BelvoAccountInstutionType {
+  Bank = 'bank',
+  Fiscal = 'fiscal',
+  Employment = 'employment',
+}
+
+/*
+Indicates whether this account is either an ASSET or a LIABILITY.
+You can consider the balance of an ASSET as being positive, while the balance of a LIABILITY as negative.
+ */
+export enum BelvoAccountBalanceType {
+  Asset = 'ASSET',
+  Liability = 'LIABILITY',
+}
+
+export type OFDABrazilAccount = AccountsReturn & {
+  subtype: string;
+  balance_type: BelvoAccountBalanceType;
+  category: BelvoAccountCategory;
+  institution: {
+    name: string;
+    type: BelvoAccountInstutionType;
+  };
+};
 
 @Injectable()
 export class BelvoGateway implements OnModuleInit {
@@ -31,6 +69,6 @@ export class BelvoGateway implements OnModuleInit {
   }
 
   async getAccounts(linkID: string) {
-    return this.client.accounts.retrieve(linkID);
+    return (await this.client.accounts.retrieve(linkID)) as OFDABrazilAccount[];
   }
 }
