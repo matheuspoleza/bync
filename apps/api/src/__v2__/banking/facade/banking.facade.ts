@@ -7,6 +7,8 @@ export class BankingFacade {
   async setupAccounts(
     bankingAccountAdapter: BankingAccountAdapter,
   ): Promise<void> {
-    this.bankingService.setupAccounts();
+    await this.bankingService.setupAccounts(
+      bankingAccountAdapter.getAccounts(),
+    );
   }
 }
