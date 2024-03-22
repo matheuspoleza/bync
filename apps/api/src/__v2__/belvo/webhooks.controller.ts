@@ -6,7 +6,7 @@ import {
   WebhookEventDto,
   WebhookType,
   WebhookCode,
-} from './dto/webhook-event.dto';
+} from './dto/webhook/webhook-event.dto';
 
 @Controller('belvo')
 export class WebhooksController {
@@ -19,7 +19,7 @@ export class WebhooksController {
       event.webhook_type === WebhookType.Accounts &&
       event.webhook_code === WebhookCode.HistoricalUpdate
     ) {
-      await this.belvoService.setupInstitutionAccounts();
+      await this.belvoService.setupAccounts(event.link_id);
     }
   }
 }

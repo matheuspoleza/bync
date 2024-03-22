@@ -1,4 +1,6 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+
 import { CollectService } from './application/collect.service';
 import { CollectorRepository } from './infrastructure/repositories/collector.repository';
 import { MobilisAPIV1, MobilisAPIV2 } from './infrastructure/mobilis';
@@ -21,7 +23,6 @@ import { BankAccountLinkRepository } from './infrastructure/repositories/bank-ac
 import { CustomerController } from './presentation/customer.controller';
 import { CustomerService } from './application/customer.service';
 import { AuthMiddleware } from './presentation/common/auth.middeware';
-import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [

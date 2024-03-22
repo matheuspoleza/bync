@@ -16,7 +16,7 @@ export const webhookAccountHistoricalUpdateEventSchema = z.object({
 export const webhookNewAccountsAvailableEventSchema = z.object({
   webhook_id: z.string(),
   webhook_type: z.nativeEnum(WebhookType),
-  webhook_code: z.literal(WebhookCode.HistoricalUpdate),
+  webhook_code: z.literal(WebhookCode.NewAccountsAvailable),
   link_id: z.string(),
   request_id: z.string(),
   external_id: z.string(),

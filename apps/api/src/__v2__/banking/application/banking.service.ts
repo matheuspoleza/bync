@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common';
 
-import { IBankAccountProviderAdapter } from '../domain/bank-account.adapter';
-
 import { BankAccountLinkRepository } from '../../../infrastructure/repositories/bank-account-link.repository';
 import { BankAccountRepository } from '../../../infrastructure/repositories/bank-account.repository';
 
@@ -18,10 +16,7 @@ export class BankingService {
     console.log({ linkID, institution });
   }
 
-  async setupAccounts(
-    linkID: string,
-    providerAdapter: IBankAccountProviderAdapter,
-  ) {
+  async setupAccounts(linkID: string) {
     const accountsDTO = providerAdapter.getAccounts();
     const link = await this.bankAccountLinkRepository.getOne(linkID);
     const bankAccounts = accountsDTO.map(
