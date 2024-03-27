@@ -20,10 +20,10 @@ export class BankingService {
 
   async setupAccounts(accountsDto: BankingAccountDto[]) {
     const link = await this.bankAccountLinkRepository.getOne(linkID);
-    const bankAccounts = accountsDto.map(
-      (account) => new BankingAccount({ ...account, link }),
+    const bankingAccounts = accountsDto.map(
+      (account) => new BankingAccount(account),
     );
-    await this.bankAccountsRepository.createMany(bankAccounts);
+    await this.bankAccountsRepository.createMany(bankingAccounts);
 
     // update link status to CONNECTED if status is pending. If is ERROR ignore
     link.connect();

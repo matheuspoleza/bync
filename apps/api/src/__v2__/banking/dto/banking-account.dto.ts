@@ -1,10 +1,10 @@
 export enum BankingAccountType {
-  CheckingAccount = 'CHECKING_ACCOUNT',
-  CreditCard = 'CREDIT_CARD',
-  FinancingAccount = 'FINANCING_ACCOUNT',
-  InvestmentAccount = 'INVESTMENT_ACCOUNT',
-  LoanAccount = 'LOAN_ACCOUNT',
-  SavingsAccount = 'SAVINGS_ACCOUNT',
+  CheckingAccount = 'Checking Account',
+  CreditCard = 'Credit Card',
+  FinancingAccount = 'Financing Account',
+  InvestmentAccount = 'Investment Account',
+  LoanAccount = 'Loan Account',
+  SavingsAccount = 'Savings Account',
 }
 
 export interface BankingAccountDto {
