@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Transaction, YNABCustomerAuthDTO } from './ynab.types';
-import { API as YNABApi } from 'ynab';
-import { RedisService } from '../../../common/database';
+import { SaveTransaction, API as YNABApi } from 'ynab';
+import { RedisService } from '../../common/database';
 import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
 import { FormData } from 'formdata-node';
-import { IYnabIntegration } from '../../domain/ynab.integration';
-import { YnabAccount } from '../../domain/ynab-account';
+import { YnabAccount } from '../domain/ynab-account';
 
 @Injectable()
 export class YnabIntegration {
@@ -97,6 +96,9 @@ export class YnabIntegration {
           data.budgets.reduce((prev, current) => {
             if (current.name.includes('Archived')) return prev;
 
+            if (!prev.last_modified_on || !current.last_modified_on)
+              return current;
+
             return new Date(prev.last_modified_on) >
               new Date(current.last_modified_on)
               ? prev
@@ -161,7 +163,9 @@ export class YnabIntegration {
     }
 
     const response = await client.transactions.createTransaction(budget.id, {
-      transactions: transactions.reduce((acc, t) => {
+      transactions: transactions.reduce<SaveTransaction[]>((acc, t) => {
+        if (!t) return acc;
+
         const id = `YNAB:${t.amount}:${t.date}`;
         const count = acc.filter((t) => t.import_id === id).length;
         const importID = `${id}:${count + 1}`;
@@ -169,6 +173,6 @@ export class YnabIntegration {
       }, []),
     });
 
-    return response.data.transactions;
+    return response.data.transactions || [];
   }
 }

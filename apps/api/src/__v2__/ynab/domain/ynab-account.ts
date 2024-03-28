@@ -1,14 +1,5 @@
 export interface IYnabAccountRepository {}
 
-export class IYnabIntegration {
-  authorize: (
-    customerID: string,
-    authData: { redirectURL: string; authCode: string },
-  ) => Promise<void>;
-
-  getAllForCustomer: (customerID: string) => Promise<YnabAccount[]>;
-}
-
 interface IYnabAccount {
   id?: string;
   ynabAccountID?: string;

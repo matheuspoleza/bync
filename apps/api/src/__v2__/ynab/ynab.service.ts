@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { YnabAccountRepository } from './infra/ynab-account.repository';
-import { YnabIntegration } from './infra/ynab/ynab.integration';
+import { YnabIntegration } from './infra/ynab.gateway';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { YnabAccountLinked } from './domain/ynab-account-linked';
 
