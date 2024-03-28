@@ -1,5 +1,13 @@
 import { z } from 'zod';
-import { WebhookType, WebhookCode } from './webhook-event.dto';
+
+export enum WebhookType {
+  Accounts = 'ACCOUNTS',
+}
+
+export enum WebhookCode {
+  HistoricalUpdate = 'historical_update',
+  NewAccountsAvailable = 'new_accounts_available',
+}
 
 export const webhookAccountHistoricalUpdateEventSchema = z.object({
   webhook_id: z.string(),

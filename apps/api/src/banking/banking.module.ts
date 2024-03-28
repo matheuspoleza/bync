@@ -22,5 +22,6 @@ import { BankAccountRepository } from './infra/bank-account.repository';
       useClass: BankAccountRepository,
     },
   ],
+  exports: [BankingFacade],
 })
 export class BankingModule {}
