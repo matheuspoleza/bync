@@ -13,8 +13,8 @@ export class DatabaseService implements OnModuleInit {
 
   async onModuleInit() {
     this.client = createClient<Database>(
-      this.configService.get<string>('SUPABASE_URL'),
-      this.configService.get<string>('SUPABASE_ANON_KEY'),
+      this.configService.get<string>('SUPABASE_URL', ''),
+      this.configService.get<string>('SUPABASE_ANON_KEY', ''),
     );
   }
 }

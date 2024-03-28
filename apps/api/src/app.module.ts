@@ -23,4 +23,4 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     YnabModule,
   ],
 })
-export class V2Module {}
+export class AppModule {}

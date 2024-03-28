@@ -5,7 +5,7 @@ import { ConfigService } from '@nestjs/config';
 @Global()
 @Injectable()
 export class RedisService implements OnModuleInit {
-  client: Redis;
+  client!: Redis;
 
   constructor(private configService: ConfigService) {}
 
@@ -13,14 +13,14 @@ export class RedisService implements OnModuleInit {
     return await this.client.set(key, value);
   }
 
-  async get<T = unknown>(key: string): Promise<T> {
+  async get<T = unknown>(key: string): Promise<T | null> {
     return await this.client.get(key);
   }
 
   onModuleInit() {
     this.client = new Redis({
-      url: this.configService.get<string>('UPSTASH_REDIS_HOST'),
-      token: this.configService.get<string>('UPSTASH_REDIS_TOKEN'),
+      url: this.configService.get<string>('UPSTASH_REDIS_HOST', ''),
+      token: this.configService.get<string>('UPSTASH_REDIS_TOKEN', ''),
     });
   }
 }
