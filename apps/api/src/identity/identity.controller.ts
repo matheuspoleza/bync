@@ -1,15 +1,15 @@
 import { Body, Controller, Get, Post, UsePipes } from '@nestjs/common';
-import { CustomerService } from 'src/application/customer.service';
 import { CustomerID, ZodValidationPipe } from '../common';
 import { UserCreatedWebhookRequest } from './dtos/create-user-webhook-request.dto';
+import { CustomerRepository } from './customer.repository';
 
 @Controller('identity')
 export class IdentityController {
-  constructor(private customerService: CustomerService) {}
+  constructor(private customerRepository: CustomerRepository) {}
 
   @Get('me')
   async me(@CustomerID() customerID: string) {
-    return this.customerService.getCustomer(customerID);
+    return this.customerRepository.getOne(customerID);
   }
 
   @Post()
@@ -26,6 +26,6 @@ export class IdentityController {
       throw new Error('User name not defined');
     }
 
-    await this.customerService.createCustomer(userID, fullName);
+    await this.customerRepository.createOne(userID, fullName);
   }
 }

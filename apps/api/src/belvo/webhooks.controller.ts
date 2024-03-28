@@ -1,6 +1,6 @@
 import { Controller, Post, Body, UsePipes } from '@nestjs/common';
 import { BelvoService } from './belvo.service';
-import { ZodValidationPipe } from '../../presentation/common/zod-validation.pipe';
+import { ZodValidationPipe } from '../common';
 import {
   webhookAccountEventSchema,
   WebhookEventDto,
