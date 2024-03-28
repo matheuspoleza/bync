@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { IYnabAccountRepository } from '../domain/ynab-account';
 import { YnabAccount } from '../domain/ynab-account';
 import { DatabaseService } from 'src/__v2__/common';
 
 @Injectable()
-export class YnabAccountRepository implements IYnabAccountRepository {
+export class YnabAccountRepository {
   static TABLE_NAME = 'ynab_accounts';
 
   constructor(private databaseService: DatabaseService) {}
@@ -25,6 +24,8 @@ export class YnabAccountRepository implements IYnabAccountRepository {
       )
       .eq('customer_id', customerID)
       .single();
+
+    if (!data) return [];
 
     return new YnabAccount({
       id: data.id,
@@ -53,6 +54,8 @@ export class YnabAccountRepository implements IYnabAccountRepository {
       )
       .eq('id', accountID)
       .single();
+
+    if (!data) return null;
 
     return new YnabAccount({
       id: data.id,
