@@ -7,7 +7,7 @@ import { ConfigService } from '@nestjs/config';
 @Global()
 @Injectable()
 export class DatabaseService implements OnModuleInit {
-  public client: SupabaseClient<Database>;
+  public client!: SupabaseClient<Database>;
 
   constructor(private configService: ConfigService) {}
 

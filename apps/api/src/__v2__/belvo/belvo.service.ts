@@ -16,7 +16,7 @@ export class BelvoService {
 
   public async setupAccounts(linkId: string) {
     const linkAccounts = await this.belvoGateway.getAccounts(linkId);
-    const adapter = new BelvoAccountAdapter(linkAccounts);
+    const adapter = new BelvoAccountAdapter(linkId, linkAccounts);
     await this.bankingFacade.setupAccounts(adapter);
   }
 }

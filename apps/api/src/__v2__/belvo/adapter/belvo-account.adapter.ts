@@ -10,6 +10,7 @@ import {
 } from '../../banking/application/bank-account.dto';
 
 export class BelvoAccountAdapter implements BankAccountAdapter {
+  private readonly linkId: string;
   private readonly accounts: BelvoAccountDto[];
   private readonly accountTypes = new Map([
     [BelvoAccountCategory.CheckingAccount, BankAccountType.CheckingAccount],
@@ -20,7 +21,8 @@ export class BelvoAccountAdapter implements BankAccountAdapter {
     [BelvoAccountCategory.SavingsAccount, BankAccountType.SavingsAccount],
   ]);
 
-  constructor(accounts: OFDABrazilAccount[]) {
+  constructor(linkId: string, accounts: OFDABrazilAccount[]) {
+    this.linkId = linkId;
     this.accounts = accounts.map<BelvoAccountDto>((account) => ({
       id: account.id as string,
       link: account.link,
@@ -34,6 +36,10 @@ export class BelvoAccountAdapter implements BankAccountAdapter {
       currentBalance: account.balance.current,
       balanceType: account.balance_type,
     }));
+  }
+
+  getLinkId() {
+    return this.linkId;
   }
 
   getAccounts() {
