@@ -6,7 +6,7 @@ export enum ConnectionLinkStatus {
 
 export class ConnectionLink {
   public id?: string;
-  public customerID: string;
+  public customerId: string;
   public linkID: string;
   public institution: string;
   public status: ConnectionLinkStatus;
@@ -14,27 +14,31 @@ export class ConnectionLink {
   constructor({
     id,
     linkID,
-    customerID,
+    customerId,
     status = ConnectionLinkStatus.PENDING,
     institution,
   }: {
     id?: string;
-    customerID: string;
+    customerId: string;
     linkID: string;
     institution: string;
     status: ConnectionLinkStatus;
   }) {
     this.id = id;
-    this.customerID = customerID;
+    this.customerId = customerId;
     this.linkID = linkID;
     this.status = status;
     this.institution = institution;
+  }
+
+  get connected() {
+    return this.status === ConnectionLinkStatus.CONNECTED;
   }
 }
 
 export interface IConnectionLinkRepository {
   create: (connectionLink: ConnectionLink) => Promise<ConnectionLink>;
-  getOne: (linkID: string) => Promise<ConnectionLink>;
+  getByLinkId: (linkId: string) => Promise<ConnectionLink>;
 }
 
 export const IConnectionLinkRepository = Symbol('ConnectionLinkRepository');

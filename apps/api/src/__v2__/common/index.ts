@@ -1,2 +1,2 @@
 export * from './database';
-export * from './base.repository';
+export * from './presentation';
