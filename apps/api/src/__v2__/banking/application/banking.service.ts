@@ -1,21 +1,37 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 
 import { BankAccountLinkRepository } from '../../../infrastructure/repositories/bank-account-link.repository';
 import { BankAccountRepository } from '../../../infrastructure/repositories/bank-account.repository';
 import { BankingAccountDto } from '../dto/banking-account.dto';
 import { BankingAccount } from '../domain/banking-account';
+import {
+  ConnectionLink,
+  ConnectionLinkStatus,
+  IConnectionLinkRepository,
+} from '../domain/connection-link';
 
 @Injectable()
 export class BankingService {
   constructor(
     private bankAccountsRepository: BankAccountRepository,
     private bankAccountLinkRepository: BankAccountLinkRepository,
+    @Inject(IConnectionLinkRepository)
+    private readonly connectionLinkRepository: IConnectionLinkRepository,
   ) {}
 
-  async createLink(linkID: string, institution: string) {
-    // create all links
-    // bank account link should be on pending (domain logic)
-    console.log({ linkID, institution });
+  async createBankingConnection(
+    customerID: string,
+    linkID: string,
+    institution: string,
+  ): Promise<ConnectionLink> {
+    const connectionLink = new ConnectionLink({
+      customerID,
+      linkID,
+      status: ConnectionLinkStatus.PENDING,
+      institution,
+    });
+
+    return this.connectionLinkRepository.create(connectionLink);
   }
 
   async setupAccounts(accountsDto: BankingAccountDto[]) {

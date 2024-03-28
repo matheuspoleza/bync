@@ -9,7 +9,7 @@ import { IYnabIntegration } from '../../domain/ynab.integration';
 import { YnabAccount } from '../../domain/ynab-account';
 
 @Injectable()
-export class YnabIntegration implements IYnabIntegration {
+export class YnabIntegration {
   constructor(
     private readonly redisService: RedisService,
     private configService: ConfigService,
