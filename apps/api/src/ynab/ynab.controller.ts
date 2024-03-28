@@ -1,7 +1,6 @@
 import { Body, Controller, Get, Param, Post, UsePipes } from '@nestjs/common';
-import { CustomerID } from 'src/presentation/common';
+import { CustomerID, ZodValidationPipe } from '../common';
 import { YnabService } from './ynab.service';
-import { ZodValidationPipe } from 'src/presentation/common/zod-validation.pipe';
 import { AuthorizeBudgetAccessRequest } from './dtos/authorize-budget-access-request.dto';
 import { LinkYnabAccount } from './dtos/link-ynab-account.dto';
 

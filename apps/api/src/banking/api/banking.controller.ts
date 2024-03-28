@@ -1,16 +1,12 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 
-import { CustomerID } from '../../../presentation/common';
-import { BelvoService } from '../../../infrastructure/belvo/belvo.service';
+import { CustomerID } from '../../common';
 import { BankingService } from '../application/banking.service';
 
 @Controller('banking')
 export class BankingController {
-  constructor(
-    private readonly belvoService: BelvoService,
-    private readonly bankingService: BankingService,
-  ) {}
+  constructor(private readonly bankingService: BankingService) {}
 
   @OnEvent('ynab.account-linked')
   async linkBankAccount(payload: { bankAccountID: string }) {

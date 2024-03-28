@@ -1,26 +1,28 @@
 import { Injectable } from '@nestjs/common';
-import { DatabaseService } from '../../__v2__/common/database/database.service';
-import { ICustomerRepository, Customer } from 'src/domain/customer';
-import { Tables } from '../../__v2__/common/database/database.types';
+import { DatabaseService } from '../common/database/database.service';
+import { Tables } from '../common/database/database.types';
 
 @Injectable()
-export class CustomerRepository implements ICustomerRepository {
+export class CustomerRepository {
   static TABLE_NAME = 'customers';
 
   constructor(private databaseService: DatabaseService) {}
 
-  async getAll(): Promise<Customer[]> {
+  async getAll(): Promise<any[]> {
     const { data } = await this.databaseService.client
       .schema('public')
       .from(CustomerRepository.TABLE_NAME)
       .select('*');
 
-    return data.map(
-      (customer) => new Customer(customer.id, customer.full_name),
-    );
+    if (!data) return [];
+
+    return data.map((customer) => ({
+      id: customer.id,
+      fullName: customer.full_name,
+    }));
   }
 
-  async getOne(id: string): Promise<Customer> {
+  async getOne(id: string): Promise<any> {
     const { data } = await this.databaseService.client
       .schema('public')
       .from(CustomerRepository.TABLE_NAME)
@@ -30,10 +32,10 @@ export class CustomerRepository implements ICustomerRepository {
 
     const customersData = data as Tables<'customers'>;
 
-    return new Customer(customersData.id, customersData.full_name);
+    return { id: customersData.id, fullName: customersData.full_name };
   }
 
-  async getOneByUserID(id: string): Promise<Customer> {
+  async getOneByUserID(id: string): Promise<any> {
     const { data } = await this.databaseService.client
       .schema('public')
       .from(CustomerRepository.TABLE_NAME)
@@ -41,10 +43,10 @@ export class CustomerRepository implements ICustomerRepository {
       .eq('user_id', id)
       .single();
 
-    return new Customer(data.id, data.full_name);
+    return { id: data.id, fullName: data.full_name };
   }
 
-  async createOne(userID: string, fullName: string): Promise<Customer> {
+  async createOne(userID: string, fullName: string): Promise<any> {
     const { data } = await this.databaseService.client
       .schema('public')
       .from(CustomerRepository.TABLE_NAME)
@@ -52,6 +54,6 @@ export class CustomerRepository implements ICustomerRepository {
       .select()
       .single();
 
-    return new Customer(data.id, data.full_name);
+    return { id: data.id, fullName: data.full_name };
   }
 }

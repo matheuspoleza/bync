@@ -1,8 +1,4 @@
-import { CollectorSession } from '../../domain/collector-session';
-import { CollectorAccountData } from '../../domain/collector-account';
-import { Transaction } from 'src/infrastructure/mobilis/types/transaction';
-import { BankAccount } from 'src/domain/bank-account';
-import { DatabaseService } from 'src/__v2__/common/database/database.service';
+import { DatabaseService } from 'src/common/database/database.service';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
@@ -11,7 +7,7 @@ export class CollectorSessionRepository {
 
   constructor(private readonly databaseService: DatabaseService) {}
 
-  async saveSessionBackup<T = Transaction>(session: CollectorSession<T>) {
+  async saveSessionBackup<T = any>(session: any) {
     for (const {
       transactions,
       customerID,
@@ -31,11 +27,11 @@ export class CollectorSessionRepository {
     }
   }
 
-  async fetchSessionBackup<T = Transaction>(
+  async fetchSessionBackup<T = any>(
     sessionID: string,
-    bankAccounts: BankAccount[],
-  ): Promise<CollectorAccountData<T>[]> {
-    const accountsData: CollectorAccountData<T>[] = [];
+    bankAccounts: any[],
+  ): Promise<any[]> {
+    const accountsData: T[] = [];
 
     for (const bankAccount of bankAccounts) {
       const filePath = `${sessionID}/${bankAccount.customerID}/${bankAccount.id}.json`;
@@ -57,13 +53,11 @@ export class CollectorSessionRepository {
       const transactions: T[] = JSON.parse(textData);
 
       // Push the transactions data into the accountsData array
-      accountsData.push(
-        new CollectorAccountData(
-          bankAccount.id,
-          bankAccount.customerID,
-          transactions,
-        ),
-      );
+      accountsData.push({
+        id: bankAccount.id,
+        customerID: bankAccount.customerID,
+        transactions,
+      } as any);
     }
 
     return accountsData;
