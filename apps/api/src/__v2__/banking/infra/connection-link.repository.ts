@@ -17,7 +17,7 @@ export class ConnectionLinkRepository implements IConnectionLinkRepository {
     return new ConnectionLink({
       id: '',
       customerId: '',
-      linkID,
+      linkId: linkID,
       institution: 'Institution',
       status: ConnectionLinkStatus.CONNECTED,
     });

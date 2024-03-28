@@ -4,31 +4,27 @@ export enum ConnectionLinkStatus {
   ERROR = 'error',
 }
 
+type IConnectionLink = {
+  id?: string;
+  customerId: string;
+  linkId: string;
+  institution: string;
+  status: ConnectionLinkStatus;
+};
+
 export class ConnectionLink {
   public id?: string;
   public customerId: string;
-  public linkID: string;
+  public linkId: string;
   public institution: string;
   public status: ConnectionLinkStatus;
 
-  constructor({
-    id,
-    linkID,
-    customerId,
-    status = ConnectionLinkStatus.PENDING,
-    institution,
-  }: {
-    id?: string;
-    customerId: string;
-    linkID: string;
-    institution: string;
-    status: ConnectionLinkStatus;
-  }) {
-    this.id = id;
-    this.customerId = customerId;
-    this.linkID = linkID;
-    this.status = status;
-    this.institution = institution;
+  constructor(connectionLink: IConnectionLink) {
+    this.id = connectionLink.id;
+    this.customerId = connectionLink.customerId;
+    this.linkId = connectionLink.linkId;
+    this.status = connectionLink.status;
+    this.institution = connectionLink.institution;
   }
 
   get connected() {

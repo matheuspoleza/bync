@@ -5,7 +5,6 @@ import {
   ConnectionLinkStatus,
   IConnectionLinkRepository,
 } from '../domain/connection-link';
-import { BankAccountRepository } from '../infra/bank-account.repository';
 import { BankAccountDto } from './bank-account.dto';
 import { BankAccount, IBankAccountRepository } from '../domain/bank-account';
 
@@ -19,13 +18,13 @@ export class BankingService {
   ) {}
 
   async createBankingConnection(
-    customerID: string,
-    linkID: string,
+    customerId: string,
+    linkId: string,
     institution: string,
   ): Promise<ConnectionLink> {
     const connectionLink = new ConnectionLink({
-      customerID,
-      linkID,
+      customerId,
+      linkId,
       status: ConnectionLinkStatus.PENDING,
       institution,
     });
@@ -34,7 +33,9 @@ export class BankingService {
   }
 
   async setupAccounts(linkId: string, accountsDto: BankAccountDto[]) {
-    const connectionLink = await this.connectionLinkRepository.getOne(linkId);
+    const connectionLink =
+      await this.connectionLinkRepository.getByLinkId(linkId);
+
     connectionLink.connect();
     await this.connectionLinkRepository.update(connectionLink);
 
@@ -45,7 +46,7 @@ export class BankingService {
           accountName: account.name,
           number: account.number,
           balance: account.balance,
-          customerId: connectionLink.customerID,
+          customerId: connectionLink.customerId,
           institution: account.institution,
           connectionLink,
         }),
