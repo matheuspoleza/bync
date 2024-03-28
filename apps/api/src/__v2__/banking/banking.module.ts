@@ -4,6 +4,8 @@ import { BankingService } from './application/banking.service';
 import { BankingFacade } from './banking.facade';
 import { IConnectionLinkRepository } from './domain/connection-link';
 import { ConnectionLinkRepository } from './infra/connection-link.repository';
+import { IBankAccountRepository } from './domain/bank-account';
+import { BankAccountRepository } from './infra/bank-account.repository';
 
 @Module({
   imports: [],
@@ -14,6 +16,10 @@ import { ConnectionLinkRepository } from './infra/connection-link.repository';
     {
       provide: IConnectionLinkRepository,
       useClass: ConnectionLinkRepository,
+    },
+    {
+      provide: IBankAccountRepository,
+      useClass: BankAccountRepository,
     },
   ],
 })

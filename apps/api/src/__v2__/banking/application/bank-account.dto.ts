@@ -1,4 +1,4 @@
-export enum BankingAccountType {
+export enum BankAccountType {
   CheckingAccount = 'Checking Account',
   CreditCard = 'Credit Card',
   FinancingAccount = 'Financing Account',
@@ -7,11 +7,11 @@ export enum BankingAccountType {
   SavingsAccount = 'Savings Account',
 }
 
-export interface BankingAccountDto {
+export interface BankAccountDto {
   link: string;
   name: string;
   number: string;
   institution: string;
-  type: BankingAccountType;
+  type: BankAccountType;
   balance: number;
 }

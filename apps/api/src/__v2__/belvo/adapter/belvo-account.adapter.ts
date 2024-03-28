@@ -1,29 +1,23 @@
-import { BankingAccountAdapter } from '../../banking/adapters/banking-account.adapter';
+import { BankAccountAdapter } from '../../banking/banking.facade';
 import { BelvoAccountDto } from '../dto/belvo-account.dto';
 import {
   OFDABrazilAccount,
   BelvoAccountCategory,
 } from '../infrastructure/belvo.gateway';
 import {
-  BankingAccountDto,
-  BankingAccountType,
-} from '../../banking/dto/banking-account.dto';
+  BankAccountDto,
+  BankAccountType,
+} from '../../banking/application/bank-account.dto';
 
-export class BelvoAccountAdapter implements BankingAccountAdapter {
+export class BelvoAccountAdapter implements BankAccountAdapter {
   private readonly accounts: BelvoAccountDto[];
   private readonly accountTypes = new Map([
-    [BelvoAccountCategory.CheckingAccount, BankingAccountType.CheckingAccount],
-    [BelvoAccountCategory.CreditCard, BankingAccountType.CreditCard],
-    [
-      BelvoAccountCategory.FinancingAccount,
-      BankingAccountType.FinancingAccount,
-    ],
-    [
-      BelvoAccountCategory.InvestmentAccount,
-      BankingAccountType.InvestmentAccount,
-    ],
-    [BelvoAccountCategory.LoanAccount, BankingAccountType.LoanAccount],
-    [BelvoAccountCategory.SavingsAccount, BankingAccountType.SavingsAccount],
+    [BelvoAccountCategory.CheckingAccount, BankAccountType.CheckingAccount],
+    [BelvoAccountCategory.CreditCard, BankAccountType.CreditCard],
+    [BelvoAccountCategory.FinancingAccount, BankAccountType.FinancingAccount],
+    [BelvoAccountCategory.InvestmentAccount, BankAccountType.InvestmentAccount],
+    [BelvoAccountCategory.LoanAccount, BankAccountType.LoanAccount],
+    [BelvoAccountCategory.SavingsAccount, BankAccountType.SavingsAccount],
   ]);
 
   constructor(accounts: OFDABrazilAccount[]) {
@@ -45,10 +39,10 @@ export class BelvoAccountAdapter implements BankingAccountAdapter {
   getAccounts() {
     return this.accounts
       .filter((account) => this.accountTypes.has(account.category))
-      .map<BankingAccountDto>((account) => ({
+      .map<BankAccountDto>((account) => ({
         name: account.name,
         number: account.number,
-        type: this.accountTypes.get(account.category) as BankingAccountType,
+        type: this.accountTypes.get(account.category) as BankAccountType,
         link: account.link,
         institution: account.institutionName,
         balance: account.currentBalance,

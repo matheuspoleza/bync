@@ -10,9 +10,8 @@ export class BankingController {
   constructor(
     private readonly belvoService: BelvoService,
     private readonly bankingService: BankingService,
-  ) {
-  }
-}
+  ) {}
+
   @OnEvent('ynab.account-linked')
   async linkBankAccount(payload: { bankAccountID: string }) {
     console.log('BANK ACCOUNT LINKED', payload.bankAccountID);

@@ -1,20 +1,19 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { BankAccountLinkRepository } from '../../../infrastructure/repositories/bank-account-link.repository';
-import { BankAccountRepository } from '../../../infrastructure/repositories/bank-account.repository';
-import { BankingAccountDto } from '../dto/banking-account.dto';
-import { BankingAccount } from '../domain/banking-account';
 import {
   ConnectionLink,
   ConnectionLinkStatus,
   IConnectionLinkRepository,
 } from '../domain/connection-link';
+import { BankAccountRepository } from '../infra/bank-account.repository';
+import { BankAccountDto } from './bank-account.dto';
+import { BankAccount, IBankAccountRepository } from '../domain/bank-account';
 
 @Injectable()
 export class BankingService {
   constructor(
-    private bankAccountsRepository: BankAccountRepository,
-    private bankAccountLinkRepository: BankAccountLinkRepository,
+    @Inject(IBankAccountRepository)
+    private bankAccountsRepository: IBankAccountRepository,
     @Inject(IConnectionLinkRepository)
     private readonly connectionLinkRepository: IConnectionLinkRepository,
   ) {}
@@ -34,17 +33,25 @@ export class BankingService {
     return this.connectionLinkRepository.create(connectionLink);
   }
 
-  async setupAccounts(accountsDto: BankingAccountDto[]) {
-    const link = await this.bankAccountLinkRepository.getOne(linkID);
-    const bankingAccounts = accountsDto.map(
-      (account) => new BankingAccount(account),
+  async setupAccounts(linkId: string, accountsDto: BankAccountDto[]) {
+    const connectionLink = await this.connectionLinkRepository.getOne(linkId);
+    connectionLink.connect();
+    await this.connectionLinkRepository.update(connectionLink);
+
+    const bankAccounts = accountsDto.map(
+      (account) =>
+        new BankAccount({
+          type: account.type,
+          accountName: account.name,
+          number: account.number,
+          balance: account.balance,
+          customerId: connectionLink.customerID,
+          institution: account.institution,
+          connectionLink,
+        }),
     );
-    await this.bankAccountsRepository.createMany(bankingAccounts);
 
-    // update link status to CONNECTED if status is pending. If is ERROR ignore
-    link.connect();
-
-    await this.bankAccountLinkRepository.update(link);
+    await this.bankAccountsRepository.createMany(bankAccounts);
   }
 
   async getAccounts(customerID: string) {
