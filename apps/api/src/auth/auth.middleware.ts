@@ -11,12 +11,12 @@ export class AuthMiddleware implements NestMiddleware {
 
   constructor() {
     this.redis = new Redis({
-      url: process.env.UPSTASH_REDIS_HOST,
-      token: process.env.UPSTASH_REDIS_TOKEN,
+      url: process.env.UPSTASH_REDIS_HOST || '',
+      token: process.env.UPSTASH_REDIS_TOKEN || '',
     });
     this.supabase = new SupabaseClient(
-      process.env.SUPABASE_URL,
-      process.env.SUPABASE_ANON_KEY,
+      process.env.SUPABASE_URL || '',
+      process.env.SUPABASE_ANON_KEY || '',
     );
   }
 
@@ -38,6 +38,11 @@ export class AuthMiddleware implements NestMiddleware {
 
     try {
       const response = await this.supabase.auth.getUser(token);
+
+      if (!response.data.user) {
+        throw new UnauthorizedException('User not found');
+      }
+
       const userID = response.data.user.id;
 
       if (!userID) {
