@@ -34,10 +34,15 @@ export class ConnectionLink {
   get connected() {
     return this.status === ConnectionLinkStatus.CONNECTED;
   }
+
+  public connect() {
+    this.status = ConnectionLinkStatus.CONNECTED;
+  }
 }
 
 export interface IConnectionLinkRepository {
   create: (connectionLink: ConnectionLink) => Promise<ConnectionLink>;
+  update: (connectionLink: ConnectionLink) => Promise<ConnectionLink>;
   getByLinkId: (linkId: string) => Promise<ConnectionLink>;
 }
 

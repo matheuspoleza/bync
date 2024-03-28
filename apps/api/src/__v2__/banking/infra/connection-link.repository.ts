@@ -9,6 +9,10 @@ export class ConnectionLinkRepository implements IConnectionLinkRepository {
     return connectionLink;
   }
 
+  async update(connectionLink: ConnectionLink): Promise<ConnectionLink> {
+    return connectionLink;
+  }
+
   async getByLinkId(linkID: string): Promise<ConnectionLink> {
     return new ConnectionLink({
       id: '',
