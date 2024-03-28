@@ -6,7 +6,7 @@ import {
   WebhookEventDto,
   WebhookType,
   WebhookCode,
-} from './dto/webhook/webhook-event.dto';
+} from './dto/webhook-event.dto';
 
 @Controller('belvo')
 export class WebhooksController {

@@ -9,7 +9,7 @@ export enum WebhookCode {
   NewAccountsAvailable = 'new_accounts_available',
 }
 
-export const webhookAccountHistoricalUpdateEventSchema = z.object({
+const webhookAccountHistoricalUpdateEventSchema = z.object({
   webhook_id: z.string(),
   webhook_type: z.nativeEnum(WebhookType),
   webhook_code: z.literal(WebhookCode.HistoricalUpdate),
@@ -21,7 +21,7 @@ export const webhookAccountHistoricalUpdateEventSchema = z.object({
   }),
 });
 
-export const webhookNewAccountsAvailableEventSchema = z.object({
+const webhookNewAccountsAvailableEventSchema = z.object({
   webhook_id: z.string(),
   webhook_type: z.nativeEnum(WebhookType),
   webhook_code: z.literal(WebhookCode.NewAccountsAvailable),
@@ -32,3 +32,10 @@ export const webhookNewAccountsAvailableEventSchema = z.object({
     new_accounts: z.number(),
   }),
 });
+
+export const webhookAccountEventSchema = z.discriminatedUnion('webhook_code', [
+  webhookAccountHistoricalUpdateEventSchema,
+  webhookNewAccountsAvailableEventSchema,
+]);
+
+export type WebhookEventDto = z.infer<typeof webhookAccountEventSchema>;

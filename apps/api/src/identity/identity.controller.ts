@@ -12,7 +12,7 @@ export class IdentityController {
     return this.customerRepository.getOne(customerID);
   }
 
-  @Post()
+  @Post('customer')
   @UsePipes(new ZodValidationPipe(UserCreatedWebhookRequest))
   async createCustomer(@Body() body: UserCreatedWebhookRequest) {
     const userID = body.record.id;
