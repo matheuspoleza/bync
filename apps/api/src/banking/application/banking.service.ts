@@ -33,8 +33,9 @@ export class BankingService {
   }
 
   async setupAccounts(linkId: string, accountsDto: BankAccountDto[]) {
-    const connectionLink =
-      await this.connectionLinkRepository.getByLinkId(linkId);
+    const connectionLink = await this.connectionLinkRepository.getByLinkId(
+      linkId,
+    );
 
     connectionLink.connect();
     await this.connectionLinkRepository.update(connectionLink);
@@ -55,8 +56,7 @@ export class BankingService {
     await this.bankAccountsRepository.createMany(bankAccounts);
   }
 
-  async getAccounts(customerID: string) {
-    // get all accounts for given customerID
-    console.log({ customerID });
+  async getAccounts(_: string) {
+    return [] as BankAccount[];
   }
 }

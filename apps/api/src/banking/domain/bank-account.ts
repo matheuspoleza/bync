@@ -9,7 +9,7 @@ export enum BankAccountType {
   SavingsAccount = 'Savings Account',
 }
 
-type IBankAccount = {
+export type IBankAccount = {
   id?: string;
   type: BankAccountType;
   accountName: string;
@@ -25,7 +25,7 @@ type IBankAccount = {
 export class BankAccount {
   private connectionLink: ConnectionLink;
   private ynabAccountId: string | null;
-  public id?: string;
+  public id!: string;
   public type: string;
   public name: string;
   public number: string;
@@ -35,7 +35,6 @@ export class BankAccount {
   public institution: string;
 
   constructor(account: IBankAccount) {
-    this.id = account.id;
     this.connectionLink = account.connectionLink;
     this.ynabAccountId = account.ynabAccountId ?? null;
     this.type = account.type;
@@ -45,6 +44,10 @@ export class BankAccount {
     this.lastSyncedAt = account.lastSyncedAt ?? null;
     this.customerId = account.customerId;
     this.institution = account.institution;
+
+    if (account.id) {
+      this.id = account.id;
+    }
   }
 
   link(id: string) {

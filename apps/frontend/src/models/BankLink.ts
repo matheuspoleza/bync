@@ -3,6 +3,6 @@ export interface BankLinkSession {
 }
 
 export interface BankLink {
-  linkID: string;
+  linkId: string;
   institution: string;
 }

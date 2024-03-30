@@ -1,15 +1,20 @@
-import { Body, Controller, Post, UsePipes } from '@nestjs/common';
+import { Body, Controller, HttpStatus, Post, UsePipes } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ZodValidationPipe } from '../common';
+import { ZodApiBody, ZodApiResponse, ZodValidationPipe } from '../common';
 import { SignupRequest, SignupResponse } from './dtos/signup.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('auth')
+@ApiTags('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('signup')
-  @UsePipes(new ZodValidationPipe(SignupRequest))
-  async signup(@Body() data: SignupRequest): Promise<SignupResponse> {
+  @ZodApiBody({ schema: SignupRequest })
+  @ZodApiResponse({ status: HttpStatus.OK, schema: SignupResponse })
+  async signup(
+    @Body(new ZodValidationPipe(SignupRequest)) data: SignupRequest,
+  ): Promise<SignupResponse> {
     return this.authService.signup(data);
   }
 }

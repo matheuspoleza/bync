@@ -3,7 +3,7 @@ import { useBelvo } from '../../../hooks/belvo';
 import { StepProgress } from '../components/StepProgress.component';
 import { Dialog, Typography, Button, toast } from '../../../components/ui';
 import { LockClosedIcon } from '@radix-ui/react-icons';
-import { createBankLink } from '../../../clients/api';
+import * as api from '../../../clients/api';
 
 export const OnboardingBankAccountsStep: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -15,7 +15,7 @@ export const OnboardingBankAccountsStep: React.FC = () => {
       setIsLoading(true);
 
       try {
-        await createBankLink({ linkID: link, institution });
+        await api.banking.createConnection({ linkId: link, institution });
       } finally {
         setIsLoading(false);
       }

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { authenticateBudget } from '../clients/api';
+import * as api from '../clients/api';
 import { useSetAtom } from 'jotai';
 import * as atoms from '../atoms';
 
@@ -27,7 +27,7 @@ export const useYNABAuth = () => {
 
   const getAccesstTokens = async (authCode: string) => {
     try {
-      await authenticateBudget(authCode, YNAB_REDIRECT_URL);
+      await api.ynab.authorize({ authCode, redirectURL: YNAB_REDIRECT_URL });
     } catch (e) {
       console.log(e);
     } finally {

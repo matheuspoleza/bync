@@ -20,12 +20,12 @@ export class YnabIntegration {
     return currentTime > expirationTime;
   }
 
-  private async getCustomerClient(customerID: string): Promise<YNABApi | null> {
+  private async getCustomerClient(customerId: string): Promise<YNABApi | null> {
     const clientSecret = this.configService.get<string>('YNAB_CLIENT_SECRET');
     const clientID = this.configService.get<string>('YNAB_CLIENT_ID');
 
     const customerAuth = await this.redisService.get<YNABCustomerAuthDTO>(
-      `ynab:${customerID}`,
+      `ynab:${customerId}`,
     );
     let authData = customerAuth;
 
@@ -38,7 +38,7 @@ export class YnabIntegration {
         `https://app.ynab.com/oauth/token?client_id=${clientID}&client_secret=${clientSecret}&grant_type=refresh_token&refresh_token=${authData.refresh_token}`,
       );
 
-      await this.storeAuth(customerID, response.data);
+      await this.storeAuth(customerId, response.data);
 
       authData = response.data;
     }
@@ -46,12 +46,12 @@ export class YnabIntegration {
     return new YNABApi(authData.access_token);
   }
 
-  private async storeAuth(customerID: string, authData: YNABCustomerAuthDTO) {
-    return this.redisService.set(`ynab:${customerID}`, authData);
+  private async storeAuth(customerId: string, authData: YNABCustomerAuthDTO) {
+    return this.redisService.set(`ynab:${customerId}`, authData);
   }
 
   async authorize(
-    customerID: string,
+    customerId: string,
     {
       redirectURL,
       authCode,
@@ -81,11 +81,11 @@ export class YnabIntegration {
       },
     );
 
-    await this.storeAuth(customerID, data);
+    await this.storeAuth(customerId, data);
   }
 
-  private async getBudgets(customerID: string) {
-    const client = await this.getCustomerClient(customerID);
+  private async getBudgets(customerId: string) {
+    const client = await this.getCustomerClient(customerId);
 
     if (!client) return [];
 
@@ -107,12 +107,12 @@ export class YnabIntegration {
         ];
   }
 
-  private async getAllBudgetsAccounts(customerID: string) {
-    const client = await this.getCustomerClient(customerID);
+  private async getAllBudgetsAccounts(customerId: string) {
+    const client = await this.getCustomerClient(customerId);
 
     if (!client) return [];
 
-    const budgets = await this.getBudgets(customerID);
+    const budgets = await this.getBudgets(customerId);
 
     const accountsResponse = await Promise.all(
       budgets.flatMap((budget) =>
@@ -128,8 +128,8 @@ export class YnabIntegration {
     return accountsResponse.flatMap((accountResponse) => accountResponse);
   }
 
-  public async getAllForCustomer(customerID: string): Promise<YnabAccount[]> {
-    const ynabBudgetAccounts = await this.getAllBudgetsAccounts(customerID);
+  public async getAllForCustomer(customerId: string): Promise<YnabAccount[]> {
+    const ynabBudgetAccounts = await this.getAllBudgetsAccounts(customerId);
     return ynabBudgetAccounts.map(
       (ynabBudgetAccount) =>
         new YnabAccount({
@@ -143,16 +143,16 @@ export class YnabIntegration {
 
   public async createTransactions(
     accountID: string,
-    customerID: string,
+    customerId: string,
     transactions: Transaction[],
   ): Promise<Transaction[]> {
-    const client = await this.getCustomerClient(customerID);
+    const client = await this.getCustomerClient(customerId);
 
     if (!client) {
       throw new Error('Not authenticated');
     }
 
-    const budgets = await this.getBudgets(customerID);
+    const budgets = await this.getBudgets(customerId);
 
     const budget = budgets?.find(
       (b) => !!b.accounts?.find((a) => a.id === accountID),

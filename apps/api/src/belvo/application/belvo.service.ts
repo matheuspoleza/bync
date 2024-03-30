@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { BelvoGateway } from './infrastructure/belvo.gateway';
-import { BankingFacade } from '../banking/banking.facade';
+import { BelvoGateway } from '../infrastructure/belvo.gateway';
+import { BankingFacade } from '../../banking/banking.facade';
 import { BelvoAccountAdapter } from './adapter/belvo-account.adapter';
 
 @Injectable()

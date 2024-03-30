@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { YnabController } from './ynab.controller';
+import { YnabController } from './api/ynab.controller';
 import { YnabAccountRepository } from './infra/ynab-account.repository';
 import { YnabIntegration } from './infra/ynab.gateway';
-import { YnabService } from './ynab.service';
+import { YnabService } from './application/ynab.service';
 
 @Module({
   controllers: [YnabController],

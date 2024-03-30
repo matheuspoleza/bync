@@ -1,14 +1,16 @@
 import { Controller, Post, Body, UsePipes } from '@nestjs/common';
-import { BelvoService } from './belvo.service';
-import { ZodValidationPipe } from '../common';
+import { BelvoService } from '../application/belvo.service';
+import { ZodValidationPipe } from '../../common';
 import {
   webhookAccountEventSchema,
   WebhookEventDto,
   WebhookType,
   WebhookCode,
 } from './dto/webhook-event.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('belvo')
+@ApiTags('belvo.webhook')
 export class WebhooksController {
   constructor(private readonly belvoService: BelvoService) {}
 

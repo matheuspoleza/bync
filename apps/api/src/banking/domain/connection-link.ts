@@ -13,18 +13,21 @@ type IConnectionLink = {
 };
 
 export class ConnectionLink {
-  public id?: string;
+  public id!: string;
   public customerId: string;
   public linkId: string;
   public institution: string;
   public status: ConnectionLinkStatus;
 
   constructor(connectionLink: IConnectionLink) {
-    this.id = connectionLink.id;
     this.customerId = connectionLink.customerId;
     this.linkId = connectionLink.linkId;
     this.status = connectionLink.status;
     this.institution = connectionLink.institution;
+
+    if (connectionLink.id) {
+      this.id = connectionLink.id;
+    }
   }
 
   get connected() {

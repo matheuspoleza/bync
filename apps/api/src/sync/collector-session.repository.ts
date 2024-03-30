@@ -10,10 +10,10 @@ export class CollectorSessionRepository {
   async saveSessionBackup<T = any>(session: any) {
     for (const {
       transactions,
-      customerID,
+      customerId,
       bankAccountID,
     } of session.accountsData) {
-      const fileName = `${session.id}/${customerID}/${bankAccountID}.json`;
+      const fileName = `${session.id}/${customerId}/${bankAccountID}.json`;
       const fileContent = JSON.stringify(transactions, null, 2);
       const fileBlob = new Blob([fileContent], { type: 'application/json' });
 
@@ -34,7 +34,7 @@ export class CollectorSessionRepository {
     const accountsData: T[] = [];
 
     for (const bankAccount of bankAccounts) {
-      const filePath = `${sessionID}/${bankAccount.customerID}/${bankAccount.id}.json`;
+      const filePath = `${sessionID}/${bankAccount.customerId}/${bankAccount.id}.json`;
 
       // Download the file for the bank account
       const { data: blobData, error } =
@@ -55,7 +55,7 @@ export class CollectorSessionRepository {
       // Push the transactions data into the accountsData array
       accountsData.push({
         id: bankAccount.id,
-        customerID: bankAccount.customerID,
+        customerId: bankAccount.customerId,
         transactions,
       } as any);
     }

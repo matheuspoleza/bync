@@ -5,7 +5,7 @@ import * as atoms from '../atoms';
 
 export const useLogin = () => {
   const handleLogin = async (email: string, password: string) => {
-    await api.login({ email, password });
+    await api.auth.login({ email, password });
   };
 
   return {
@@ -22,12 +22,12 @@ export const useAuth = () => {
   }, [session?.access_token]);
 
   useEffect(() => {
-    api.authClient
+    api.auth
       .getSession()
       .then((response) => setSession(response.data.session))
       .finally(() => setIsFetching(false));
 
-    const { data } = api.authClient.onAuthStateChange((event, session) => {
+    const { data } = api.auth.listenToAuthChanges((event, session) => {
       if (event === 'INITIAL_SESSION') {
         setSession(session);
       } else if (event === 'SIGNED_IN') {

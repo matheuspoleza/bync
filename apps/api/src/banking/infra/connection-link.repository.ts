@@ -13,11 +13,11 @@ export class ConnectionLinkRepository implements IConnectionLinkRepository {
     return connectionLink;
   }
 
-  async getByLinkId(linkID: string): Promise<ConnectionLink> {
+  async getByLinkId(linkId: string): Promise<ConnectionLink> {
     return new ConnectionLink({
       id: '',
       customerId: '',
-      linkId: linkID,
+      linkId: linkId,
       institution: 'Institution',
       status: ConnectionLinkStatus.CONNECTED,
     });

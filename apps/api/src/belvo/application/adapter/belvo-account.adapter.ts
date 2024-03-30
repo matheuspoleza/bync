@@ -1,13 +1,13 @@
-import { BankAccountAdapter } from '../../banking/banking.facade';
-import { BelvoAccountDto } from '../dto/belvo-account.dto';
+import { BankAccountAdapter } from '../../../banking/banking.facade';
+import { BelvoAccountDto } from '../../api/dto/belvo-account.dto';
 import {
   OFDABrazilAccount,
   BelvoAccountCategory,
-} from '../infrastructure/belvo.gateway';
+} from '../../infrastructure/belvo.gateway';
 import {
   BankAccountDto,
   BankAccountType,
-} from '../../banking/application/bank-account.dto';
+} from '../../../banking/application/bank-account.dto';
 
 export class BelvoAccountAdapter implements BankAccountAdapter {
   private readonly linkId: string;

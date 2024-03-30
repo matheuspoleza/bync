@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { YnabAccountRepository } from './infra/ynab-account.repository';
-import { YnabIntegration } from './infra/ynab.gateway';
+import { YnabAccountRepository } from '../infra/ynab-account.repository';
+import { YnabIntegration } from '../infra/ynab.gateway';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { YnabAccountLinked } from './domain/ynab-account-linked';
+import { YnabAccountLinked } from '../domain/ynab-account-linked';
 
 @Injectable()
 export class YnabService {
@@ -30,23 +30,23 @@ export class YnabService {
   }
 
   async authorizeBudgetAccess(
-    customerID: string,
+    customerId: string,
     redirectURL: string,
     authCode: string,
   ) {
-    await this.ynabIntegration.authorize(customerID, {
+    await this.ynabIntegration.authorize(customerId, {
       redirectURL,
       authCode,
     });
 
-    const accounts = await this.ynabIntegration.getAllForCustomer(customerID);
+    const accounts = await this.ynabIntegration.getAllForCustomer(customerId);
 
     await Promise.all(
       accounts.map((account) => this.ynabAccountRepository.create(account)),
     );
   }
 
-  async getAllForCustomer(customerID: string) {
-    return this.ynabAccountRepository.getAllForCustomer(customerID);
+  async getAllForCustomer(customerId: string) {
+    return this.ynabAccountRepository.getAllForCustomer(customerId);
   }
 }

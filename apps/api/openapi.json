@@ -1,0 +1,407 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/banking/accounts": {
+      "get": {
+        "operationId": "BankingController_getBankAccounts",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "bankAccounts": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "number": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string"
+                          },
+                          "institution": {
+                            "type": "string"
+                          },
+                          "balance": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "number",
+                          "type",
+                          "institution",
+                          "balance"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "bankAccounts"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "banking"
+        ]
+      }
+    },
+    "/banking/connection": {
+      "post": {
+        "operationId": "BankingController_createConnection",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "linkId": {
+                    "type": "string"
+                  },
+                  "institution": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "linkId",
+                  "institution"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "linkId": {
+                      "type": "string"
+                    },
+                    "institution": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "pending",
+                        "connected",
+                        "error"
+                      ],
+                      "x-enumNames": [
+                        "PENDING",
+                        "CONNECTED",
+                        "ERROR"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "linkId",
+                    "institution",
+                    "status"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "banking"
+        ]
+      }
+    },
+    "/belvo/session": {
+      "post": {
+        "operationId": "BelvoController_createSession",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "access": {
+                      "type": "string"
+                    },
+                    "refresh": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "access",
+                    "refresh"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "belvo"
+        ]
+      }
+    },
+    "/belvo/webhook": {
+      "post": {
+        "operationId": "WebhooksController_receiveBelvoWebhook",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "belvo.webhook"
+        ]
+      }
+    },
+    "/identity/me": {
+      "get": {
+        "operationId": "IdentityController_me",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "identity"
+        ]
+      }
+    },
+    "/ynab/auth": {
+      "post": {
+        "operationId": "YnabController_authorize",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "authCode": {
+                    "type": "string"
+                  },
+                  "redirectURL": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "authCode",
+                  "redirectURL"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "ynab"
+        ]
+      }
+    },
+    "/ynab/accounts/{accountID}/link": {
+      "post": {
+        "operationId": "YnabController_link",
+        "parameters": [
+          {
+            "name": "accountID",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "bankAccountID": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "bankAccountID"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "ynab"
+        ]
+      }
+    },
+    "/ynab/accounts": {
+      "get": {
+        "operationId": "YnabController_getAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "accounts": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "balance": {
+                            "type": "number"
+                          },
+                          "linkedBankAccountID": {
+                            "type": "string"
+                          },
+                          "lastSyncedAt": {}
+                        },
+                        "required": [
+                          "id",
+                          "type",
+                          "name",
+                          "balance"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "accounts"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "ynab"
+        ]
+      }
+    },
+    "/auth/signup": {
+      "post": {
+        "operationId": "AuthController_signup",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "fullName": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "email",
+                  "password",
+                  "fullName"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "customerId": {
+                      "type": "string"
+                    },
+                    "userId": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "customerId",
+                    "userId"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "auth"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Bync api",
+    "description": "Bync internal api",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [
+    {
+      "name": "bync",
+      "description": ""
+    }
+  ],
+  "servers": [],
+  "components": {
+    "schemas": {}
+  }
+}

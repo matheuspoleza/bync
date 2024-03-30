@@ -68,7 +68,7 @@ export class BelvoGateway implements OnModuleInit {
     });
   }
 
-  async getAccounts(linkID: string) {
-    return (await this.client.accounts.retrieve(linkID)) as OFDABrazilAccount[];
+  async getAccounts(linkId: string) {
+    return (await this.client.accounts.retrieve(linkId)) as OFDABrazilAccount[];
   }
 }

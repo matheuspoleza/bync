@@ -2,7 +2,7 @@ import {
   BelvoAccountBalanceType,
   BelvoAccountInstutionType,
   BelvoAccountCategory,
-} from '../infrastructure/belvo.gateway';
+} from '../../infrastructure/belvo.gateway';
 
 export interface BelvoAccountDto {
   id: string;

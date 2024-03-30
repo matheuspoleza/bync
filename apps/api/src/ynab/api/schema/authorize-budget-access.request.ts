@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'nestjs-zod/z';
 
 export const AuthorizeBudgetAccessRequest = z.object({
   authCode: z.string(),

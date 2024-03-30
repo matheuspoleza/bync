@@ -49,7 +49,7 @@ export class AuthMiddleware implements NestMiddleware {
         throw new UnauthorizedException('Invalid token');
       }
 
-      let customerID: string;
+      let customerId: string;
 
       const cachedCustomerID = await this.redis.get<string>(
         `auth:user-customer-map:${userID}`,
@@ -71,13 +71,13 @@ export class AuthMiddleware implements NestMiddleware {
           customersData.id,
         );
 
-        customerID = customersData.id;
+        customerId = customersData.id;
       } else {
-        customerID = cachedCustomerID;
+        customerId = cachedCustomerID;
       }
 
       req.user = { userID };
-      req.customerID = customerID;
+      req.customerId = customerId;
 
       next();
     } catch (error) {

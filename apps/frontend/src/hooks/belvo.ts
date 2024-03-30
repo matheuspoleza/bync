@@ -1,4 +1,4 @@
-import { createBankLinkSession } from '../clients/api';
+import * as api from '../clients/api';
 import { useScript } from './scripts';
 
 declare global {
@@ -44,11 +44,9 @@ export const useBelvo = ({
   );
 
   const createWidget = async () => {
-    const { access } = await createBankLinkSession();
+    const { data } = await api.belvo.createSession();
 
-    console.log({ access });
-
-    loadScript(widgetCallback(access));
+    loadScript(widgetCallback(data.access));
   };
 
   return { createWidget };

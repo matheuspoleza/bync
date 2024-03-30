@@ -13,8 +13,11 @@ export const useSignup = () => {
     setIsLoading(true);
 
     try {
-      const authenticatedData = await api.signup(data);
-      return authenticatedData;
+      const response = await api.auth.signup({
+        ...data,
+        fullName: data.name,
+      });
+      return response.data;
     } catch (e) {
       console.log('ERROR', e);
 

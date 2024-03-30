@@ -11,7 +11,8 @@
     "lint:eslint": "yarn g:eslint \"src/**/*.{js,ts,tsx,mdx}\"",
     "lint:fix": "yarn g:run-p \"lint:eslint --fix\" \"lint:prettier --write\"",
     "lint:prettier": "yarn g:prettier . \"!**/*.{js,ts,tsx,mdx}\"",
-    "lint:report": "yarn g:eslint-output --quiet './src/**/*.{js,ts,tsx,mdx}'"
+    "lint:report": "yarn g:eslint-output --quiet './src/**/*.{js,ts,tsx,mdx}'",
+    "api:generate": "openapi-generator-cli generate -i ../api/openapi.json -g typescript-axios -o ./src/clients/api/__generated__"
   },
   "dependencies": {
     "@emotion/react": "^11.11.3",
@@ -55,6 +56,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@openapitools/openapi-generator-cli": "^2.13.1",
     "@tanstack/eslint-plugin-query": "^5.20.1",
     "@types/node": "^20.11.24",
     "@types/react": "^18.2.47",

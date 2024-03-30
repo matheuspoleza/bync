@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'nestjs-zod/z';
 
 export enum WebhookType {
   Accounts = 'ACCOUNTS',
