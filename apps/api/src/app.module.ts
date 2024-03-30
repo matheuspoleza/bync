@@ -8,6 +8,7 @@ import { YnabModule } from './ynab/ynab.module';
 import { ConfigModule } from '@nestjs/config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AuthMiddleware } from './auth/auth.middleware';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -19,13 +20,11 @@ import { AuthMiddleware } from './auth/auth.middleware';
     IdentityModule,
     SyncModule,
     YnabModule,
+    AuthModule,
   ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(AuthMiddleware)
-      .exclude('identity/customer', 'auth')
-      .forRoutes('*');
+    consumer.apply(AuthMiddleware).exclude('auth/signup').forRoutes('*');
   }
 }

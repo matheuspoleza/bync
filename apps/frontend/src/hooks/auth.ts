@@ -16,6 +16,8 @@ export const useSignup = () => {
       const authenticatedData = await api.signup(data);
       return authenticatedData;
     } catch (e) {
+      console.log('ERROR', e);
+
       toast({
         variant: 'destructive',
         title: 'Não foi possível criar uma nova conta',

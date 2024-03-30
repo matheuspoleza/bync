@@ -11,14 +11,14 @@ import { STORAGE_KEYS } from '../atoms/utils';
 
 // TODO: move to env var
 // remote
-// const SUPABASE_URL = 'https://atbffzwecdubmzwfinqr.supabase.co';
-// const SUPABASE_KEY =
-//   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0YmZmendlY2R1Ym16d2ZpbnFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDYwNDUyOTcsImV4cCI6MjAyMTYyMTI5N30.Q3VmXyW1JCyE-Ep78iSHwh0HfgB93v8oRD82jjttvRM';
+const SUPABASE_URL = 'https://atbffzwecdubmzwfinqr.supabase.co';
+const SUPABASE_KEY =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0YmZmendlY2R1Ym16d2ZpbnFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDYwNDUyOTcsImV4cCI6MjAyMTYyMTI5N30.Q3VmXyW1JCyE-Ep78iSHwh0HfgB93v8oRD82jjttvRM';
 
 // local
-const SUPABASE_URL = 'http://127.0.0.1:54321';
-const SUPABASE_KEY =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0';
+// const SUPABASE_URL = 'http://127.0.0.1:54321';
+// const SUPABASE_KEY =
+//   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0';
 
 // TODO: move to env var
 export const YNAB_CLIENT_ID = 'WGEAcIpzW8Npx-kFtgYSA-JBDUPodjRKQVqoCD0cRZA';
@@ -39,6 +39,8 @@ const getAccessToken = async () => {
 };
 
 api.interceptors.request.use(async (config) => {
+  if (config.url?.includes('auth')) return config;
+
   const accessToken = await getAccessToken();
 
   if (accessToken) {
@@ -80,15 +82,14 @@ export const signup = async ({
   name: string;
   password: string;
 }) => {
-  await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      data: {
-        full_name: name,
-      },
-    },
-  });
+  const response = await api.post<{ userId: string; customerId: string }>(
+    '/auth/signup',
+    { email, password, fullName: name }
+  );
+
+  if (!response.data.customerId || !response.data.userId) {
+    throw new Error('Failed to signup');
+  }
 
   await supabase.auth.signInWithPassword({
     email,
