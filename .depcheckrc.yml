@@ -1,9 +1,0 @@
-ignores: [
-  "@commitlint/config-conventional",
-  "source-map-support",
-  "tsd",
-  "eslint-import-resolver-typescript",
-  "rimraf"
-]
-ignore-bin-package: true
-ignore-patterns: [ "build" ]
