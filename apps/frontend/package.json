@@ -6,12 +6,6 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",
-    "lint": "yarn g:run-p lint:eslint \"lint:prettier --check\"",
-    "lint:eslint": "yarn g:eslint \"src/**/*.{js,ts,tsx,mdx}\"",
-    "lint:fix": "yarn g:run-p \"lint:eslint --fix\" \"lint:prettier --write\"",
-    "lint:prettier": "yarn g:prettier . \"!**/*.{js,ts,tsx,mdx}\"",
-    "lint:report": "yarn g:eslint-output --quiet './src/**/*.{js,ts,tsx,mdx}'",
     "api:generate": "openapi-generator-cli generate -i ../api/openapi.json -g typescript-axios -o ./src/clients/api/__generated__"
   },
   "dependencies": {
@@ -20,11 +14,6 @@
     "@faker-js/faker": "^8.4.1",
     "@fontsource/inter": "^5.0.16",
     "@iconify/react": "^4.1.1",
-    "@mui/icons-material": "^5.15.6",
-    "@mui/joy": "^5.0.0-beta.24",
-    "@mui/lab": "^5.0.0-alpha.162",
-    "@mui/material": "^5.15.6",
-    "@mui/styled-engine-sc": "^6.0.0-alpha.13",
     "@radix-ui/react-avatar": "^1.0.4",
     "@radix-ui/react-checkbox": "^1.0.4",
     "@radix-ui/react-dialog": "^1.0.5",
@@ -57,17 +46,10 @@
   },
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "^2.13.1",
-    "@tanstack/eslint-plugin-query": "^5.20.1",
     "@types/node": "^20.11.24",
     "@types/react": "^18.2.47",
     "@types/react-dom": "^18.2.18",
-    "@typescript-eslint/eslint-plugin": "^6.18.1",
-    "@typescript-eslint/parser": "^6.18.1",
     "autoprefixer": "^10.4.18",
-    "eslint": "^8.53.0",
-    "eslint-plugin-react": "^7.33.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.4",
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.2.2"
