@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
 import { Card, Label, Button, Input } from '../../components/ui';
-import { useSignup } from '../../hooks/auth';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/auth';
+import { useAuthSession, useSignup } from '../../hooks';
 
 export const SignupPage: React.FC = () => {
   const [name, setName] = useState('');
@@ -11,7 +10,7 @@ export const SignupPage: React.FC = () => {
   const [password, setPassword] = useState('');
   const { isLoading, onSignup } = useSignup();
   const navigate = useNavigate();
-  const { isLoggedIn, isFetching } = useAuth();
+  const { isLoggedIn, isFetching } = useAuthSession();
   const [isCreatingAccount, setIsCreatingAccount] = useState(false);
 
   const handleSignup = async () => {

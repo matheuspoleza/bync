@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
 import { Card, Label, Button, Input, useToast } from '../../components/ui';
-import { useLogin } from '../../context/auth';
 import { useNavigate } from 'react-router-dom';
+import { useLogin } from '../../hooks';
 
 export const LoginPage: React.FC = () => {
   const { login } = useLogin();

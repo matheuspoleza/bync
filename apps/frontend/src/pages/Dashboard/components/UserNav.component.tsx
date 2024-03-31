@@ -1,13 +1,12 @@
-import { useAtomValue } from 'jotai';
 import { Avatar, Button, DropdownMenu } from '../../../components/ui';
-import * as atoms from '../../../atoms';
-import { api } from '../../../clients';
+import * as api from '../../../api';
+import { useCustomer } from '../../../hooks';
 
 export const UserNav: React.FC = () => {
-  const userEmail = useAtomValue(atoms.session.userEmail);
+  const { email } = useCustomer();
 
   const handleLogout = async () => {
-    await api.authClient.signOut();
+    await api.auth.signout();
     window.location.href = '/login';
   };
 
@@ -24,9 +23,9 @@ export const UserNav: React.FC = () => {
       <DropdownMenu.Content className="w-56" align="end" forceMount>
         <DropdownMenu.Label className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{userEmail}</p>
+            <p className="text-sm font-medium leading-none">{email}</p>
             <p className="text-xs leading-none text-muted-foreground">
-              {userEmail}
+              {email}
             </p>
           </div>
         </DropdownMenu.Label>

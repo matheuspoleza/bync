@@ -7,15 +7,15 @@ import {
 import { DashboardPage } from './pages/Dashboard/Dashboard.component';
 import { LoginPage } from './pages/Login/Login.component';
 import { SignupPage } from './pages/Signup';
-import { ModalProvider } from './context/modal';
-import { useAuth } from './context/auth';
+import { ModalProvider } from './components/Modal/modal';
 import { useEffect } from 'react';
 import { LoadingPage } from './components/LoadingPage.component';
+import { useAuthSession } from './hooks';
 
 export const unAuthenticatedRoutes = ['login', 'sign-up'];
 
 const RoutePage = () => {
-  const { isLoggedIn, isFetching } = useAuth();
+  const { isLoggedIn, isFetching } = useAuthSession();
   const navigate = useNavigate();
   const location = useLocation();
 
