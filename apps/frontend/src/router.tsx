@@ -30,6 +30,7 @@ const RoutePage = () => {
       return;
     }
 
+    // TODO: create onboarding hook to encapsulate this redirect logic
     Promise.all([fetchBankAccounts(), fetchYnabAccounts()]).then(
       ([bankAccounts, ynabAccounts]) => {
         if (bankAccounts.data?.length && ynabAccounts.data?.length) {
