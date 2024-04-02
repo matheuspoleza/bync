@@ -3,7 +3,6 @@ import {
   createBrowserRouter,
   useLocation,
   useNavigate,
-  useNavigation,
 } from 'react-router-dom';
 import { DashboardPage } from './pages/Dashboard/Dashboard.component';
 import { LoginPage } from './pages/Login/Login.component';
@@ -11,8 +10,7 @@ import { SignupPage } from './pages/Signup';
 import { ModalProvider } from './components/Modal/modal';
 import { useEffect } from 'react';
 import { LoadingPage } from './components/LoadingPage.component';
-import { useAuthSession } from './hooks';
-import * as api from './api';
+import { useAuthSession, useBankAccounts, useYnabAccounts } from './hooks';
 
 export const unAuthenticatedRoutes = ['login', 'sign-up'];
 
@@ -20,7 +18,8 @@ const RoutePage = () => {
   const { isLoggedIn, isFetching } = useAuthSession();
   const navigate = useNavigate();
   const location = useLocation();
-  const navigation = useNavigation();
+  const { fetchBankAccounts } = useBankAccounts({ enabled: false });
+  const { fetchYnabAccounts } = useYnabAccounts({ enabled: false });
 
   useEffect(() => {
     if (isFetching) return;
@@ -28,12 +27,22 @@ const RoutePage = () => {
 
     if (!isLoggedIn) {
       navigate('/login');
-    } else {
-      navigate('/dashboard');
+      return;
     }
+
+    Promise.all([fetchBankAccounts(), fetchYnabAccounts()]).then(
+      ([bankAccounts, ynabAccounts]) => {
+        if (bankAccounts.data?.length && ynabAccounts.data?.length) {
+          navigate('/dashboard');
+        } else {
+          // TODO: Transform onboarding in a page instead of modal and redirect to onboarding here
+          navigate('/dashboard?test=123');
+        }
+      }
+    );
   }, [isLoggedIn, isFetching]);
 
-  if (isFetching || navigation.state === 'loading') return <LoadingPage />;
+  if (isFetching) return <LoadingPage />;
 
   return (
     <ModalProvider>
@@ -50,14 +59,6 @@ export const router = createBrowserRouter([
       {
         path: '/dashboard',
         element: <DashboardPage />,
-        loader: async () => {
-          const bankAccounts = await api.banking.getAccounts();
-          const ynabAccounts = await api.ynab.getAll();
-
-          console.log({ bankAccounts, ynabAccounts });
-
-          return { bankAccounts, ynabAccounts };
-        },
       },
       {
         path: '/login',
