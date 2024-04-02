@@ -16,9 +16,9 @@ export const OnboardingConnectionStep: React.FC<
 
   const handleBankAccountSelect = (
     ynabAccountId: string,
-    accountID: string
+    accountId: string
   ) => {
-    setConnections({ ...connections, [ynabAccountId]: accountID });
+    setConnections({ ...connections, [ynabAccountId]: accountId });
   };
 
   return (
@@ -46,8 +46,8 @@ export const OnboardingConnectionStep: React.FC<
               <Typography.Small>{ynabAccount.name}</Typography.Small>
               <BankAccountSelect
                 value={connections[ynabAccount.id]}
-                onSelect={(accountID) =>
-                  handleBankAccountSelect(ynabAccount.id, accountID)
+                onSelect={(accountId) =>
+                  handleBankAccountSelect(ynabAccount.id, accountId)
                 }
               />
             </div>

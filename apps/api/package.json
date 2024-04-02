@@ -10,7 +10,7 @@
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "db:generate-types": "npx supabase gen types typescript --project-id atbffzwecdubmzwfinqr > ./src/infrastructure/database/__generated__/database.types.ts",
+    "db:generate-types": "npx supabase gen types typescript --project-id atbffzwecdubmzwfinqr > ./src/common/database/__generated__/database.types.ts",
     "db:local:generate-types": "npx supabase gen types typescript --local > ./src/infrastructure/database/__generated__/database.types.ts",
     "db:pull": "npx supabase link --project-ref atbffzwecdubmzwfinqr && npx supabase db pull",
     "db:storage:pull": "npx supabase link --project-ref atbffzwecdubmzwfinqr && npx supabase db pull --schema storage",

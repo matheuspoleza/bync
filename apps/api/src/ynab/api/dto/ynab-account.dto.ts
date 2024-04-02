@@ -5,7 +5,7 @@ export const YnabAccountDto = z.object({
   type: z.string(),
   name: z.string(),
   balance: z.number(),
-  linkedBankAccountID: z.string().optional(),
+  linkedBankAccountId: z.string().optional(),
   lastSyncedAt: z.date().optional(),
 });
 

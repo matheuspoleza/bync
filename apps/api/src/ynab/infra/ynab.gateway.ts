@@ -133,16 +133,18 @@ export class YnabIntegration {
     return ynabBudgetAccounts.map(
       (ynabBudgetAccount) =>
         new YnabAccount({
-          ynabAccountID: ynabBudgetAccount.id,
+          ynabAccountId: ynabBudgetAccount.id,
           name: ynabBudgetAccount.name,
           balance: ynabBudgetAccount.balance,
           type: ynabBudgetAccount.type,
+          budgetId: ynabBudgetAccount.budgetID,
+          customerId,
         }),
     );
   }
 
   public async createTransactions(
-    accountID: string,
+    accountId: string,
     customerId: string,
     transactions: Transaction[],
   ): Promise<Transaction[]> {
@@ -155,7 +157,7 @@ export class YnabIntegration {
     const budgets = await this.getBudgets(customerId);
 
     const budget = budgets?.find(
-      (b) => !!b.accounts?.find((a) => a.id === accountID),
+      (b) => !!b.accounts?.find((a) => a.id === accountId),
     );
 
     if (!budget) {
@@ -169,7 +171,7 @@ export class YnabIntegration {
         const id = `YNAB:${t.amount}:${t.date}`;
         const count = acc.filter((t) => t.import_id === id).length;
         const importID = `${id}:${count + 1}`;
-        return [...acc, { ...t, account_id: accountID, import_id: importID }];
+        return [...acc, { ...t, account_id: accountId, import_id: importID }];
       }, []),
     });
 

@@ -33,14 +33,14 @@ export class YnabController {
     );
   }
 
-  @Post('accounts/:accountID/link')
+  @Post('accounts/:accountId/link')
   @ZodApiBody({ schema: LinkYnabAccount })
   @ZodApiResponse({ status: HttpStatus.OK })
   async link(
-    @Param('accountID') accountID: string,
+    @Param('accountId') accountId: string,
     @Body(new ZodValidationPipe(LinkYnabAccount)) data: LinkYnabAccount,
   ) {
-    await this.ynabService.createBankAccountLink(accountID, data.bankAccountID);
+    await this.ynabService.createBankAccountLink(accountId, data.bankAccountID);
   }
 
   @Get('accounts')

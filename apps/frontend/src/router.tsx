@@ -3,6 +3,7 @@ import {
   createBrowserRouter,
   useLocation,
   useNavigate,
+  useNavigation,
 } from 'react-router-dom';
 import { DashboardPage } from './pages/Dashboard/Dashboard.component';
 import { LoginPage } from './pages/Login/Login.component';
@@ -11,6 +12,7 @@ import { ModalProvider } from './components/Modal/modal';
 import { useEffect } from 'react';
 import { LoadingPage } from './components/LoadingPage.component';
 import { useAuthSession } from './hooks';
+import * as api from './api';
 
 export const unAuthenticatedRoutes = ['login', 'sign-up'];
 
@@ -18,6 +20,7 @@ const RoutePage = () => {
   const { isLoggedIn, isFetching } = useAuthSession();
   const navigate = useNavigate();
   const location = useLocation();
+  const navigation = useNavigation();
 
   useEffect(() => {
     if (isFetching) return;
@@ -30,7 +33,7 @@ const RoutePage = () => {
     }
   }, [isLoggedIn, isFetching]);
 
-  if (isFetching) return <LoadingPage />;
+  if (isFetching || navigation.state === 'loading') return <LoadingPage />;
 
   return (
     <ModalProvider>
@@ -47,6 +50,14 @@ export const router = createBrowserRouter([
       {
         path: '/dashboard',
         element: <DashboardPage />,
+        loader: async () => {
+          const bankAccounts = await api.banking.getAccounts();
+          const ynabAccounts = await api.ynab.getAll();
+
+          console.log({ bankAccounts, ynabAccounts });
+
+          return { bankAccounts, ynabAccounts };
+        },
       },
       {
         path: '/login',

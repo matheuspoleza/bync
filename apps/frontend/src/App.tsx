@@ -1,4 +1,4 @@
-import { RouterProvider } from 'react-router-dom';
+import { RouterProvider, useNavigation } from 'react-router-dom';
 import { ThemeProvider } from './components/ui/lib/ThemeProvider.component';
 import { router } from './router';
 import { QueryClientProvider } from '@tanstack/react-query';

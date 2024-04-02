@@ -18,7 +18,7 @@ export class YnabApi extends BaseApi {
     );
   }
 
-  async link(accountID: string, linkRequest: YnabControllerLinkRequest) {
-    return this.ynab.ynabControllerLink(accountID, linkRequest);
+  async link(accountId: string, linkRequest: YnabControllerLinkRequest) {
+    return this.ynab.ynabControllerLink(accountId, linkRequest);
   }
 }

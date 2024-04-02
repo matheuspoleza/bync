@@ -231,12 +231,12 @@
         ]
       }
     },
-    "/ynab/accounts/{accountID}/link": {
+    "/ynab/accounts/{accountId}/link": {
       "post": {
         "operationId": "YnabController_link",
         "parameters": [
           {
-            "name": "accountID",
+            "name": "accountId",
             "required": true,
             "in": "path",
             "schema": {
@@ -301,7 +301,7 @@
                           "balance": {
                             "type": "number"
                           },
-                          "linkedBankAccountID": {
+                          "linkedBankAccountId": {
                             "type": "string"
                           },
                           "lastSyncedAt": {}

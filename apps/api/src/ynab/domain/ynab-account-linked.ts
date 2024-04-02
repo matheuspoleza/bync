@@ -1,4 +1,4 @@
 export interface YnabAccountLinked {
-  ynabAccountID: string;
+  ynabAccountId: string;
   bankAccountID: string;
 }

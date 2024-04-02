@@ -2,32 +2,38 @@ export interface IYnabAccountRepository {}
 
 interface IYnabAccount {
   id?: string;
-  ynabAccountID?: string;
+  customerId: string;
+  budgetId: string;
   type: string;
   name: string;
   balance: number;
-  linkedBankAccountID?: string;
+  ynabAccountId?: string;
+  linkedBankAccountId?: string;
   lastSyncedAt?: Date;
 }
 
 export class YnabAccount {
   public id!: string;
-  public ynabAccountID!: string;
+  public budgetId: string;
+  public ynabAccountId!: string;
   public type!: string;
   public name!: string;
   public balance!: number;
-  public linkedBankAccountID?: string;
+  public linkedBankAccountId?: string;
   public lastSyncedAt?: Date;
+  public customerId: string;
 
   constructor(account: IYnabAccount) {
-    this.linkedBankAccountID = account.linkedBankAccountID;
+    this.linkedBankAccountId = account.linkedBankAccountId;
     this.type = account.type;
     this.name = account.name;
     this.balance = account.balance;
     this.lastSyncedAt = account.lastSyncedAt;
+    this.customerId = account.customerId;
+    this.budgetId = account.budgetId;
 
-    if (account.ynabAccountID) {
-      this.ynabAccountID = account.ynabAccountID;
+    if (account.ynabAccountId) {
+      this.ynabAccountId = account.ynabAccountId;
     }
 
     if (account.id) {
@@ -36,6 +42,6 @@ export class YnabAccount {
   }
 
   link(bankAccountID: string) {
-    this.linkedBankAccountID = bankAccountID;
+    this.linkedBankAccountId = bankAccountID;
   }
 }

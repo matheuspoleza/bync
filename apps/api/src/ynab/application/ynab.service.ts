@@ -12,8 +12,8 @@ export class YnabService {
     private readonly eventEmitter: EventEmitter2,
   ) {}
 
-  async createBankAccountLink(ynabAccountID: string, bankAccountID: string) {
-    const ynabAccount = await this.ynabAccountRepository.getByID(ynabAccountID);
+  async createBankAccountLink(ynabAccountId: string, bankAccountID: string) {
+    const ynabAccount = await this.ynabAccountRepository.getById(ynabAccountId);
 
     if (!ynabAccount) {
       throw new Error('Ynab account not found');
@@ -24,7 +24,7 @@ export class YnabService {
     await this.ynabAccountRepository.update(ynabAccount);
 
     this.eventEmitter.emit('ynab.account-linked', {
-      ynabAccountID,
+      ynabAccountId,
       bankAccountID,
     } as YnabAccountLinked);
   }

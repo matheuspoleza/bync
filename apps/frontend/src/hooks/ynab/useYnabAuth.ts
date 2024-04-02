@@ -1,14 +1,22 @@
+import { useRef, useEffect } from 'react';
+import { YNAB_REDIRECT_URL } from '.';
+import * as api from '../../api';
+
+const removeQueryParam = (paramToRemove: string) => {
+  const currentUrl = window.location.href;
+  const url = new URL(currentUrl);
+  url.searchParams.delete(paramToRemove);
+  window.history.pushState({}, '', url);
+};
+
 export const useYNABAuth = () => {
   const hasRun = useRef(false);
-  const setIsAuthorizing = useSetAtom(atoms.budgets.isAuthorizing);
 
   const getAccesstTokens = async (authCode: string) => {
     try {
       await api.ynab.authorize({ authCode, redirectURL: YNAB_REDIRECT_URL });
     } catch (e) {
       console.log(e);
-    } finally {
-      setIsAuthorizing(false);
     }
   };
 
@@ -21,7 +29,6 @@ export const useYNABAuth = () => {
     hasRun.current = true;
 
     if (ynabAuthorizationCode) {
-      setIsAuthorizing(true);
       setTimeout(() => getAccesstTokens(ynabAuthorizationCode), 500);
       removeQueryParam('code');
     }

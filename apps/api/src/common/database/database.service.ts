@@ -17,4 +17,8 @@ export class DatabaseService implements OnModuleInit {
       this.configService.get<string>('SUPABASE_ANON_KEY', ''),
     );
   }
+
+  get schema() {
+    return this.client.schema('public');
+  }
 }
