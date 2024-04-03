@@ -1,21 +1,26 @@
+import React from "react";
+import { useBankAccounts, useYnabAccounts } from "..";
+
 export const useOnboarding = () => {
-  const { openModal } = useModal(Modals.Onboarding);
+  const { accounts: bankAccounts } = useBankAccounts();
+  const { accounts: ynabAccounts } = useYnabAccounts();
 
-  useEffect(() => {
-    if (isLoading) return;
+  console.log({ bankAccounts });
 
-    if (!bankAccounts?.length) {
-      openModal({ step: 'bank-accounts' });
-      return;
-    }
+  const stepsCompleteMapper = React.useMemo(() => {
+    return {
+      bankAccounts: !!bankAccounts?.length,
+      ynabAccounts: !!ynabAccounts?.length,
+      connection: !!ynabAccounts?.some(
+        (account) => account.linkedBankAccountId
+      ),
+    };
+  }, [bankAccounts, ynabAccounts]);
 
-    if (!budgetAccounts?.length) {
-      openModal({ step: 'budgets' });
-      return;
-    }
+  const isCompleted = React.useMemo(
+    () => Object.values(stepsCompleteMapper).every((step) => step),
+    [stepsCompleteMapper]
+  );
 
-    if (!Object.keys(connections).length) {
-      openModal({ step: 'connection' });
-    }
-  }, [bankAccounts, budgetAccounts, connections, isLoading]);
+  return { isCompleted, stepsCompleteMapper };
 };

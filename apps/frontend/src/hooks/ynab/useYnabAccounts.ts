@@ -1,19 +1,17 @@
-import { useQuery } from '@tanstack/react-query';
-import * as api from '../../api';
-
-export const fetchYnabAccountsQuery = () =>
-  api.queryClient.fetchQuery({
-    queryKey: ['ynab-accounts'],
-    queryFn: api.ynab.getAll,
-  });
+import { useQuery } from "@tanstack/react-query";
+import * as api from "../../api";
 
 export const useYnabAccounts = (options?: { enabled?: boolean }) => {
   const query = useQuery({
-    queryKey: ['ynab-accounts'],
-    queryFn: api.ynab.getAll,
-    enabled: options?.enabled,
+    queryKey: ["ynab-accounts"],
+    queryFn: () => {
+      return api.ynab.getAll();
+    },
+    enabled: options?.enabled ?? true,
     throwOnError: false,
     retry: false,
+    initialData: [],
+    refetchOnMount: true,
   });
 
   return {

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
-import { Card, Label, Button, Input } from '../../components/ui';
+import { Card, Label, Button, Input } from '../../../components/ui';
 import { useNavigate } from 'react-router-dom';
-import { useAuthSession, useSignup } from '../../hooks';
+import { useLogin, useSignup } from '../../../hooks';
 
 export const SignupPage: React.FC = () => {
   const [name, setName] = useState('');
@@ -10,7 +10,7 @@ export const SignupPage: React.FC = () => {
   const [password, setPassword] = useState('');
   const { isLoading, onSignup } = useSignup();
   const navigate = useNavigate();
-  const { isLoggedIn, isFetching } = useAuthSession();
+  const { login } = useLogin();
   const [isCreatingAccount, setIsCreatingAccount] = useState(false);
 
   const handleSignup = async () => {
@@ -18,19 +18,12 @@ export const SignupPage: React.FC = () => {
 
     try {
       await onSignup({ name, email, password });
-    } catch (e) {
+      await login(email, password);
+      navigate('/');
+    } finally {
       setIsCreatingAccount(false);
     }
   };
-
-  useEffect(() => {
-    if (isLoggedIn && !isFetching) {
-      setTimeout(() => {
-        setIsCreatingAccount(false);
-        navigate('/dashboard');
-      }, 2000);
-    }
-  }, [isLoggedIn, isFetching]);
 
   return (
     <div className="min-h-screen min-w-screen flex items-center justify-center">

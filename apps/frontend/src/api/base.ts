@@ -1,4 +1,4 @@
-import { SupabaseClient, createClient } from '@supabase/supabase-js';
+import { Session, SupabaseClient, createClient } from '@supabase/supabase-js';
 import axios from 'axios';
 import { AuthApi, BankingApi, BelvoApi, YnabApi } from './__generated__';
 import { SUPABASE_KEY, SUPABASE_URL } from './config';
@@ -28,16 +28,15 @@ api.interceptors.request.use(async (config) => {
   if (accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`;
   }
+
   return config;
 });
 
 api.interceptors.response.use(null, async (error) => {
   if (error.config && error.response && error.response.status === 401) {
-    const cachedSession = JSON.parse(
-      localStorage.getItem('bync.session') ?? ''
-    );
+    const accessToken = localStorage.getItem('accessToken');
 
-    if (cachedSession?.access_token) {
+    if (accessToken) {
       const { data } = await supabase.auth.getSession();
 
       if (!data.session?.access_token) {
@@ -54,18 +53,21 @@ api.interceptors.response.use(null, async (error) => {
 });
 
 export class BaseApi {
-  protected auth: AuthApi;
-  protected banking: BankingApi;
-  protected ynab: YnabApi;
-  protected belvo: BelvoApi;
-  protected supabase: SupabaseClient;
+  protected auth!: AuthApi;
+  protected banking!: BankingApi;
+  protected ynab!: YnabApi;
+  protected belvo!: BelvoApi;
+  protected supabase!: SupabaseClient;
 
   constructor() {
-    console.log('base constructor');
+    this.supabase = supabase;
+    this.setupApis();
+  }
+
+  async setupApis() {
     this.auth = new AuthApi(undefined, undefined, api);
     this.banking = new BankingApi(undefined, undefined, api);
     this.ynab = new YnabApi(undefined, undefined, api);
     this.belvo = new BelvoApi(undefined, undefined, api);
-    this.supabase = supabase;
   }
 }

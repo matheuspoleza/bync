@@ -1,26 +1,22 @@
 import { NestMiddleware, UnauthorizedException } from '@nestjs/common';
 import { SupabaseClient } from '@supabase/supabase-js';
-import { Redis } from '@upstash/redis';
 import { Request, Response, NextFunction } from 'express';
 import { Tables } from '../common/database';
 import { API_KEY } from './auth.constants';
 
+let customerUserIdMap: Record<string, string> = {};
+
 export class AuthMiddleware implements NestMiddleware {
-  private redis: Redis;
   private supabase: SupabaseClient;
 
   constructor() {
-    this.redis = new Redis({
-      url: process.env.UPSTASH_REDIS_HOST || '',
-      token: process.env.UPSTASH_REDIS_TOKEN || '',
-    });
     this.supabase = new SupabaseClient(
       process.env.SUPABASE_URL || '',
       process.env.SUPABASE_ANON_KEY || '',
     );
   }
 
-  async use(req: Request, res: Response, next: NextFunction) {
+  async use(req: Request, _: Response, next: NextFunction) {
     const tokenType = req.headers.authorization?.split(' ')[0];
     const token = req.headers.authorization?.split(' ')[1];
 
@@ -43,44 +39,35 @@ export class AuthMiddleware implements NestMiddleware {
         throw new UnauthorizedException('User not found');
       }
 
-      const userID = response.data.user.id;
+      const userId = response.data.user.id;
 
-      if (!userID) {
+      if (!userId) {
         throw new UnauthorizedException('Invalid token');
       }
 
-      let customerId: string;
+      let customerId = customerUserIdMap[userId];
 
-      const cachedCustomerID = await this.redis.get<string>(
-        `auth:user-customer-map:${userID}`,
-      );
-
-      if (!cachedCustomerID) {
+      if (!customerId) {
         const { data } = await this.supabase
           .schema('public')
           .from('customers')
           .select('*')
-          .eq('user_id', userID)
+          .eq('user_id', userId)
           .single();
 
         const customersData = data as Tables<'customers'>;
 
-        await this.redis.setex(
-          `auth:user-customer-map:${userID}`,
-          86400,
-          customersData.id,
-        );
-
         customerId = customersData.id;
-      } else {
-        customerId = cachedCustomerID;
+
+        customerUserIdMap[userId] = customerId;
       }
 
-      req.user = { userID };
+      req.user = { userID: userId };
       req.customerId = customerId;
 
       next();
     } catch (error) {
+      console.log('ERROR', error);
       throw new UnauthorizedException('Invalid token');
     }
   }

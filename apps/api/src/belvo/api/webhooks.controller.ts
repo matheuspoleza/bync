@@ -1,11 +1,11 @@
-import { Controller, Post, Body, UsePipes } from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { BelvoService } from '../application/belvo.service';
-import { ZodValidationPipe } from '../../common';
+import { ZodApiBody } from '../../common';
 import {
-  webhookAccountEventSchema,
   WebhookEventDto,
   WebhookType,
   WebhookCode,
+  webhookEventSchema,
 } from './dto/webhook-event.dto';
 import { ApiTags } from '@nestjs/swagger';
 
@@ -15,13 +15,20 @@ export class WebhooksController {
   constructor(private readonly belvoService: BelvoService) {}
 
   @Post('webhook')
-  @UsePipes(new ZodValidationPipe(webhookAccountEventSchema))
+  @ZodApiBody({ schema: webhookEventSchema })
   async receiveBelvoWebhook(@Body() event: WebhookEventDto) {
     if (
       event.webhook_type === WebhookType.Accounts &&
       event.webhook_code === WebhookCode.HistoricalUpdate
     ) {
+      console.log(
+        `Handling belvo event: ${event.webhook_code} ${event.webhook_type}`,
+      );
       await this.belvoService.setupAccounts(event.link_id);
+    } else {
+      console.log(
+        `Ignoring belvo event: ${event.webhook_code} ${event.webhook_type}`,
+      );
     }
   }
 }

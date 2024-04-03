@@ -24,7 +24,7 @@ export class YnabAccountRepository {
 
   async getAllForCustomer(customerId: string) {
     const { data } = await this.databaseService.schema
-      .from('ynab_account')
+      .from('ynab_accounts')
       .select('*')
       .eq('customer_id', customerId);
 
@@ -53,7 +53,7 @@ export class YnabAccountRepository {
       });
 
     if (result.error) {
-      throw new Error(`Failed to update ynab account: ${result.error}`);
+      throw new Error(`Failed to update ynab account: ${result.error.message}`);
     }
   }
 
@@ -73,7 +73,7 @@ export class YnabAccountRepository {
       .single();
 
     if (!result.data || result.error) {
-      throw new Error(`Failed to create ynab account: ${result.error}`);
+      throw new Error(`Failed to create ynab account: ${result.error.message}`);
     }
 
     return this.fromDB(result.data);

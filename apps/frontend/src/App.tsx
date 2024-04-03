@@ -1,10 +1,16 @@
-import { RouterProvider, useNavigation } from 'react-router-dom';
-import { ThemeProvider } from './components/ui/lib/ThemeProvider.component';
-import { router } from './router';
-import { QueryClientProvider } from '@tanstack/react-query';
-import { Toaster } from './components/ui';
-import { useYNABAuth } from './hooks/ynab';
-import { queryClient } from './api';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ThemeProvider } from "./components/ui/lib/ThemeProvider.component";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "./components/ui";
+import { useYNABAuth } from "./hooks/ynab";
+import { queryClient } from "./api";
+import { SignupPage } from "./routes/pages/Signup";
+import { LoginPage } from "./routes/pages/Login";
+import PrivateRoute from "./components/PrivateRoute.component";
+import { DashboardPage } from "./routes/pages/Dashboard/Dashboard.component";
+import { OnboardingPage } from "./routes/pages/Onboarding";
+import { ynabConnectedLoader } from "./routes/loaders";
+import { LoadingPage } from "./components/LoadingPage.component";
 
 const YNABProvider = () => {
   useYNABAuth();
@@ -18,7 +24,29 @@ const App = () => {
         <Toaster />
         <div id="belvo" />
         <YNABProvider />
-        <RouterProvider router={router} />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/sign-up" element={<SignupPage />} />
+            <Route
+              path="/"
+              loader={ynabConnectedLoader}
+              element={
+                <PrivateRoute>
+                  <DashboardPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/onboarding"
+              element={
+                <PrivateRoute>
+                  <OnboardingPage />
+                </PrivateRoute>
+              }
+            />
+          </Routes>
+        </BrowserRouter>
       </QueryClientProvider>
     </ThemeProvider>
   );

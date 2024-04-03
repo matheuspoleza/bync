@@ -3,7 +3,7 @@
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { Row } from '@tanstack/react-table';
 
-import { Button, DropdownMenu } from '../../../components/ui';
+import { Button, DropdownMenu } from '../../../../components/ui';
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;

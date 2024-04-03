@@ -1,25 +1,22 @@
 import * as api from '../../api';
-import { useEffect, useMemo } from 'react';
-import { atom, useAtom } from 'jotai';
+import { useEffect, useMemo, useState } from 'react';
 import { Session } from '@supabase/supabase-js';
-
-const isFetchingAtom = atom(false);
-const sessionAtom = atom<Session | null>(null);
+import { useLocation } from 'react-router-dom';
 
 export const useAuthSession = () => {
-  const [isFetching, setIsFetching] = useAtom(isFetchingAtom);
-  const [session, setSession] = useAtom(sessionAtom);
+  const [session, setSession] = useState<Session | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const location = useLocation();
 
   const isLoggedIn = useMemo(() => {
-    return session?.access_token?.length ? true : false;
+    return !!session?.access_token;
   }, [session?.access_token]);
 
-  useEffect(() => {
-    api.auth
-      .getSession()
-      .then((response) => setSession(response.data.session))
-      .finally(() => setIsFetching(false));
+  const userEmail = useMemo(() => {
+    return session?.user.email;
+  }, [session?.user]);
 
+  useEffect(() => {
     const { data } = api.auth.listenToAuthChanges((event, session) => {
       if (event === 'INITIAL_SESSION') {
         setSession(session);
@@ -39,5 +36,16 @@ export const useAuthSession = () => {
     return () => data.subscription.unsubscribe();
   }, []);
 
-  return { isLoggedIn, isFetching };
+  useEffect(() => {
+    if (!session) {
+      setIsLoading(true);
+
+      api.auth
+        .getSession()
+        .then((response) => setSession(response.data.session))
+        .finally(() => setIsLoading(false));
+    }
+  }, [location]);
+
+  return { isLoading, isLoggedIn, userEmail };
 };

@@ -15,7 +15,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { Table } from '../../../components/ui';
+import { Table } from '../../../../components/ui';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

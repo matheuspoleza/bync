@@ -14,6 +14,11 @@ export class AuthApi extends BaseApi {
     return this.supabase.auth.getSession();
   }
 
+  public async getAccessToken() {
+    const response = await this.supabase.auth.getSession();
+    return response.data.session?.access_token;
+  }
+
   public async signout() {
     return this.supabase.auth.signOut();
   }

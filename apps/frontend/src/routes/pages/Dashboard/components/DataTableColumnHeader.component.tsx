@@ -5,8 +5,8 @@ import {
   EyeNoneIcon,
 } from '@radix-ui/react-icons';
 import { Column } from '@tanstack/react-table';
-import { Button, DropdownMenu } from '../../../components/ui';
-import { cn } from '../../../components/ui/lib/utils';
+import { Button, DropdownMenu } from '../../../../components/ui';
+import { cn } from '../../../../components/ui/lib/utils';
 
 interface DataTableColumnHeaderProps<TData, TValue>
   extends React.HTMLAttributes<HTMLDivElement> {

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
-import { Card, Label, Button, Input, useToast } from '../../components/ui';
+import { Card, Label, Button, Input, useToast } from '../../../components/ui';
 import { useNavigate } from 'react-router-dom';
-import { useLogin } from '../../hooks';
+import { useLogin } from '../../../hooks';
 
 export const LoginPage: React.FC = () => {
   const { login } = useLogin();
@@ -14,7 +14,7 @@ export const LoginPage: React.FC = () => {
   const handleLogin = async () => {
     try {
       await login(email, password);
-      navigate('/dashboard');
+      navigate('/');
     } catch (e) {
       toast({ title: 'Email or password is wrong', variant: 'destructive' });
     }

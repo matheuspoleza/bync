@@ -171,6 +171,46 @@
       "post": {
         "operationId": "WebhooksController_receiveBelvoWebhook",
         "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "webhook_id": {
+                    "type": "string"
+                  },
+                  "webhook_type": {
+                    "type": "string"
+                  },
+                  "webhook_code": {
+                    "type": "string"
+                  },
+                  "link_id": {
+                    "type": "string"
+                  },
+                  "request_id": {
+                    "type": "string"
+                  },
+                  "external_id": {
+                    "type": "string"
+                  },
+                  "data": {}
+                },
+                "required": [
+                  "webhook_id",
+                  "webhook_type",
+                  "webhook_code",
+                  "link_id",
+                  "request_id",
+                  "external_id",
+                  "data"
+                ]
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
             "description": ""

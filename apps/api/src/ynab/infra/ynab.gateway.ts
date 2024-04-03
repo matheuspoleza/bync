@@ -20,6 +20,13 @@ export class YnabIntegration {
     return currentTime > expirationTime;
   }
 
+  public async isCustomerAuthorized(customerId: string) {
+    const response = await this.redisService.get<YNABCustomerAuthDTO>(
+      `ynab:${customerId}`,
+    );
+    return !!response?.access_token;
+  }
+
   private async getCustomerClient(customerId: string): Promise<YNABApi | null> {
     const clientSecret = this.configService.get<string>('YNAB_CLIENT_SECRET');
     const clientID = this.configService.get<string>('YNAB_CLIENT_ID');

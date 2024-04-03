@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 export const H1: React.FC<React.PropsWithChildren> = ({ children }) => (
   <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
@@ -7,7 +7,7 @@ export const H1: React.FC<React.PropsWithChildren> = ({ children }) => (
 );
 
 export const H2: React.FC<React.PropsWithChildren> = ({ children }) => (
-  <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
+  <h2 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0">
     {children}
   </h2>
 );
@@ -25,7 +25,7 @@ export const H4: React.FC<React.PropsWithChildren> = ({ children }) => (
 );
 
 export const Paragraph: React.FC<React.PropsWithChildren> = ({ children }) => (
-  <p className="leading-7 [&:not(:first-child)]:mt-6">{children}</p>
+  <p className="leading-7">{children}</p>
 );
 
 export const Blockquote: React.FC<React.PropsWithChildren> = ({ children }) => (
@@ -53,7 +53,7 @@ export const Small: React.FC<React.PropsWithChildren> = ({ children }) => (
 export const Caption: React.FC<React.PropsWithChildren> = ({ children }) => (
   <p
     className="text-xs text-muted-foreground"
-    style={{ fontSize: '10px', opacity: 0.6 }}
+    style={{ fontSize: "10px", opacity: 0.6 }}
   >
     {children}
   </p>

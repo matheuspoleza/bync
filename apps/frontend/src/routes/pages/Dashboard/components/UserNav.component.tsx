@@ -1,9 +1,9 @@
-import { Avatar, Button, DropdownMenu } from '../../../components/ui';
-import * as api from '../../../api';
-import { useCustomer } from '../../../hooks';
+import { Avatar, Button, DropdownMenu } from '../../../../components/ui';
+import * as api from '../../../../api';
+import { useAuthSession } from '../../../../hooks';
 
 export const UserNav: React.FC = () => {
-  const { email } = useCustomer();
+  const { userEmail } = useAuthSession();
 
   const handleLogout = async () => {
     await api.auth.signout();
@@ -23,9 +23,9 @@ export const UserNav: React.FC = () => {
       <DropdownMenu.Content className="w-56" align="end" forceMount>
         <DropdownMenu.Label className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{email}</p>
+            <p className="text-sm font-medium leading-none">{userEmail}</p>
             <p className="text-xs leading-none text-muted-foreground">
-              {email}
+              {userEmail}
             </p>
           </div>
         </DropdownMenu.Label>

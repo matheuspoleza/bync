@@ -96,7 +96,9 @@ export class BankAccountRepository implements IBankAccountRepository {
       .eq('id', bankAccount.id);
 
     if (result.error || !result.count) {
-      throw new Error(`Failed to update bank account link: ${result.error}`);
+      throw new Error(
+        `Failed to update bank account link: ${result.error?.message}`,
+      );
     }
   }
 

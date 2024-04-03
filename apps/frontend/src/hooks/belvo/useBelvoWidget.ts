@@ -1,5 +1,5 @@
-import * as api from '../../api';
-import { useScript } from '../utils/useScript';
+import * as api from "../../api";
+import { useScript } from "../utils/useScript";
 
 declare global {
   interface Window {
@@ -28,19 +28,19 @@ export const useBelvoWidget = ({
         successCallbackFunction(link, institution),
       onExit,
       onEvent: ({ eventName }: any) => {
-        if (eventName === 'PAGE_LOAD') {
+        if (eventName === "PAGE_LOAD") {
           onPageLoad?.();
         }
       },
-      locale: 'pt',
-      country_codes: ['BR'],
+      locale: "pt",
+      country_codes: ["BR"],
     };
 
     window.belvoSDK.createWidget(access, config).build();
   };
 
   const { loadScript } = useScript(
-    'https://cdn.belvo.io/belvo-widget-1-stable.js'
+    "https://cdn.belvo.io/belvo-widget-1-stable.js"
   );
 
   const createWidget = async () => {

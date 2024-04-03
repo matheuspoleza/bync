@@ -13,9 +13,8 @@ export class YnabService {
   ) {}
 
   async createBankAccountLink(ynabAccountId: string, bankAccountID: string) {
-    const ynabAccount = await this.ynabAccountRepository.getOneById(
-      ynabAccountId,
-    );
+    const ynabAccount =
+      await this.ynabAccountRepository.getOneById(ynabAccountId);
 
     if (!ynabAccount) {
       throw new Error('Ynab account not found');
@@ -36,14 +35,17 @@ export class YnabService {
     redirectURL: string,
     authCode: string,
   ) {
+    const isCustomerAuthorized =
+      await this.ynabIntegration.isCustomerAuthorized(customerId);
+
+    if (isCustomerAuthorized) return;
+
     await this.ynabIntegration.authorize(customerId, {
       redirectURL,
       authCode,
     });
 
     const accounts = await this.ynabIntegration.getAllForCustomer(customerId);
-
-    console.log('YNAB ACCOUNTS', { accounts });
 
     await Promise.all(
       accounts.map((account) => this.ynabAccountRepository.create(account)),

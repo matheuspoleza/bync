@@ -41,8 +41,8 @@ export class ConnectionLink {
 
 export interface IConnectionLinkRepository {
   create: (connectionLink: ConnectionLink) => Promise<ConnectionLink>;
-  update: (connectionLink: ConnectionLink) => Promise<ConnectionLink>;
-  getByLinkId: (linkId: string) => Promise<ConnectionLink>;
+  updateStatus: (connectionLink: ConnectionLink) => Promise<void>;
+  getByLinkId: (linkId: string) => Promise<ConnectionLink | null>;
 }
 
 export const IConnectionLinkRepository = Symbol('ConnectionLinkRepository');
