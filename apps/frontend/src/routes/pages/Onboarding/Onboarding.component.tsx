@@ -13,12 +13,18 @@ import {
 import { LoadingPage } from "../../../components/LoadingPage.component";
 import { useModal } from "../../../components/Modal/modal";
 import { Modals } from "../../modals";
+import { useNavigate } from "react-router-dom";
 
 export const OnboardingPage: React.FC = () => {
   const { connect, isCreatingConnection } = useConnectionLink();
   const { isCompleted, stepsCompleteMapper, isLoading } = useOnboarding();
   const { connectBudgets } = useYNABConnect();
   const { openModal } = useModal(Modals.ConnectionLink);
+  const navigate = useNavigate();
+
+  const handleOnboardingCompleted = () => {
+    navigate("/dashboard");
+  };
 
   if (isLoading) return <LoadingPage />;
 
@@ -29,7 +35,9 @@ export const OnboardingPage: React.FC = () => {
           <StitchesLogoIcon />
           <Typography.H2>Bync</Typography.H2>
         </div>
-        <Button disabled={!isCompleted}>Completar onboarding</Button>
+        <Button disabled={!isCompleted} onClick={handleOnboardingCompleted}>
+          Completar onboarding
+        </Button>
       </header>
 
       <div className="w-full h-full flex items-center justify-center">
@@ -110,15 +118,17 @@ export const OnboardingPage: React.FC = () => {
                 </div>
               </div>
               <div>
-                <Button
-                  onClick={openModal}
-                  disabled={
-                    !stepsCompleteMapper.bankAccounts ||
-                    !stepsCompleteMapper.ynabAccounts
-                  }
-                >
-                  <Link1Icon className="mr-2 h-4 w-4" /> Conectar
-                </Button>
+                {!stepsCompleteMapper.connection && (
+                  <Button
+                    onClick={openModal}
+                    disabled={
+                      !stepsCompleteMapper.bankAccounts ||
+                      !stepsCompleteMapper.ynabAccounts
+                    }
+                  >
+                    <Link1Icon className="mr-2 h-4 w-4" /> Conectar
+                  </Button>
+                )}
               </div>
             </Card.Container>
           </div>

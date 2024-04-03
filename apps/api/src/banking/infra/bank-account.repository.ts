@@ -93,9 +93,11 @@ export class BankAccountRepository implements IBankAccountRepository {
     const result = await this.databaseService.schema
       .from('bank_accounts')
       .update({ ynab_account_id: bankAccount.linkedAccountId })
-      .eq('id', bankAccount.id);
+      .eq('id', bankAccount.id)
+      .select('*')
+      .single();
 
-    if (result.error || !result.count) {
+    if (result.error || !result.data) {
       throw new Error(
         `Failed to update bank account link: ${result.error?.message}`,
       );
