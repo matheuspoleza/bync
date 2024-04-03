@@ -73,10 +73,19 @@ export class BankAccount {
   get connectionLinkId() {
     return this.connectionLink.id;
   }
+
+  get linkedAccountId() {
+    return this.ynabAccountId;
+  }
 }
 
 export interface IBankAccountRepository {
   getAllForCustomer(customerId: string): Promise<BankAccount[]>;
+  getOneById(id: string): Promise<BankAccount | null>;
+  updateBankAccountLink(
+    bankAccountId: string,
+    accountId: string,
+  ): Promise<void>;
   createMany(accounts: BankAccount[]): Promise<BankAccount[]>;
 }
 

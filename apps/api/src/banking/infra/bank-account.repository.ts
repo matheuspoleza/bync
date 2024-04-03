@@ -70,6 +70,37 @@ export class BankAccountRepository implements IBankAccountRepository {
     }, []);
   }
 
+  public async getOneById(id: string): Promise<BankAccount | null> {
+    const result = await this.databaseService.schema
+      .from('bank_accounts')
+      .select(
+        `
+        *,
+        connection_link ( * )
+      `,
+      )
+      .eq('id', id)
+      .single();
+
+    if (!result.data || !result.data.connection_link) return null;
+
+    return this.fromDB(result.data, result.data.connection_link);
+  }
+
+  public async updateBankAccountLink(
+    bankAccountId: string,
+    linkedAccountId: string,
+  ): Promise<void> {
+    const result = await this.databaseService.schema
+      .from('bank_accounts')
+      .update({ ynab_account_id: linkedAccountId })
+      .eq('id', bankAccountId);
+
+    if (result.error || !result.count) {
+      throw new Error(`Failed to update bank account link: ${result.error}`);
+    }
+  }
+
   public async createMany(accounts: BankAccount[]): Promise<BankAccount[]> {
     const creationResult = await this.databaseService.schema
       .from('bank_accounts')

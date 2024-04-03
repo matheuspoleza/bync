@@ -22,8 +22,14 @@ export class BankingController {
   constructor(private readonly bankingService: BankingService) {}
 
   @OnEvent('ynab.account-linked')
-  async linkBankAccount(payload: { bankAccountID: string }) {
-    console.log('BANK ACCOUNT LINKED', payload.bankAccountID);
+  async linkBankAccount(payload: {
+    bankAccountID: string;
+    ynabAccountId: string;
+  }) {
+    await this.bankingService.linkBankAccount(
+      payload.bankAccountID,
+      payload.ynabAccountId,
+    );
   }
 
   @Get('accounts')

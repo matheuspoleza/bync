@@ -33,7 +33,7 @@ export class YnabAccountRepository {
     return data.map((dbAccount) => this.fromDB(dbAccount));
   }
 
-  async getById(accountId: string) {
+  async getOneById(accountId: string) {
     const { data } = await this.databaseService.schema
       .from('ynab_accounts')
       .select('*')

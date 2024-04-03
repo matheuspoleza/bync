@@ -17,6 +17,23 @@ export class BankingService {
     private readonly connectionLinkRepository: IConnectionLinkRepository,
   ) {}
 
+  async linkBankAccount(bankAccountId: string, accountId: string) {
+    const bankAccount = await this.bankAccountsRepository.getOneById(
+      bankAccountId,
+    );
+
+    if (!bankAccount) {
+      throw new Error('Bank account not found');
+    }
+
+    bankAccount.link(accountId);
+
+    await this.bankAccountsRepository.updateBankAccountLink(
+      bankAccount.id,
+      bankAccount.linkedAccountId!,
+    );
+  }
+
   async createBankingConnection(
     customerId: string,
     linkId: string,
@@ -56,7 +73,7 @@ export class BankingService {
     await this.bankAccountsRepository.createMany(bankAccounts);
   }
 
-  async getAccounts(_: string) {
-    return [] as BankAccount[];
+  async getAccounts(customerId: string) {
+    return this.bankAccountsRepository.getAllForCustomer(customerId);
   }
 }

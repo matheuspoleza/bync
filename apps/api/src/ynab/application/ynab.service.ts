@@ -13,7 +13,9 @@ export class YnabService {
   ) {}
 
   async createBankAccountLink(ynabAccountId: string, bankAccountID: string) {
-    const ynabAccount = await this.ynabAccountRepository.getById(ynabAccountId);
+    const ynabAccount = await this.ynabAccountRepository.getOneById(
+      ynabAccountId,
+    );
 
     if (!ynabAccount) {
       throw new Error('Ynab account not found');
