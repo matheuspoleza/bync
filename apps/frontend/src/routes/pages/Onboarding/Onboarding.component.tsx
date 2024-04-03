@@ -10,11 +10,17 @@ import {
   useOnboarding,
   useYNABConnect,
 } from "../../../hooks";
+import { LoadingPage } from "../../../components/LoadingPage.component";
+import { useModal } from "../../../components/Modal/modal";
+import { Modals } from "../../modals";
 
 export const OnboardingPage: React.FC = () => {
   const { connect, isCreatingConnection } = useConnectionLink();
-  const { isCompleted, stepsCompleteMapper } = useOnboarding();
+  const { isCompleted, stepsCompleteMapper, isLoading } = useOnboarding();
   const { connectBudgets } = useYNABConnect();
+  const { openModal } = useModal(Modals.ConnectionLink);
+
+  if (isLoading) return <LoadingPage />;
 
   return (
     <div className="w-screen h-screen overflow-hidden">
@@ -96,7 +102,7 @@ export const OnboardingPage: React.FC = () => {
                 )}
                 <div className="ml-4 space-y-1">
                   <p className="text-sm font-medium leading-none">
-                    Criar conexões
+                    Sincronizar contas
                   </p>
                   <p className="text-sm text-muted-foreground">
                     dasoundsaodasun
@@ -105,6 +111,7 @@ export const OnboardingPage: React.FC = () => {
               </div>
               <div>
                 <Button
+                  onClick={openModal}
                   disabled={
                     !stepsCompleteMapper.bankAccounts ||
                     !stepsCompleteMapper.ynabAccounts

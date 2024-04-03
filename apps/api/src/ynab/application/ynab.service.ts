@@ -22,7 +22,7 @@ export class YnabService {
 
     ynabAccount.link(bankAccountID);
 
-    await this.ynabAccountRepository.update(ynabAccount);
+    await this.ynabAccountRepository.updateLink(ynabAccount);
 
     this.eventEmitter.emit('ynab.account-linked', {
       ynabAccountId,
@@ -38,12 +38,12 @@ export class YnabService {
     const isCustomerAuthorized =
       await this.ynabIntegration.isCustomerAuthorized(customerId);
 
-    if (isCustomerAuthorized) return;
-
-    await this.ynabIntegration.authorize(customerId, {
-      redirectURL,
-      authCode,
-    });
+    if (!isCustomerAuthorized) {
+      await this.ynabIntegration.authorize(customerId, {
+        redirectURL,
+        authCode,
+      });
+    }
 
     const accounts = await this.ynabIntegration.getAllForCustomer(customerId);
 

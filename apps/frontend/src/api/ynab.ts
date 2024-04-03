@@ -21,4 +21,12 @@ export class YnabApi extends BaseApi {
   async link(accountId: string, linkRequest: YnabControllerLinkRequest) {
     return this.ynab.ynabControllerLink(accountId, linkRequest);
   }
+
+  async createManyLinks(linkRequests: { bankAccountId: string, ynabAccountId: string }[]) {
+    return Promise.all(
+      linkRequests.map((linkRequest) =>
+        this.ynab.ynabControllerLink(linkRequest.ynabAccountId, { bankAccountID: linkRequest.bankAccountId }),
+      ),
+    );
+  }
 }

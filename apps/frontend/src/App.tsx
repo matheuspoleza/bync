@@ -11,6 +11,7 @@ import { DashboardPage } from "./routes/pages/Dashboard/Dashboard.component";
 import { OnboardingPage } from "./routes/pages/Onboarding";
 import { ynabConnectedLoader } from "./routes/loaders";
 import { LoadingPage } from "./components/LoadingPage.component";
+import { ModalProvider } from "./components/Modal/modal";
 
 const YNABProvider = () => {
   useYNABAuth();
@@ -25,27 +26,29 @@ const App = () => {
         <div id="belvo" />
         <YNABProvider />
         <BrowserRouter>
-          <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/sign-up" element={<SignupPage />} />
-            <Route
-              path="/"
-              loader={ynabConnectedLoader}
-              element={
-                <PrivateRoute>
-                  <DashboardPage />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/onboarding"
-              element={
-                <PrivateRoute>
-                  <OnboardingPage />
-                </PrivateRoute>
-              }
-            />
-          </Routes>
+          <ModalProvider>
+            <Routes>
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/sign-up" element={<SignupPage />} />
+              <Route
+                path="/"
+                loader={ynabConnectedLoader}
+                element={
+                  <PrivateRoute>
+                    <DashboardPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/onboarding"
+                element={
+                  <PrivateRoute>
+                    <OnboardingPage />
+                  </PrivateRoute>
+                }
+              />
+            </Routes>
+          </ModalProvider>
         </BrowserRouter>
       </QueryClientProvider>
     </ThemeProvider>

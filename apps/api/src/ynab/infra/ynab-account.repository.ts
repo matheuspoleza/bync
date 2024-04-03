@@ -45,12 +45,13 @@ export class YnabAccountRepository {
     return this.fromDB(data);
   }
 
-  async update(ynabAccount: Omit<Partial<YnabAccount>, 'id'>): Promise<void> {
+  async updateLink(ynabAccount: YnabAccount): Promise<void> {
     const result = await this.databaseService.schema
       .from('ynab_accounts')
       .update({
-        ...ynabAccount,
-      });
+        bank_account_id: ynabAccount.linkedBankAccountId,
+      })
+      .eq('id', ynabAccount.id);
 
     if (result.error) {
       throw new Error(`Failed to update ynab account: ${result.error.message}`);

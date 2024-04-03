@@ -2,10 +2,10 @@ import React from "react";
 import { useBankAccounts, useYnabAccounts } from "..";
 
 export const useOnboarding = () => {
-  const { accounts: bankAccounts } = useBankAccounts();
-  const { accounts: ynabAccounts } = useYnabAccounts();
-
-  console.log({ bankAccounts });
+  const { accounts: bankAccounts, isFetching: isFetchingBankAccounts } =
+    useBankAccounts();
+  const { accounts: ynabAccounts, isFetching: isFetchingYnabAccounts } =
+    useYnabAccounts();
 
   const stepsCompleteMapper = React.useMemo(() => {
     return {
@@ -22,5 +22,9 @@ export const useOnboarding = () => {
     [stepsCompleteMapper]
   );
 
-  return { isCompleted, stepsCompleteMapper };
+  return {
+    isCompleted,
+    stepsCompleteMapper,
+    isLoading: isFetchingBankAccounts || isFetchingYnabAccounts,
+  };
 };
