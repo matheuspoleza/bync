@@ -225,6 +225,28 @@
       "get": {
         "operationId": "IdentityController_me",
         "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "customerId": {
+                    "type": "string"
+                  },
+                  "fullName": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "customerId",
+                  "fullName"
+                ]
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": ""
