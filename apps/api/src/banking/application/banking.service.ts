@@ -17,7 +17,7 @@ export class BankingService {
     private readonly connectionLinkRepository: IConnectionLinkRepository,
   ) {}
 
-  async linkBankAccount(bankAccountId: string, accountId: string) {
+  async linkBankAccount(bankAccountId: string, ynabAccountId: string) {
     const bankAccount = await this.bankAccountsRepository.getOneById(
       bankAccountId,
     );
@@ -26,12 +26,9 @@ export class BankingService {
       throw new Error('Bank account not found');
     }
 
-    bankAccount.link(accountId);
+    bankAccount.link(ynabAccountId);
 
-    await this.bankAccountsRepository.updateBankAccountLink(
-      bankAccount.id,
-      bankAccount.linkedAccountId!,
-    );
+    await this.bankAccountsRepository.updateBankAccountLink(bankAccount);
   }
 
   async createBankingConnection(

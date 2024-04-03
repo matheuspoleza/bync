@@ -1,5 +1,5 @@
 export const YNAB_CLIENT_ID = 'WGEAcIpzW8Npx-kFtgYSA-JBDUPodjRKQVqoCD0cRZA';
-export const YNAB_REDIRECT_URL = 'http://localhost:5173';
+export const YNAB_REDIRECT_URL = 'http://localhost:5173/ynab-connected';
 
 export const useYNABConnect = () => {
   const connectBudgets = () => {

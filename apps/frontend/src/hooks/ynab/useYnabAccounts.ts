@@ -1,6 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import * as api from '../../api';
 
+export const fetchYnabAccountsQuery = () =>
+  api.queryClient.fetchQuery({
+    queryKey: ['ynab-accounts'],
+    queryFn: api.ynab.getAll,
+  });
+
 export const useYnabAccounts = (options?: { enabled?: boolean }) => {
   const query = useQuery({
     queryKey: ['ynab-accounts'],

@@ -43,6 +43,8 @@ export class YnabService {
 
     const accounts = await this.ynabIntegration.getAllForCustomer(customerId);
 
+    console.log('YNAB ACCOUNTS', { accounts });
+
     await Promise.all(
       accounts.map((account) => this.ynabAccountRepository.create(account)),
     );

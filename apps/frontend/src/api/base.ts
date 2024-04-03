@@ -21,7 +21,7 @@ const getAccessToken = async () => {
 };
 
 api.interceptors.request.use(async (config) => {
-  if (config.url?.includes('auth')) return config;
+  if (config.url?.includes('signup')) return config;
 
   const accessToken = await getAccessToken();
 
@@ -61,6 +61,7 @@ export class BaseApi {
   protected supabase: SupabaseClient;
 
   constructor() {
+    console.log('base constructor');
     this.auth = new AuthApi(undefined, undefined, api);
     this.banking = new BankingApi(undefined, undefined, api);
     this.ynab = new YnabApi(undefined, undefined, api);

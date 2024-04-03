@@ -87,14 +87,13 @@ export class BankAccountRepository implements IBankAccountRepository {
     return this.fromDB(result.data, result.data.connection_link);
   }
 
-  public async updateBankAccountLink(
-    bankAccountId: string,
-    linkedAccountId: string,
-  ): Promise<void> {
+  public async updateBankAccountLink(bankAccount: BankAccount): Promise<void> {
+    if (!bankAccount.linkedAccountId) return;
+
     const result = await this.databaseService.schema
       .from('bank_accounts')
-      .update({ ynab_account_id: linkedAccountId })
-      .eq('id', bankAccountId);
+      .update({ ynab_account_id: bankAccount.linkedAccountId })
+      .eq('id', bankAccount.id);
 
     if (result.error || !result.count) {
       throw new Error(`Failed to update bank account link: ${result.error}`);

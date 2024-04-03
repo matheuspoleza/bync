@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react';
-import { YNAB_REDIRECT_URL } from '.';
 import * as api from '../../api';
+import { YNAB_REDIRECT_URL } from './useYnabConnect';
 
 const removeQueryParam = (paramToRemove: string) => {
   const currentUrl = window.location.href;

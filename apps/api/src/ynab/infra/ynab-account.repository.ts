@@ -59,7 +59,7 @@ export class YnabAccountRepository {
 
   async create(ynabAccount: YnabAccount): Promise<YnabAccount> {
     const result = await this.databaseService.schema
-      .from('ynab_account')
+      .from('ynab_accounts')
       .insert({
         name: ynabAccount.name,
         customer_id: ynabAccount.customerId,
@@ -68,7 +68,9 @@ export class YnabAccountRepository {
         ynab_account_id: ynabAccount.ynabAccountId,
         balance: ynabAccount.balance,
         bank_account_id: ynabAccount.linkedBankAccountId,
-      });
+      })
+      .select('*')
+      .single();
 
     if (!result.data || result.error) {
       throw new Error(`Failed to create ynab account: ${result.error}`);
