@@ -1,5 +1,6 @@
 import { useQuery, DefinedInitialDataOptions } from "@tanstack/react-query";
 import * as api from "../../api";
+import { BankAccount } from "../../api/types";
 
 export const useBankAccounts = (
   options?: Partial<DefinedInitialDataOptions>
@@ -12,13 +13,13 @@ export const useBankAccounts = (
     enabled: true,
     throwOnError: false,
     retry: false,
-    initialData: [],
+    initialData: [] as BankAccount[],
     refetchOnMount: true,
     ...options,
   });
 
   return {
-    accounts: query.data,
+    accounts: query.data as BankAccount[],
     isFetching: query.isLoading,
     fetchBankAccounts: query.refetch,
   };

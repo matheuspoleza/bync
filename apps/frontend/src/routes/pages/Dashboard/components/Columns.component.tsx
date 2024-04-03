@@ -1,11 +1,11 @@
 import { ColumnDef } from '@tanstack/react-table';
 
-import { accountTypes } from '../data/data';
-import { BudgetAccount } from '../data/schema';
 import { DataTableColumnHeader } from './DataTableColumnHeader.component';
-import { currency } from '../../../utils';
+import { BankAccount } from '../../../../api/types';
+import Formatter from '../../../../components/Formatter';
+import { useYnabAccounts } from '../../../../hooks';
 
-export const columns: ColumnDef<BudgetAccount>[] = [
+export const columns: ColumnDef<BankAccount>[] = [
   {
     accessorKey: 'name',
     header: ({ column }) => (
@@ -27,17 +27,15 @@ export const columns: ColumnDef<BudgetAccount>[] = [
       <DataTableColumnHeader column={column} title="Tipo" />
     ),
     cell: ({ row }) => {
-      const accountType = row.getValue('type');
-      const accountTypeData = accountTypes.find(
-        (type) => type.value === accountType
-      );
-      const label = accountTypeData?.label;
-      // const AccountTypeIcon = accountTypeData?.icon;
+      // const accountType = row.getValue('type');
+      // const accountTypeData = accountTypes.find(
+      //   (type) => type.value === accountType
+      // );
+      // const label = accountTypeData?.label;
 
       return (
         <div className="flex items-center gap-x-2">
-          {/* {AccountTypeIcon && <AccountTypeIcon style={{ color: 'grey' }} />} */}
-          {label}
+          {row.getValue('type')}
         </div>
       );
     },
@@ -53,7 +51,7 @@ export const columns: ColumnDef<BudgetAccount>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex w-[100px] items-center">
-          {currency.format(Number(row.getValue('balance')))}
+          <Formatter.Money value={row.getValue('balance')} />
         </div>
       );
     },
@@ -62,34 +60,19 @@ export const columns: ColumnDef<BudgetAccount>[] = [
     },
   },
   {
-    accessorKey: 'connectedBankAccountName',
+    accessorKey: 'id',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Conta bancária conectada" />
+      <DataTableColumnHeader column={column} title="Conta ynab" />
     ),
     cell: ({ row }) => {
-      const connectedBankAccountName = row.getValue<string>(
-        'connectedBankAccountName'
-      );
+      const { accounts } = useYnabAccounts();
+      const connectedAccount = accounts.find(account => account.linkedBankAccountId && account.linkedBankAccountId === row.getValue('id'));
 
       return (
         <div className="flex items-center">
-          {connectedBankAccountName ?? '-'}
+          {connectedAccount?.name ?? '-'}
         </div>
       );
-    },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
-    },
-  },
-  {
-    accessorKey: 'connectionStatus',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Status da conexão" />
-    ),
-    cell: ({ row }) => {
-      const connectionStatus = row.getValue<string>('connectionStatus');
-
-      return <div className="flex items-center">{connectionStatus ?? '-'}</div>;
     },
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));

@@ -1,5 +1,6 @@
 import { DefinedInitialDataOptions, useQuery } from "@tanstack/react-query";
 import * as api from "../../api";
+import { YnabAccount } from "../../api/types";
 
 export const useYnabAccounts = (
   options?: Partial<DefinedInitialDataOptions>
@@ -12,13 +13,13 @@ export const useYnabAccounts = (
     enabled: true,
     throwOnError: false,
     retry: false,
-    initialData: [],
+    initialData: [] as YnabAccount[],
     refetchOnMount: true,
     ...options,
   });
 
   return {
-    accounts: query.data,
+    accounts: query.data as YnabAccount[],
     isFetching: query.isLoading,
     fetchYnabAccounts: query.refetch,
   };
