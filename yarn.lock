@@ -706,7 +706,7 @@ __metadata:
   resolution: "@bync/api@workspace:apps/api"
   dependencies:
     "@js-joda/core": ^5.6.1
-    "@nestjs/bull": ^10.1.0
+    "@nestjs/bull": ^10.1.1
     "@nestjs/cli": ^10.0.0
     "@nestjs/common": ^10.0.0
     "@nestjs/config": ^3.1.1
@@ -722,6 +722,7 @@ __metadata:
     "@radix-ui/react-toast": ^1.1.5
     "@supabase/supabase-js": ^2.39.3
     "@types/belvo": ^0.16.2
+    "@types/bull": ^4.10.0
     "@types/express": ^4.17.17
     "@types/node": ^20.3.1
     "@types/node-fetch": 2.x
@@ -1660,29 +1661,29 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nestjs/bull-shared@npm:^10.1.0":
-  version: 10.1.0
-  resolution: "@nestjs/bull-shared@npm:10.1.0"
+"@nestjs/bull-shared@npm:^10.1.1":
+  version: 10.1.1
+  resolution: "@nestjs/bull-shared@npm:10.1.1"
   dependencies:
     tslib: 2.6.2
   peerDependencies:
     "@nestjs/common": ^8.0.0 || ^9.0.0 || ^10.0.0
     "@nestjs/core": ^8.0.0 || ^9.0.0 || ^10.0.0
-  checksum: b71cef811475e5c59f20ab935146619987d4957d3635b7fb7a95231f5d4417f79721cbf02b3789111da5e929f485077815d3abce993f1dab2adbc451a827483b
+  checksum: 492c6bfd8d77ded163913aa8fced3c6a52f8b6b40ae2e35b722cde98d89d3a0136497233ea8d60436cc842107cb61fc1f2a5ddc3fa01dd85aa68f08a350f8c47
   languageName: node
   linkType: hard
 
-"@nestjs/bull@npm:^10.1.0":
-  version: 10.1.0
-  resolution: "@nestjs/bull@npm:10.1.0"
+"@nestjs/bull@npm:^10.1.1":
+  version: 10.1.1
+  resolution: "@nestjs/bull@npm:10.1.1"
   dependencies:
-    "@nestjs/bull-shared": ^10.1.0
+    "@nestjs/bull-shared": ^10.1.1
     tslib: 2.6.2
   peerDependencies:
     "@nestjs/common": ^8.0.0 || ^9.0.0 || ^10.0.0
     "@nestjs/core": ^8.0.0 || ^9.0.0 || ^10.0.0
     bull: ^3.3 || ^4.0.0
-  checksum: 3f35584a71537f7e49e2cec62dc48114d1530a53fd235da4170a3eb6a7d5f13adc738f99c69ce08794a79ff25cff4eb8070c84fc92642a1eac65f54f72d0a9a4
+  checksum: 3f3cf1a119324f2e7721fedc3d1484a60ffb55381a2d291040953770e0aded825cd14ee2a2526e68929f79fee56053ae9ac0858f8a427cbb11dbffb73191be36
   languageName: node
   linkType: hard
 
@@ -3727,6 +3728,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/bull@npm:^4.10.0":
+  version: 4.10.0
+  resolution: "@types/bull@npm:4.10.0"
+  dependencies:
+    bull: "*"
+  checksum: 1f8cd1a084a7e67b208384381c6baee940b256fbb651daafcb463d818174a44421212a55a317784d6cfae1b0c26e6ac623ed4ff7703d5c3938245af1930e3596
+  languageName: node
+  linkType: hard
+
 "@types/connect@npm:*":
   version: 3.4.36
   resolution: "@types/connect@npm:3.4.36"
@@ -4997,7 +5007,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bull@npm:^4.12.2":
+"bull@npm:*, bull@npm:^4.12.2":
   version: 4.12.2
   resolution: "bull@npm:4.12.2"
   dependencies:

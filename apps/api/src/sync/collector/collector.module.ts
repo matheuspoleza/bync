@@ -5,6 +5,7 @@ import { CollectorService } from './application/collector.service';
 import { BankingModule } from 'src/banking/banking.module';
 import { IBankingFacade } from './domain/banking';
 import { BankingFacade } from 'src/banking/banking.facade';
+import { CollectorFacade } from './collector.facade';
 
 @Module({
   imports: [BankingModule],
@@ -18,6 +19,7 @@ import { BankingFacade } from 'src/banking/banking.facade';
       provide: IBankingFacade,
       useClass: BankingFacade
     }
-  ]
+  ],
+  exports: [CollectorFacade]
 })
 export class CollectorModule {}
