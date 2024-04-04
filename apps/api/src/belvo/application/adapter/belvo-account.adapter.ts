@@ -5,8 +5,8 @@ import {
   BelvoAccountCategory,
 } from '../../infrastructure/belvo.gateway';
 import {
-  BankAccountDto,
   BankAccountType,
+  CreateBankAccountDto,
 } from '../../../banking/application/bank-account.dto';
 
 export class BelvoAccountAdapter implements BankAccountAdapter {
@@ -45,7 +45,7 @@ export class BelvoAccountAdapter implements BankAccountAdapter {
   getAccounts() {
     return this.accounts
       .filter((account) => this.accountTypes.has(account.category))
-      .map<BankAccountDto>((account) => ({
+      .map<CreateBankAccountDto>((account) => ({
         name: account.name,
         number: account.number,
         type: this.accountTypes.get(account.category) as BankAccountType,

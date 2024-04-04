@@ -257,6 +257,17 @@
         ]
       }
     },
+    "/sync/manual": {
+      "post": {
+        "operationId": "SyncController_manualSync",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/ynab/auth": {
       "post": {
         "operationId": "YnabController_authorize",

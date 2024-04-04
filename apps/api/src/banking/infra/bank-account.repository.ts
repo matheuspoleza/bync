@@ -42,7 +42,7 @@ export class BankAccountRepository implements IBankAccountRepository {
     return {
       account_name: bankAccount.name,
       balance: bankAccount.balance,
-      connection_link_id: bankAccount.connectionLinkId,
+      connection_link_id: bankAccount.connectionId,
       customer_id: bankAccount.customerId,
       institution: bankAccount.institution,
       number: bankAccount.number,
@@ -122,6 +122,27 @@ export class BankAccountRepository implements IBankAccountRepository {
     return creationResult.data.reduce<BankAccount[]>((acc, account) => {
       if (!account.connection_link) return acc;
       return [...acc, this.fromDB(account, account.connection_link)];
+    }, []);
+  }
+
+  public async getAllLinkedAccounts(): Promise<BankAccount[]> {
+    const result = await this.databaseService.schema
+      .from('bank_accounts')
+      .select(
+        `
+        *,
+        connection_link ( * )
+      `,
+      )
+      .not('connection_link_id', 'is', null)
+      .not('ynab_account_id', 'is', null);
+
+    if (!result.data) return [];
+
+    return result.data.reduce<BankAccount[]>((acc, dbResult) => {
+      if (!dbResult.connection_link) return acc;
+
+      return [...acc, this.fromDB(dbResult, dbResult.connection_link)];
     }, []);
   }
 }

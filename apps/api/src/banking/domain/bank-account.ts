@@ -70,8 +70,12 @@ export class BankAccount {
     return this.connectionLink.connected;
   }
 
-  get connectionLinkId() {
+  get connectionId() {
     return this.connectionLink.id;
+  }
+
+  get connectionLinkId() {
+    return this.connectionLink.linkId;
   }
 
   get linkedAccountId() {
@@ -84,6 +88,7 @@ export interface IBankAccountRepository {
   getOneById(id: string): Promise<BankAccount | null>;
   updateBankAccountLink(bankAccount: BankAccount): Promise<void>;
   createMany(accounts: BankAccount[]): Promise<BankAccount[]>;
+  getAllLinkedAccounts(): Promise<BankAccount[]>;
 }
 
 export const IBankAccountRepository = Symbol('BankAccountRepository');

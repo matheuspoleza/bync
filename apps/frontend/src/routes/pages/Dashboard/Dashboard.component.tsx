@@ -1,3 +1,4 @@
+import { Button } from '../../../components/ui';
 import { useBankAccounts } from '../../../hooks';
 import { useCustomer } from '../../../hooks/auth/useCustomer';
 import { columns } from './components/Columns.component';
@@ -21,6 +22,7 @@ export const DashboardPage = () => {
           </p>
         </div>
         <div className="flex items-center space-x-2">
+          <Button>Sincronizar contas</Button>
           <UserNav />
         </div>
       </div>

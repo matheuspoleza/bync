@@ -10,7 +10,7 @@ import {
   ConnectionLinkStatus,
   IConnectionLinkRepository,
 } from '../domain/connection-link';
-import { BankAccountDto } from './bank-account.dto';
+import { CreateBankAccountDto } from './bank-account.dto';
 import { BankAccount, IBankAccountRepository } from '../domain/bank-account';
 
 @Injectable()
@@ -57,7 +57,7 @@ export class BankingService {
     return this.connectionLinkRepository.create(connectionLink);
   }
 
-  async setupAccounts(linkId: string, accountsDto: BankAccountDto[]) {
+  async setupAccounts(linkId: string, accountsDto: CreateBankAccountDto[]) {
     const connectionLink =
       await this.connectionLinkRepository.getByLinkId(linkId);
 
@@ -87,5 +87,9 @@ export class BankingService {
 
   async getAccounts(customerId: string) {
     return this.bankAccountsRepository.getAllForCustomer(customerId);
+  }
+
+  async getAllLinkedAccounts() {
+    return this.bankAccountsRepository.getAllLinkedAccounts();
   }
 }

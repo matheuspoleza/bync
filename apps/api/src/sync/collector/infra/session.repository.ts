@@ -1,13 +1,14 @@
 import { DatabaseService } from 'src/common/database/database.service';
 import { Injectable } from '@nestjs/common';
+import { ISessionRepository } from '../domain/session';
 
 @Injectable()
-export class CollectorSessionRepository {
+export class SessionRepository implements ISessionRepository {
   static BUCKET_NAME = 'sessions_data';
 
   constructor(private readonly databaseService: DatabaseService) {}
 
-  async saveSessionBackup<T = any>(session: any) {
+  async saveSessionBackup(session: any) {
     for (const {
       transactions,
       customerId,
@@ -18,7 +19,7 @@ export class CollectorSessionRepository {
       const fileBlob = new Blob([fileContent], { type: 'application/json' });
 
       const { error } = await this.databaseService.client.storage
-        .from(CollectorSessionRepository.BUCKET_NAME)
+        .from(SessionRepository.BUCKET_NAME)
         .upload(fileName, fileBlob);
 
       if (error) {
@@ -27,11 +28,11 @@ export class CollectorSessionRepository {
     }
   }
 
-  async fetchSessionBackup<T = any>(
+  async fetchSessionBackup(
     sessionID: string,
     bankAccounts: any[],
   ): Promise<any[]> {
-    const accountsData: T[] = [];
+    const accountsData = [] as any[];
 
     for (const bankAccount of bankAccounts) {
       const filePath = `${sessionID}/${bankAccount.customerId}/${bankAccount.id}.json`;
@@ -39,7 +40,7 @@ export class CollectorSessionRepository {
       // Download the file for the bank account
       const { data: blobData, error } =
         await this.databaseService.client.storage
-          .from(CollectorSessionRepository.BUCKET_NAME)
+          .from(SessionRepository.BUCKET_NAME)
           .download(filePath);
 
       if (error) {
@@ -50,7 +51,7 @@ export class CollectorSessionRepository {
 
       // Parse the blob into JSON
       const textData = await new Response(blobData).text();
-      const transactions: T[] = JSON.parse(textData);
+      const transactions = JSON.parse(textData);
 
       // Push the transactions data into the accountsData array
       accountsData.push({
