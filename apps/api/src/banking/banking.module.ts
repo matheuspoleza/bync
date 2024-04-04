@@ -13,6 +13,7 @@ import { BankAccountRepository } from './infra/bank-account.repository';
   providers: [
     BankingService,
     BankingFacade,
+    ConnectionLinkRepository,
     {
       provide: IConnectionLinkRepository,
       useClass: ConnectionLinkRepository,
@@ -22,6 +23,6 @@ import { BankAccountRepository } from './infra/bank-account.repository';
       useClass: BankAccountRepository,
     },
   ],
-  exports: [BankingFacade],
+  exports: [BankingFacade, ConnectionLinkRepository],
 })
 export class BankingModule {}

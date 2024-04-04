@@ -9,5 +9,6 @@ import { BankingModule } from '../banking/banking.module';
   imports: [BankingModule],
   controllers: [BelvoController, WebhooksController],
   providers: [BelvoService, BelvoGateway],
+  exports: [BelvoGateway]
 })
 export class BelvoModule {}

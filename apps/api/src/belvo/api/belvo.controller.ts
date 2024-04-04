@@ -1,4 +1,4 @@
-import { Controller, HttpStatus, Post } from '@nestjs/common';
+import { Controller, Delete, HttpStatus, Param, Post } from '@nestjs/common';
 import { BelvoService } from '../application/belvo.service';
 import { ZodApiResponse } from '../../common';
 import { ApiTags } from '@nestjs/swagger';

@@ -20,6 +20,11 @@ export class ConnectionLinkRepository implements IConnectionLinkRepository {
     });
   }
 
+  async delete(id: string): Promise<void> {
+    await this.databaseService.schema.from('connection_link').delete().eq('id', id);
+    await this.databaseService.schema.from('bank_accounts').update({ connection_link_id: undefined }).eq('connection_link_id', id);
+  }
+
   async create(connectionLink: ConnectionLink): Promise<ConnectionLink> {
     const result = await this.databaseService.schema
       .from('connection_link')

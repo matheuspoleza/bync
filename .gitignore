@@ -41,3 +41,6 @@ libs/icons/src/components/*
 
 # Generated UI Documentation
 libs/ui/src/documentation/*
+
+# Env
+apps/api/.env

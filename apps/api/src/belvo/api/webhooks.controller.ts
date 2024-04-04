@@ -19,15 +19,15 @@ export class WebhooksController {
   async receiveBelvoWebhook(@Body() event: WebhookEventDto) {
     if (
       event.webhook_type === WebhookType.Accounts &&
-      event.webhook_code === WebhookCode.HistoricalUpdate
+      (event.webhook_code === WebhookCode.HistoricalUpdate || event.webhook_code === WebhookCode.NewAccountsAvailable)
     ) {
       console.log(
-        `Handling belvo event: ${event.webhook_code} ${event.webhook_type}`,
+        `Handling belvo event: ${event.webhook_type} ${event.webhook_code}`,
       );
       await this.belvoService.setupAccounts(event.link_id);
     } else {
       console.log(
-        `Ignoring belvo event: ${event.webhook_code} ${event.webhook_type}`,
+        `Ignoring belvo event: ${event.webhook_type} ${event.webhook_code}`,
       );
     }
   }

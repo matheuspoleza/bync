@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, HttpStatus, Delete, Param } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 
 import {
@@ -15,11 +15,12 @@ import {
 } from './schema';
 import { BankAccountDto } from './dtos';
 import { ApiTags } from '@nestjs/swagger';
+import { ConnectionLinkRepository } from '../infra/connection-link.repository';
 
 @Controller('banking')
 @ApiTags('banking')
 export class BankingController {
-  constructor(private readonly bankingService: BankingService) {}
+  constructor(private readonly bankingService: BankingService, private readonly connectionLinkRepository: ConnectionLinkRepository) {}
 
   @OnEvent('ynab.account-linked')
   async linkBankAccount(payload: {
