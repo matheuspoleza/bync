@@ -1,6 +1,7 @@
-import Belvo, { AccountsReturn } from 'belvo';
+import Belvo, { AccountsReturn, TransactionsReturn } from 'belvo';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { DatabaseService } from 'src/common';
 
 const COMPANY_NAME = 'Bync';
 
@@ -22,6 +23,8 @@ export enum BelvoAccountInstutionType {
   Fiscal = 'fiscal',
   Employment = 'employment',
 }
+
+type Transaction = TransactionsReturn & { external_account_id: string };
 
 /*
 Indicates whether this account is either an ASSET or a LIABILITY.
@@ -46,7 +49,10 @@ export type OFDABrazilAccount = AccountsReturn & {
 export class BelvoGateway implements OnModuleInit {
   private client!: Belvo;
 
-  constructor(private readonly configService: ConfigService) {}
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly databaseService: DatabaseService,
+  ) {}
 
   async onModuleInit() {
     this.client = new Belvo(
@@ -68,6 +74,35 @@ export class BelvoGateway implements OnModuleInit {
     });
   }
 
+  async getTransactionsBetween(
+    linkId: string,
+    from: Date,
+    to: Date,
+  ): Promise<Transaction[]> {
+    const transactions = await this.client.transactions.retrieve(
+      linkId,
+      from.toDateString(),
+      to.toDateString(),
+      {
+        account: 'all',
+        saveData: true,
+      },
+    );
+
+    return Promise.all(
+      transactions.map(async (transaction) => {
+        const externalAccountId = await this.getAccountIdByExternalId(
+          transaction.account.id ?? '',
+        );
+
+        return {
+          ...transaction,
+          external_account_id: externalAccountId,
+        };
+      }),
+    );
+  }
+
   async getAccounts(linkId: string) {
     return (await this.client.accounts.retrieve(linkId)) as OFDABrazilAccount[];
   }
@@ -78,5 +113,16 @@ export class BelvoGateway implements OnModuleInit {
 
   async deleteLink(linkId: string) {
     return this.client.links.delete(linkId);
+  }
+
+  public async saveExternalIdReference(
+    belvoAccountId: string,
+    externalAccountId: string,
+  ) {}
+
+  public async getAccountIdByExternalId(
+    externalAccountId: string,
+  ): Promise<string> {
+    return '';
   }
 }

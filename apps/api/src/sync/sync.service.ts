@@ -1,22 +1,32 @@
 import { InjectQueue } from '@nestjs/bull';
 import { Injectable } from '@nestjs/common';
-import { Queue } from 'bull';
-import { QUEUE_NAMES } from 'src/app.constants';
-import { CollectDto } from './collector/application/dtos/collect.dto';
-import { OnEvent } from '@nestjs/event-emitter';
-import { NewTransactionsCollectedEvent } from './collector/domain/new-transactions-collected.event';
-import { CollectorFacade } from './collector/collector.facade';
+import { Job, Queue } from 'bull';
+import {
+  CollectDto,
+  CollectResponse,
+} from './collector/application/dtos/collect.dto';
+import { PublishDto } from './publisher/application/dtos/publish.dto';
 
 @Injectable()
 export class SyncService {
-  constructor(@InjectQueue(QUEUE_NAMES.SYNC_COLLECTOR) private collectorJob: Queue<CollectDto>, private readonly collectorFacade: CollectorFacade) {}
+  constructor(
+    @InjectQueue('sync.collector')
+    private readonly collectorJob: Queue<CollectDto>,
+    @InjectQueue('sync.publisher')
+    private readonly publisherJob: Queue<PublishDto>,
+  ) {}
 
   async manualSync() {
-    await this.collectorJob.add({ from: new Date(), to: new Date() });
-  }
+    await this.collectorJob.add({
+      from: new Date(),
+      to: new Date(),
+      bankAccountIds: [],
+    });
 
-  @OnEvent(NewTransactionsCollectedEvent.EVENT_NAME)
-  async handleCollectorCompleted(event: NewTransactionsCollectedEvent) {
-    const sessionData = await this.collectorFacade.getSessionData(event.sessionId);
+    this.collectorJob.once('completed', async (job: Job<CollectResponse>) => {
+      await this.publisherJob.add({
+        sessionId: job.data.session.id,
+      });
+    });
   }
 }

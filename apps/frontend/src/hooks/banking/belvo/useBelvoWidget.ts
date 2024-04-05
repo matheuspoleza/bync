@@ -1,5 +1,5 @@
-import * as api from "../../api";
-import { useScript } from "../utils/useScript";
+import * as api from "../../../api";
+import { useScript } from "../../utils/useScript";
 
 declare global {
   interface Window {
@@ -19,7 +19,7 @@ export const useBelvoWidget = ({
   const widgetCallback = (access: string) => async () => {
     const successCallbackFunction = async (
       link: string,
-      institution: string
+      institution: string,
     ) => {
       onSuccess({ link, institution });
     };
@@ -40,7 +40,7 @@ export const useBelvoWidget = ({
   };
 
   const { loadScript } = useScript(
-    "https://cdn.belvo.io/belvo-widget-1-stable.js"
+    "https://cdn.belvo.io/belvo-widget-1-stable.js",
   );
 
   const createWidget = async () => {

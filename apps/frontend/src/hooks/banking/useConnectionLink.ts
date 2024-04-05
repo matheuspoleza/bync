@@ -1,6 +1,6 @@
 import { useState } from "react";
 import * as api from "../../api";
-import { useBelvoWidget } from "../belvo/useBelvoWidget";
+import { useBelvoWidget } from "./belvo/useBelvoWidget";
 
 export const useConnectionLink = () => {
   const [isCreatingConnection, setIsCreatingConnection] = useState(false);

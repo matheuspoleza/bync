@@ -1,4 +1,7 @@
 import { Module } from '@nestjs/common';
+import { CollectorModule } from '../collector/collector.module';
 
-@Module({})
+@Module({
+  imports: [CollectorModule],
+})
 export class PublisherModule {}

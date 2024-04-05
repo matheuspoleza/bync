@@ -145,4 +145,24 @@ export class BankAccountRepository implements IBankAccountRepository {
       return [...acc, this.fromDB(dbResult, dbResult.connection_link)];
     }, []);
   }
+
+  public async getAllByIds(ids: string[]): Promise<BankAccount[]> {
+    const result = await this.databaseService.schema
+      .from('bank_accounts')
+      .select(
+        `
+        *,
+        connection_link ( * )
+      `,
+      )
+      .in('id', ids);
+
+    if (!result.data) return [];
+
+    return result.data.reduce<BankAccount[]>((acc, dbResult) => {
+      if (!dbResult.connection_link) return acc;
+
+      return [...acc, this.fromDB(dbResult, dbResult.connection_link)];
+    }, []);
+  }
 }

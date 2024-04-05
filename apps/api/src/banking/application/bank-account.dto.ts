@@ -8,8 +8,8 @@ export enum BankAccountType {
 }
 
 export interface BankAccountDto {
-  id: string;
-  customerId: string;
+  id?: string;
+  customerId?: string;
   linkedAccountId?: string;
   link: string;
   name: string;
@@ -18,5 +18,3 @@ export interface BankAccountDto {
   type: BankAccountType;
   balance: number;
 }
-
-export type CreateBankAccountDto = Omit<BankAccountDto, 'id' | 'customerId'>;

@@ -6,9 +6,10 @@ import { IConnectionLinkRepository } from './domain/connection-link';
 import { ConnectionLinkRepository } from './infra/connection-link.repository';
 import { IBankAccountRepository } from './domain/bank-account';
 import { BankAccountRepository } from './infra/bank-account.repository';
+import { BelvoModule } from 'src/belvo/belvo.module';
 
 @Module({
-  imports: [],
+  imports: [BelvoModule],
   controllers: [BankingController],
   providers: [
     BankingService,

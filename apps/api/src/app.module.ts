@@ -10,7 +10,6 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AuthMiddleware } from './auth/auth.middleware';
 import { AuthModule } from './auth/auth.module';
 import { BullModule } from '@nestjs/bull';
-import { QUEUE_NAMES } from './app.constants';
 
 @Module({
   imports: [
@@ -29,7 +28,6 @@ import { QUEUE_NAMES } from './app.constants';
     SyncModule,
     YnabModule,
     AuthModule,
-    ...Object.values(QUEUE_NAMES).map(name => BullModule.registerQueue({ name })),
   ],
 })
 export class AppModule implements NestModule {

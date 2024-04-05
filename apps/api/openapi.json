@@ -134,9 +134,9 @@
         ]
       }
     },
-    "/belvo/session": {
+    "/banking/session": {
       "post": {
-        "operationId": "BelvoController_createSession",
+        "operationId": "BankingController_createSession",
         "parameters": [],
         "responses": {
           "200": {
@@ -163,7 +163,7 @@
           }
         },
         "tags": [
-          "belvo"
+          "banking"
         ]
       }
     },

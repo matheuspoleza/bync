@@ -24,10 +24,10 @@ export class YnabService {
 
     await this.ynabAccountRepository.updateLink(ynabAccount);
 
-    this.eventEmitter.emit('ynab.account-linked', {
-      ynabAccountId,
-      bankAccountID,
-    } as YnabAccountLinked);
+    this.eventEmitter.emit(
+      YnabAccountLinked.EventName,
+      new YnabAccountLinked(ynabAccountId, bankAccountID),
+    );
   }
 
   async authorizeBudgetAccess(

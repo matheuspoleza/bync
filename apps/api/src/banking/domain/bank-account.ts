@@ -86,6 +86,7 @@ export class BankAccount {
 export interface IBankAccountRepository {
   getAllForCustomer(customerId: string): Promise<BankAccount[]>;
   getOneById(id: string): Promise<BankAccount | null>;
+  getAllByIds(ids: string[]): Promise<BankAccount[]>;
   updateBankAccountLink(bankAccount: BankAccount): Promise<void>;
   createMany(accounts: BankAccount[]): Promise<BankAccount[]>;
   getAllLinkedAccounts(): Promise<BankAccount[]>;

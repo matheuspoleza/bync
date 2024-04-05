@@ -10,8 +10,10 @@ import {
   ConnectionLinkStatus,
   IConnectionLinkRepository,
 } from '../domain/connection-link';
-import { CreateBankAccountDto } from './bank-account.dto';
 import { BankAccount, IBankAccountRepository } from '../domain/bank-account';
+import { OnEvent } from '@nestjs/event-emitter';
+import { AccountsConnected } from '../domain/accounts-connected';
+import { BankAccountDto } from './bank-account.dto';
 
 @Injectable()
 export class BankingService {
@@ -57,7 +59,8 @@ export class BankingService {
     return this.connectionLinkRepository.create(connectionLink);
   }
 
-  async setupAccounts(linkId: string, accountsDto: CreateBankAccountDto[]) {
+  @OnEvent(AccountsConnected.EventName)
+  async handleAccountsConnected(linkId: string, accountsDto: BankAccountDto[]) {
     const connectionLink =
       await this.connectionLinkRepository.getByLinkId(linkId);
 
@@ -87,6 +90,10 @@ export class BankingService {
 
   async getAccounts(customerId: string) {
     return this.bankAccountsRepository.getAllForCustomer(customerId);
+  }
+
+  async getAllByIds(bankAccountIds: string[]) {
+    return this.bankAccountsRepository.getAllByIds(bankAccountIds);
   }
 
   async getAllLinkedAccounts() {

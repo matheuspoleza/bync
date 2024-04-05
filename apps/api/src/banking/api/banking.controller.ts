@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, HttpStatus, Delete, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, HttpStatus } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 
 import {
@@ -15,14 +15,18 @@ import {
 } from './schema';
 import { BankAccountDto } from './dtos';
 import { ApiTags } from '@nestjs/swagger';
-import { ConnectionLinkRepository } from '../infra/connection-link.repository';
+import { CreateSessionResponse } from './schema/create-session.request';
+import { BelvoFacade } from 'src/belvo/belvo.facade';
 
 @Controller('banking')
 @ApiTags('banking')
 export class BankingController {
-  constructor(private readonly bankingService: BankingService, private readonly connectionLinkRepository: ConnectionLinkRepository) {}
+  constructor(
+    private readonly bankingService: BankingService,
+    private readonly belvoFacade: BelvoFacade,
+  ) {}
 
-  @OnEvent('ynab.account-linked')
+  @OnEvent('ynab.account.linked')
   async linkBankAccount(payload: {
     bankAccountID: string;
     ynabAccountId: string;
@@ -65,5 +69,11 @@ export class BankingController {
       data.linkId,
       data.institution,
     );
+  }
+
+  @Post('session')
+  @ZodApiResponse({ status: HttpStatus.OK, schema: CreateSessionResponse })
+  async createSession(): Promise<CreateSessionResponse> {
+    return this.belvoFacade.authenticate();
   }
 }
