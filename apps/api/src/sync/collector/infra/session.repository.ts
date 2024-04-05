@@ -9,7 +9,7 @@ import {
 @Injectable()
 export class SessionRepository implements ISessionRepository {
   static BUCKET_NAME = 'sessions_data';
-  static TABLE_NAME = 'sync.sessions';
+  static TABLE_NAME = 'sync_sessions';
 
   constructor(private readonly databaseService: DatabaseService) {}
 

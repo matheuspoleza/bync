@@ -15,8 +15,8 @@ export class BankAccountRepository implements IBankAccountRepository {
   constructor(private readonly databaseService: DatabaseService) {}
 
   private fromDB(
-    dbResult: Tables<'bank_accounts'>,
-    connectionLink: Tables<'connection_link'>,
+    dbResult: Tables<'banking_bank_accounts'>,
+    connectionLink: Tables<'banking_connection_link'>,
   ): BankAccount {
     return new BankAccount({
       id: dbResult.id,
@@ -52,11 +52,11 @@ export class BankAccountRepository implements IBankAccountRepository {
 
   public async getAllForCustomer(customerId: string): Promise<BankAccount[]> {
     const result = await this.databaseService.schema
-      .from('bank_accounts')
+      .from('banking_bank_accounts')
       .select(
         `
         *,
-        connection_link ( * )
+        banking_connection_link ( * )
       `,
       )
       .eq('customer_id', customerId);
@@ -64,27 +64,27 @@ export class BankAccountRepository implements IBankAccountRepository {
     if (!result.data) return [];
 
     return result.data.reduce<BankAccount[]>((acc, dbResult) => {
-      if (!dbResult.connection_link) return acc;
+      if (!dbResult.banking_connection_link) return acc;
 
-      return [...acc, this.fromDB(dbResult, dbResult.connection_link)];
+      return [...acc, this.fromDB(dbResult, dbResult.banking_connection_link)];
     }, []);
   }
 
   public async getOneById(id: string): Promise<BankAccount | null> {
     const result = await this.databaseService.schema
-      .from('bank_accounts')
+      .from('banking_bank_accounts')
       .select(
         `
         *,
-        connection_link ( * )
+        banking_connection_link ( * )
       `,
       )
       .eq('id', id)
       .single();
 
-    if (!result.data || !result.data.connection_link) return null;
+    if (!result.data || !result.data.banking_connection_link) return null;
 
-    return this.fromDB(result.data, result.data.connection_link);
+    return this.fromDB(result.data, result.data.banking_connection_link);
   }
 
   public async updateBankAccountLink(bankAccount: BankAccount): Promise<void> {
@@ -111,7 +111,7 @@ export class BankAccountRepository implements IBankAccountRepository {
       .select(
         `
           *,
-          connection_link ( * )
+          banking_connection_link ( * )
         `,
       );
 
@@ -131,7 +131,7 @@ export class BankAccountRepository implements IBankAccountRepository {
       .select(
         `
         *,
-        connection_link ( * )
+        banking_connection_link ( * )
       `,
       )
       .not('connection_link_id', 'is', null)
@@ -148,11 +148,11 @@ export class BankAccountRepository implements IBankAccountRepository {
 
   public async getAllByIds(ids: string[]): Promise<BankAccount[]> {
     const result = await this.databaseService.schema
-      .from('bank_accounts')
+      .from('banking_bank_accounts')
       .select(
         `
         *,
-        connection_link ( * )
+        banking_connection_link ( * )
       `,
       )
       .in('id', ids);
@@ -160,9 +160,9 @@ export class BankAccountRepository implements IBankAccountRepository {
     if (!result.data) return [];
 
     return result.data.reduce<BankAccount[]>((acc, dbResult) => {
-      if (!dbResult.connection_link) return acc;
+      if (!dbResult.banking_connection_link) return acc;
 
-      return [...acc, this.fromDB(dbResult, dbResult.connection_link)];
+      return [...acc, this.fromDB(dbResult, dbResult.banking_connection_link)];
     }, []);
   }
 }

@@ -4,7 +4,7 @@ import { Tables } from '../common/database/database.types';
 
 @Injectable()
 export class CustomerRepository {
-  static TABLE_NAME = 'customers';
+  static TABLE_NAME = 'identity_customers';
 
   constructor(private databaseService: DatabaseService) {}
 
@@ -30,7 +30,7 @@ export class CustomerRepository {
       .eq('id', id)
       .single();
 
-    const customersData = data as Tables<'customers'>;
+    const customersData = data as Tables<'identity_customers'>;
 
     return { id: customersData.id, fullName: customersData.full_name };
   }

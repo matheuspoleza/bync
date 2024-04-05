@@ -10,7 +10,7 @@ import {
 export class ConnectionLinkRepository implements IConnectionLinkRepository {
   constructor(private readonly databaseService: DatabaseService) {}
 
-  private fromDB(data: Tables<'connection_link'>): ConnectionLink {
+  private fromDB(data: Tables<'banking_connection_link'>): ConnectionLink {
     return new ConnectionLink({
       id: data.id,
       customerId: data.customer_id,
@@ -21,13 +21,19 @@ export class ConnectionLinkRepository implements IConnectionLinkRepository {
   }
 
   async delete(id: string): Promise<void> {
-    await this.databaseService.schema.from('connection_link').delete().eq('id', id);
-    await this.databaseService.schema.from('bank_accounts').update({ connection_link_id: undefined }).eq('connection_link_id', id);
+    await this.databaseService.schema
+      .from('banking_connection_link')
+      .delete()
+      .eq('id', id);
+    await this.databaseService.schema
+      .from('bank_accounts')
+      .update({ connection_link_id: undefined })
+      .eq('connection_link_id', id);
   }
 
   async create(connectionLink: ConnectionLink): Promise<ConnectionLink> {
     const result = await this.databaseService.schema
-      .from('connection_link')
+      .from('banking_connection_link')
       .insert({
         customer_id: connectionLink.customerId,
         institution: connectionLink.institution,
@@ -48,7 +54,7 @@ export class ConnectionLinkRepository implements IConnectionLinkRepository {
 
   async updateStatus(connectionLink: ConnectionLink): Promise<void> {
     await this.databaseService.schema
-      .from('connection_link')
+      .from('banking_connection_link')
       .update({
         status: connectionLink.status,
       })
@@ -57,7 +63,7 @@ export class ConnectionLinkRepository implements IConnectionLinkRepository {
 
   async getByLinkId(linkId: string): Promise<ConnectionLink | null> {
     const result = await this.databaseService.schema
-      .from('connection_link')
+      .from('banking_connection_link')
       .select('*')
       .eq('link_id', linkId)
       .single();

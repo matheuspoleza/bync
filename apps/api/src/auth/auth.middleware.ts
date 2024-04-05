@@ -50,12 +50,12 @@ export class AuthMiddleware implements NestMiddleware {
       if (!customerId) {
         const { data } = await this.supabase
           .schema('public')
-          .from('customers')
+          .from('identity_customers')
           .select('*')
           .eq('user_id', userId)
           .single();
 
-        const customersData = data as Tables<'customers'>;
+        const customersData = data as Tables<'identity_customers'>;
 
         customerId = customersData.id;
 

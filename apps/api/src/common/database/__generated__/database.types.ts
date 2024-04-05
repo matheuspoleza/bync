@@ -9,11 +9,11 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      bank_accounts: {
+      banking_bank_accounts: {
         Row: {
           account_name: string
           balance: number
-          connection_link_id: string
+          connection_link_id: string | null
           created_at: string
           customer_id: string
           id: string
@@ -26,7 +26,7 @@ export type Database = {
         Insert: {
           account_name: string
           balance: number
-          connection_link_id: string
+          connection_link_id?: string | null
           created_at?: string
           customer_id: string
           id?: string
@@ -39,7 +39,7 @@ export type Database = {
         Update: {
           account_name?: string
           balance?: number
-          connection_link_id?: string
+          connection_link_id?: string | null
           created_at?: string
           customer_id?: string
           id?: string
@@ -54,19 +54,26 @@ export type Database = {
             foreignKeyName: "bank_accounts_customer_id_fkey"
             columns: ["customer_id"]
             isOneToOne: false
-            referencedRelation: "customers"
+            referencedRelation: "identity_customers"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "bank_accounts_link_id_fkey"
             columns: ["connection_link_id"]
             isOneToOne: false
-            referencedRelation: "connection_link"
+            referencedRelation: "banking_connection_link"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_bank_accounts_ynab_account_id_fkey"
+            columns: ["ynab_account_id"]
+            isOneToOne: false
+            referencedRelation: "ynab_accounts"
             referencedColumns: ["id"]
           },
         ]
       }
-      connection_link: {
+      banking_connection_link: {
         Row: {
           customer_id: string
           id: string
@@ -93,12 +100,12 @@ export type Database = {
             foreignKeyName: "public_banking_account_link_customer_id_fkey"
             columns: ["customer_id"]
             isOneToOne: false
-            referencedRelation: "customers"
+            referencedRelation: "identity_customers"
             referencedColumns: ["id"]
           },
         ]
       }
-      customers: {
+      identity_customers: {
         Row: {
           created_at: string
           full_name: string | null
@@ -127,7 +134,7 @@ export type Database = {
           },
         ]
       }
-      sessions: {
+      sync_sessions: {
         Row: {
           bank_account_ids: string[] | null
           created_at: string
@@ -193,14 +200,14 @@ export type Database = {
             foreignKeyName: "public_ynab_account_bank_account_id_fkey"
             columns: ["bank_account_id"]
             isOneToOne: false
-            referencedRelation: "bank_accounts"
+            referencedRelation: "banking_bank_accounts"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "ynab_account_customer_id_fkey"
             columns: ["customer_id"]
             isOneToOne: false
-            referencedRelation: "customers"
+            referencedRelation: "identity_customers"
             referencedColumns: ["id"]
           },
         ]
