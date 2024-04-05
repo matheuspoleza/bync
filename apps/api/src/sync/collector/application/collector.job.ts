@@ -1,21 +1,25 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { Process, Processor } from '@nestjs/bull';
 import { Job } from 'bull';
 import { CollectDto } from './dtos/collect.dto';
-import { ISessionRepository, Session } from '../domain/session';
+import { Session } from '../domain/session';
 import { BankingFacade } from 'src/banking/banking.facade';
 import { CollectorBankAccountAdapter } from '../domain/bank-account';
+import { SessionRepository } from '../infra/session.repository';
 
-@Injectable()
 @Processor('sync.collector')
 export class CollectorJob {
+  private logger = new Logger();
+
   constructor(
     private readonly bankingFacade: BankingFacade,
-    @Inject(ISessionRepository) private sessionRepository: ISessionRepository,
+    private sessionRepository: SessionRepository,
   ) {}
 
   @Process()
   async collect(job: Job<CollectDto>) {
+    this.logger.log('Collecting data for session');
+
     const { from, to, bankAccountIds } = job.data;
     const session = new Session({
       from,
@@ -29,13 +33,22 @@ export class CollectorJob {
 
     session.addBankAccounts(linkedBankAccounts);
 
-    const transactions = await this.bankingFacade.getTransactionsBetween(
-      session.bankAccountIds,
-      from,
-      to,
-    );
+    try {
+      this.logger.debug('Fetching transactions');
 
-    session.addTransactions(transactions);
+      const transactions = await this.bankingFacade.getTransactionsBetween(
+        session.bankAccountIds,
+        from,
+        to,
+      );
+
+      this.logger.debug('transactions fetched', { transactions });
+
+      session.addTransactions(transactions);
+    } catch (e) {
+      this.logger.error((e as any).message);
+      throw e;
+    }
 
     await this.sessionRepository.save(session);
   }

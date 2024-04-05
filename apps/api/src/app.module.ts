@@ -5,7 +5,7 @@ import { CommonModule } from './common/common.module';
 import { IdentityModule } from './identity/identity.module';
 import { SyncModule } from './sync/sync.module';
 import { YnabModule } from './ynab/ynab.module';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AuthMiddleware } from './auth/auth.middleware';
 import { AuthModule } from './auth/auth.module';
@@ -15,11 +15,15 @@ import { BullModule } from '@nestjs/bull';
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     EventEmitterModule.forRoot(),
-    BullModule.forRoot({
-      redis: {
-        host: 'localhost',
-        port: 6379,
-      },
+    BullModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (_: ConfigService) => ({
+        redis: {
+          host: 'localhost',
+          port: 6379,
+        },
+      }),
     }),
     BankingModule,
     BelvoModule,

@@ -3,8 +3,8 @@ import { Transaction } from './transactions';
 
 export interface SessionDto {
   id?: string;
-  from: Date;
-  to: Date;
+  from: string;
+  to: string;
   data?: SessionAccountData[];
 }
 
@@ -16,8 +16,8 @@ export interface SessionAccountData {
 
 export class Session {
   public id!: string;
-  public from: Date;
-  public to: Date;
+  public from: string;
+  public to: string;
   public customerIds!: string[];
   public bankAccountIds!: string[];
   public data: SessionAccountData[];

@@ -2,8 +2,8 @@ import { z } from 'nestjs-zod/z';
 
 export const SessionDto = z.object({
   id: z.string(),
-  from: z.date(),
-  to: z.date(),
+  from: z.string(),
+  to: z.string(),
   customerIds: z.array(z.string()),
   bankAccountIds: z.array(z.string()),
   createdAt: z.date(),

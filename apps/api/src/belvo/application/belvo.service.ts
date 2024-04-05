@@ -26,7 +26,11 @@ export class BelvoService {
     );
   }
 
-  public async getTransactionsBetween(linkId: string, from: Date, to: Date) {
+  public async getTransactionsBetween(
+    linkId: string,
+    from: string,
+    to: string,
+  ) {
     return await this.belvoGateway.getTransactionsBetween(linkId, from, to);
   }
 }

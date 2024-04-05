@@ -9,7 +9,11 @@ export class BelvoFacade {
     return await this.belvoGateway.createWidgetAccessToken();
   }
 
-  public async getTransactionsBetween(linkId: string, from: Date, to: Date) {
+  public async getTransactionsBetween(
+    linkId: string,
+    from: string,
+    to: string,
+  ) {
     return await this.belvoGateway.getTransactionsBetween(linkId, from, to);
   }
 }

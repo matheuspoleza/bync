@@ -3,8 +3,8 @@ import { SessionDto } from './session.dto';
 
 export const CollectDto = z.object({
   bankAccountIds: z.array(z.string()),
-  from: z.date(),
-  to: z.date(),
+  from: z.string(),
+  to: z.string(),
 });
 
 export const CollectResponse = z.object({

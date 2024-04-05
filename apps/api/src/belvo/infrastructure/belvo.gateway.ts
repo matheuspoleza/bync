@@ -76,18 +76,20 @@ export class BelvoGateway implements OnModuleInit {
 
   async getTransactionsBetween(
     linkId: string,
-    from: Date,
-    to: Date,
+    from: string,
+    to: string,
   ): Promise<Transaction[]> {
     const transactions = await this.client.transactions.retrieve(
       linkId,
-      from.toDateString(),
-      to.toDateString(),
+      from,
+      to,
       {
         account: 'all',
         saveData: true,
       },
     );
+
+    console.log('###### BELVO TRANSACTIONS #####', { transactions });
 
     return Promise.all(
       transactions.map(async (transaction) => {

@@ -57,8 +57,8 @@ export class BankingFacade {
 
   async getTransactionsBetween(
     bankAccountIds: string[],
-    from: Date,
-    to: Date,
+    from: string,
+    to: string,
   ): Promise<TransactionsDto> {
     let response: TransactionsDto = [];
     const bankAccounts = await this.bankingService.getAllByIds(bankAccountIds);

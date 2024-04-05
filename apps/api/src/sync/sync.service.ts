@@ -1,5 +1,5 @@
 import { InjectQueue } from '@nestjs/bull';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Job, Queue } from 'bull';
 import {
   CollectDto,
@@ -8,9 +8,12 @@ import {
 import { PublishDto } from './publisher/application/dtos/publish.dto';
 import { BankingFacade } from 'src/banking/banking.facade';
 import { CollectorBankAccountAdapter } from './collector/domain/bank-account';
+import { format, subDays } from 'date-fns';
 
 @Injectable()
 export class SyncService {
+  private logger = new Logger();
+
   constructor(
     @InjectQueue('sync.collector')
     private readonly collectorJob: Queue<CollectDto>,
@@ -25,9 +28,18 @@ export class SyncService {
       new CollectorBankAccountAdapter(),
     );
 
+    if (!bankAccounts.length) {
+      throw new Error('No bank accounts found');
+    }
+
+    this.logger.log(
+      'Starting manual sync for bank accounts',
+      bankAccounts.map((b) => b.id),
+    );
+
     await this.collectorJob.add({
-      from: new Date(),
-      to: new Date(),
+      from: format(new Date(), 'yyyy-MM-dd'),
+      to: format(subDays(new Date(), 3), 'yyyy-MM-dd'),
       bankAccountIds: bankAccounts.map((b) => b.id),
     });
 

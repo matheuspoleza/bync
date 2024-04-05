@@ -129,7 +129,7 @@ export class BankAccountRepository implements IBankAccountRepository {
     customerId: string,
   ): Promise<BankAccount[]> {
     const result = await this.databaseService.schema
-      .from('bank_accounts')
+      .from('banking_bank_accounts')
       .select(
         `
         *,
@@ -143,9 +143,9 @@ export class BankAccountRepository implements IBankAccountRepository {
     if (!result.data) return [];
 
     return result.data.reduce<BankAccount[]>((acc, dbResult) => {
-      if (!dbResult.connection_link) return acc;
+      if (!dbResult.banking_connection_link) return acc;
 
-      return [...acc, this.fromDB(dbResult, dbResult.connection_link)];
+      return [...acc, this.fromDB(dbResult, dbResult.banking_connection_link)];
     }, []);
   }
 
