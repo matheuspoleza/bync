@@ -6,6 +6,8 @@ import {
   CollectResponse,
 } from './collector/application/dtos/collect.dto';
 import { PublishDto } from './publisher/application/dtos/publish.dto';
+import { BankingFacade } from 'src/banking/banking.facade';
+import { CollectorBankAccountAdapter } from './collector/domain/bank-account';
 
 @Injectable()
 export class SyncService {
@@ -14,13 +16,19 @@ export class SyncService {
     private readonly collectorJob: Queue<CollectDto>,
     @InjectQueue('sync.publisher')
     private readonly publisherJob: Queue<PublishDto>,
+    private readonly bankingFacade: BankingFacade,
   ) {}
 
-  async manualSync() {
+  async manualSync(customerId: string) {
+    const bankAccounts = await this.bankingFacade.getAllLinkedAccounts(
+      customerId,
+      new CollectorBankAccountAdapter(),
+    );
+
     await this.collectorJob.add({
       from: new Date(),
       to: new Date(),
-      bankAccountIds: [],
+      bankAccountIds: bankAccounts.map((b) => b.id),
     });
 
     this.collectorJob.once('completed', async (job: Job<CollectResponse>) => {

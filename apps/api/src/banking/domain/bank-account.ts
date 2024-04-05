@@ -89,7 +89,7 @@ export interface IBankAccountRepository {
   getAllByIds(ids: string[]): Promise<BankAccount[]>;
   updateBankAccountLink(bankAccount: BankAccount): Promise<void>;
   createMany(accounts: BankAccount[]): Promise<BankAccount[]>;
-  getAllLinkedAccounts(): Promise<BankAccount[]>;
+  getAllLinkedAccountsForCustomer(customerId: string): Promise<BankAccount[]>;
 }
 
 export const IBankAccountRepository = Symbol('BankAccountRepository');

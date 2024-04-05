@@ -125,7 +125,9 @@ export class BankAccountRepository implements IBankAccountRepository {
     }, []);
   }
 
-  public async getAllLinkedAccounts(): Promise<BankAccount[]> {
+  public async getAllLinkedAccountsForCustomer(
+    customerId: string,
+  ): Promise<BankAccount[]> {
     const result = await this.databaseService.schema
       .from('bank_accounts')
       .select(
@@ -135,7 +137,8 @@ export class BankAccountRepository implements IBankAccountRepository {
       `,
       )
       .not('connection_link_id', 'is', null)
-      .not('ynab_account_id', 'is', null);
+      .not('ynab_account_id', 'is', null)
+      .eq('customer_id', customerId);
 
     if (!result.data) return [];
 

@@ -96,7 +96,9 @@ export class BankingService {
     return this.bankAccountsRepository.getAllByIds(bankAccountIds);
   }
 
-  async getAllLinkedAccounts() {
-    return this.bankAccountsRepository.getAllLinkedAccounts();
+  async getAllLinkedAccountsForCustomer(customerId: string) {
+    return this.bankAccountsRepository.getAllLinkedAccountsForCustomer(
+      customerId,
+    );
   }
 }

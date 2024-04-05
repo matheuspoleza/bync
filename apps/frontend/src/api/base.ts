@@ -1,7 +1,14 @@
 import { Session, SupabaseClient, createClient } from '@supabase/supabase-js';
 import axios from 'axios';
-import { AuthApi, BankingApi, BelvoApi, IdentityApi, YnabApi } from './__generated__';
+import {
+  AuthApi,
+  BankingApi,
+  BelvoApi,
+  IdentityApi,
+  YnabApi,
+} from './__generated__';
 import { SUPABASE_KEY, SUPABASE_URL } from './config';
+import { SyncApi } from '../clients/api/__generated__';
 
 export const api = axios.create({
   baseURL: `http://localhost:3000`,
@@ -59,6 +66,7 @@ export class BaseApi {
   protected belvo!: BelvoApi;
   protected identity!: IdentityApi;
   protected supabase!: SupabaseClient;
+  protected sync!: SyncApi;
 
   constructor() {
     this.supabase = supabase;
@@ -71,5 +79,6 @@ export class BaseApi {
     this.ynab = new YnabApi(undefined, undefined, api);
     this.belvo = new BelvoApi(undefined, undefined, api);
     this.identity = new IdentityApi(undefined, undefined, api);
+    this.sync = new SyncApi(undefined, undefined, api);
   }
 }

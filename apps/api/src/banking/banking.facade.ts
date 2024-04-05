@@ -7,6 +7,7 @@ import {
 } from './application/bank-account.dto';
 import { TransactionsDto } from './application/transactions.dto';
 import { BelvoFacade } from '../belvo/belvo.facade';
+import { BankAccount } from './domain/bank-account';
 export abstract class BankAccountAdapter<T = unknown> {
   public accounts: T[] = [];
   abstract fromBanking(bankAccounts: BankAccountDto[]): T[];
@@ -20,12 +21,8 @@ export class BankingFacade {
     private belvoFacade: BelvoFacade,
   ) {}
 
-  async getAllLinkedAccounts<T = unknown>(
-    adapter: BankAccountAdapter<T>,
-  ): Promise<T[]> {
-    const bankAccounts = await this.bankingService.getAllLinkedAccounts();
-
-    const bankAccountDtos = bankAccounts.map<BankAccountDto>((bankAccount) => ({
+  private fromDomain(bankAccount: BankAccount): BankAccountDto {
+    return {
       id: bankAccount.id,
       customerId: bankAccount.customerId,
       link: bankAccount.connectionLinkId,
@@ -34,8 +31,27 @@ export class BankingFacade {
       institution: bankAccount.institution,
       type: bankAccount.type as BankAccountType,
       balance: bankAccount.balance,
-    }));
+    };
+  }
 
+  async getAllLinkedAccounts<T = unknown>(
+    customerId: string,
+    adapter: BankAccountAdapter<T>,
+  ): Promise<T[]> {
+    const bankAccounts =
+      await this.bankingService.getAllLinkedAccountsForCustomer(customerId);
+
+    const bankAccountDtos = bankAccounts.map<BankAccountDto>(this.fromDomain);
+
+    return adapter.fromBanking(bankAccountDtos);
+  }
+
+  async getAllBankAccountsByIds<T = unknown>(
+    ids: string[],
+    adapter: BankAccountAdapter<T>,
+  ): Promise<T[]> {
+    const bankAccounts = await this.bankingService.getAllByIds(ids);
+    const bankAccountDtos = bankAccounts.map(this.fromDomain);
     return adapter.fromBanking(bankAccountDtos);
   }
 

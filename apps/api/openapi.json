@@ -265,7 +265,10 @@
           "201": {
             "description": ""
           }
-        }
+        },
+        "tags": [
+          "sync"
+        ]
       }
     },
     "/ynab/auth": {

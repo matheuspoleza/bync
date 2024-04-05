@@ -22,7 +22,8 @@ export class CollectorJob {
       to,
     });
 
-    const linkedBankAccounts = await this.bankingFacade.getAllLinkedAccounts(
+    const linkedBankAccounts = await this.bankingFacade.getAllBankAccountsByIds(
+      bankAccountIds,
       new CollectorBankAccountAdapter(),
     );
 

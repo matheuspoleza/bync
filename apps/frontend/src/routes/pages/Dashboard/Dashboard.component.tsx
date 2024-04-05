@@ -1,3 +1,4 @@
+import * as api from '../../../api';
 import { Button } from '../../../components/ui';
 import { useBankAccounts } from '../../../hooks';
 import { useCustomer } from '../../../hooks/auth/useCustomer';
@@ -9,6 +10,10 @@ export const DashboardPage = () => {
   const { customer } = useCustomer();
   const { accounts: bankAccounts } = useBankAccounts();
 
+  const handleSync = async () => {
+    await api.sync.manualSync();
+  };
+
   return (
     <div className="h-full flex-1 flex-col space-y-8 p-8 md:flex">
       <div className="flex items-center justify-between space-y-2">
@@ -17,12 +22,12 @@ export const DashboardPage = () => {
             Bem vindo de volta, {customer?.fullName}!
           </h2>
           <p className="text-muted-foreground">
-            Aqui estão todas suas contas bancárias conectas e os status da integração com suas contas do ynab para você
-            acompanhar.
+            Aqui estão todas suas contas bancárias conectas e os status da
+            integração com suas contas do ynab para você acompanhar.
           </p>
         </div>
         <div className="flex items-center space-x-2">
-          <Button>Sincronizar contas</Button>
+          <Button onClick={handleSync}>Sincronizar contas</Button>
           <UserNav />
         </div>
       </div>
