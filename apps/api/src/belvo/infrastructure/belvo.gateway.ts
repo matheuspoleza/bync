@@ -18,7 +18,7 @@ export enum BelvoAccountCategory {
   Uncategorized = 'UNCATEGORIZED',
 }
 
-export enum BelvoAccountInstutionType {
+export enum BelvoAccountInstitutionType {
   Bank = 'bank',
   Fiscal = 'fiscal',
   Employment = 'employment',
@@ -41,7 +41,7 @@ export type OFDABrazilAccount = AccountsReturn & {
   category: BelvoAccountCategory;
   institution: {
     name: string;
-    type: BelvoAccountInstutionType;
+    type: BelvoAccountInstitutionType;
   };
 };
 
@@ -83,10 +83,6 @@ export class BelvoGateway implements OnModuleInit {
       linkId,
       from,
       to,
-      {
-        account: 'all',
-        saveData: true,
-      },
     );
 
     console.log('###### BELVO TRANSACTIONS #####', { transactions });

@@ -5035,6 +5035,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "bync@workspace:."
   dependencies:
+    localtunnel: ^2.0.2
     typescript: 5.0.4
   languageName: unknown
   linkType: soft

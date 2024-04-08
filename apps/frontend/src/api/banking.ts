@@ -10,4 +10,8 @@ export class BankingApi extends BaseApi {
     const response = await this.banking.bankingControllerGetBankAccounts();
     return response.data.bankAccounts;
   }
+
+  async createSession() {
+    await this.banking;
+  }
 }

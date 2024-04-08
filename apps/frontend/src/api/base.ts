@@ -1,4 +1,4 @@
-import { Session, SupabaseClient, createClient } from '@supabase/supabase-js';
+import { SupabaseClient, createClient } from '@supabase/supabase-js';
 import axios from 'axios';
 import {
   AuthApi,
@@ -60,20 +60,16 @@ api.interceptors.response.use(null, async (error) => {
 });
 
 export class BaseApi {
-  protected auth!: AuthApi;
-  protected banking!: BankingApi;
-  protected ynab!: YnabApi;
-  protected belvo!: BelvoApi;
-  protected identity!: IdentityApi;
-  protected supabase!: SupabaseClient;
-  protected sync!: SyncApi;
+  protected auth: AuthApi;
+  protected banking: BankingApi;
+  protected ynab: YnabApi;
+  protected belvo: BelvoApi;
+  protected identity: IdentityApi;
+  protected supabase: SupabaseClient;
+  protected sync: SyncApi;
 
   constructor() {
     this.supabase = supabase;
-    this.setupApis();
-  }
-
-  private async setupApis() {
     this.auth = new AuthApi(undefined, undefined, api);
     this.banking = new BankingApi(undefined, undefined, api);
     this.ynab = new YnabApi(undefined, undefined, api);

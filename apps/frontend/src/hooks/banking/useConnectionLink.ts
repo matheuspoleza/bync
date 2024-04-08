@@ -1,26 +1,22 @@
-import { useState } from "react";
-import * as api from "../../api";
-import { useBelvoWidget } from "./belvo/useBelvoWidget";
+import * as api from '../../api';
+import { useBelvoWidget } from './belvo';
+import { useMutation } from '@tanstack/react-query';
 
 export const useConnectionLink = () => {
-  const [isCreatingConnection, setIsCreatingConnection] = useState(false);
+  const { mutateAsync: createConnection, isPending } = useMutation({
+    mutationKey: ['createConnection'],
+    mutationFn: api.banking.createConnection,
+  });
 
   const { createWidget } = useBelvoWidget({
-    onSuccess: async ({ link, institution }) => {
-      if (isCreatingConnection) return;
-      setIsCreatingConnection(true);
-      try {
-        await api.banking.createConnection({ linkId: link, institution });
-
-        await api.queryClient.refetchQueries({
-          queryKey: ["bank-accounts"],
-          exact: true,
-        });
-      } finally {
-        setIsCreatingConnection(false);
-      }
+    onSuccess: async (link, institution) => {
+      await createConnection({ linkId: link, institution });
     },
   });
 
-  return { connect: createWidget, isCreatingConnection };
+  async function connectBanking() {
+    createWidget();
+  }
+
+  return { connectBanking, isCreatingConnection: isPending };
 };

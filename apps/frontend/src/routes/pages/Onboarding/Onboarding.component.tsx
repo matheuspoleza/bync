@@ -3,29 +3,30 @@ import {
   CircleIcon,
   Link1Icon,
   StitchesLogoIcon,
-} from "@radix-ui/react-icons";
-import { Button, Card, Typography } from "../../../components/ui";
+} from '@radix-ui/react-icons';
+import { Button, Card, Typography } from '../../../components/ui';
 import {
   useConnectionLink,
   useOnboarding,
   useYNABConnect,
-} from "../../../hooks";
-import { LoadingPage } from "../../../components/LoadingPage.component";
-import { useModal } from "../../../components/Modal/modal";
-import { Modals } from "../../modals";
-import { useNavigate } from "react-router-dom";
-import { useCustomer } from "../../../hooks/auth/useCustomer";
+} from '../../../hooks';
+import { LoadingPage } from '../../../components/LoadingPage.component';
+import { useModal } from '../../../components/Modal/modal';
+import { Modals } from '../../modals';
+import { useNavigate } from 'react-router-dom';
+import { useCustomer } from '../../../hooks/auth/useCustomer';
+import { FC } from 'react';
 
-export const OnboardingPage: React.FC = () => {
-  const { connect, isCreatingConnection } = useConnectionLink();
-  const { isCompleted, stepsCompleteMapper, isLoading } = useOnboarding();
+export const OnboardingPage: FC = () => {
+  const { connectBanking, isCreatingConnection } = useConnectionLink();
+  const { isCompleted, stepsCompleted, isLoading } = useOnboarding();
   const { connectBudgets } = useYNABConnect();
   const { openModal } = useModal(Modals.ConnectionLink);
   const navigate = useNavigate();
   const { customer } = useCustomer();
 
   const handleOnboardingCompleted = () => {
-    navigate("/dashboard");
+    navigate('/dashboard');
   };
 
   if (isLoading) return <LoadingPage />;
@@ -55,7 +56,7 @@ export const OnboardingPage: React.FC = () => {
           <div className="flex flex-col gap-4 mt-6">
             <Card.Container className="flex justify-between p-4">
               <div className="flex">
-                {stepsCompleteMapper.bankAccounts ? (
+                {stepsCompleted.bankAccounts ? (
                   <CheckCircledIcon />
                 ) : (
                   <CircleIcon />
@@ -70,8 +71,11 @@ export const OnboardingPage: React.FC = () => {
                 </div>
               </div>
               <div>
-                {!stepsCompleteMapper.bankAccounts && (
-                  <Button disabled={isCreatingConnection} onClick={connect}>
+                {!stepsCompleted.bankAccounts && (
+                  <Button
+                    disabled={isCreatingConnection}
+                    onClick={connectBanking}
+                  >
                     <Link1Icon className="mr-2 h-4 w-4" /> Conectar
                   </Button>
                 )}
@@ -80,14 +84,14 @@ export const OnboardingPage: React.FC = () => {
 
             <Card.Container className="flex justify-between p-4">
               <div className="flex">
-                {stepsCompleteMapper.ynabAccounts ? (
+                {stepsCompleted.ynabAccounts ? (
                   <CheckCircledIcon />
                 ) : (
                   <CircleIcon />
                 )}
                 <div className="ml-4 space-y-1">
                   <p className="text-sm font-medium leading-none">
-                    Conta do Ynab
+                    Contas do Ynab
                   </p>
                   <p className="text-sm text-muted-foreground">
                     dasoundsaodasun
@@ -95,7 +99,7 @@ export const OnboardingPage: React.FC = () => {
                 </div>
               </div>
               <div>
-                {!stepsCompleteMapper.ynabAccounts && (
+                {!stepsCompleted.ynabAccounts && (
                   <Button onClick={connectBudgets}>
                     <Link1Icon className="mr-2 h-4 w-4" /> Conectar
                   </Button>
@@ -105,7 +109,7 @@ export const OnboardingPage: React.FC = () => {
 
             <Card.Container className="flex justify-between p-4">
               <div className="flex">
-                {stepsCompleteMapper.connection ? (
+                {stepsCompleted.connection ? (
                   <CheckCircledIcon />
                 ) : (
                   <CircleIcon />
@@ -120,12 +124,12 @@ export const OnboardingPage: React.FC = () => {
                 </div>
               </div>
               <div>
-                {!stepsCompleteMapper.connection && (
+                {!stepsCompleted.connection && (
                   <Button
                     onClick={openModal}
                     disabled={
-                      !stepsCompleteMapper.bankAccounts ||
-                      !stepsCompleteMapper.ynabAccounts
+                      !stepsCompleted.bankAccounts ||
+                      !stepsCompleted.ynabAccounts
                     }
                   >
                     <Link1Icon className="mr-2 h-4 w-4" /> Conectar
